@@ -1,3 +1,10 @@
 
 # pulse skill output
 pulse-briefs/
+
+# jobfit skill output (contains personal comp/CV data)
+jobfit-reports/
+
+# jobfit filled-in profile (personal data — the template stays tracked)
+jobfit-profile.md
+cv.md
