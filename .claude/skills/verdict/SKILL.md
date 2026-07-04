@@ -10,14 +10,16 @@ description: >-
   and cited evidence. Keyless; the recommendation is advisory — you decide. Use
   when the user must choose between technologies or approaches — e.g.
   "/verdict postgres vs mongodb for <use case>", "should we use Kafka or NATS",
-  "compare X and Y", "buy vs build", "which framework for this". For community
-  buzz on a single topic use pulse; for exhaustive fact-checked research use
-  deep-research.
+  "compare X and Y", "buy vs build", "which framework for this". Also supports
+  "/verdict revisit <brief>" to cheaply re-check a past verdict's revisit-when
+  triggers. For community buzz on a single topic use pulse; for exhaustive
+  fact-checked research use deep-research.
 ---
 
 # verdict — technology decision briefs
 
 `/verdict <option A> vs <option B> [vs <option C>] for <context> [constraints]`
+`/verdict revisit <path-to-previous-brief>` — re-check an old verdict (see Revisit mode)
 
 Answer one question: **given this context, which option should we pick, and what
 evidence supports that?** You research every option the same way, score against
@@ -46,14 +48,16 @@ context is worse than no verdict.
 ## Step 1 — Fan out: parallel research sub-agents (per option)
 
 Spawn one research sub-agent **per option**, concurrently (one message, multiple
-`Agent` calls, `subagent_type: "Explore"`). Each covers four angles and returns
+`Agent` calls, `subagent_type: "Explore"`). Each covers five angles and returns
 structured findings — every claim with a `url` + 1-line evidence, anything
 unverified marked as such:
 
 1. **Project health** (for OSS/tools; skip for pure approaches): GitHub keyless
    REST — stars trend, commit/release cadence, open-vs-closed issue velocity, bus
    factor, age, backing org/funding. A beautiful README with a dead repo behind
-   it is a trap; this angle catches it.
+   it is a trap; this angle catches it. **Note:** keyless GitHub REST allows
+   60 req/hr shared across all sub-agents — budget calls, and on a 403
+   rate-limit mark the angle **unknown** rather than retrying in a loop.
 2. **Community sentiment:** HN Algolia (`hn.algolia.com/api/v1/search?query=...`)
    + web search + Reddit fallback — what practitioners report *after adopting*:
    praise, recurring pain points, migration-away stories. Weight experience
@@ -64,6 +68,12 @@ unverified marked as such:
 4. **Operational story:** licensing (and any recent license *changes*), managed
    vs self-hosted options, pricing shape, upgrade pain, hiring pool / learning
    curve for the stated team.
+5. **Security posture:** CVE history and severity pattern, GitHub security
+   advisories, how fast past vulnerabilities were patched, safety of the default
+   configuration, and any compliance certifications the context requires. This
+   evidence feeds the *Maturity & health* and *Operational burden* scores (no
+   separate criterion) — but an unpatched-critical-CVE pattern can be a
+   dealbreaker in its own right.
 
 If an angle returns nothing usable, record it as **unknown** — never fabricate.
 
@@ -118,6 +128,11 @@ Strengths / weaknesses for THIS context, each with citation. Health snapshot
 ## Consequences & risks of the recommendation
 - What we accept by choosing it; migration/exit cost if we're wrong.
 
+## Suggested spike
+- The cheapest experiment (ideally ≤ 1 day) that would de-risk this decision
+  before committing — what to build, what to measure, and what result would
+  overturn the recommendation.
+
 ## Revisit when
 - Concrete triggers that would change this verdict (e.g. "X ships native Y",
   "license changes", "we exceed N QPS").
@@ -125,6 +140,26 @@ Strengths / weaknesses for THIS context, each with citation. Health snapshot
 ## Sources
 Every cited URL, grouped by option; vendor sources marked.
 ```
+
+## Revisit mode
+
+`/verdict revisit <path>` (or "revisit the postgres verdict") turns the
+**Revisit when** section from a wish into a mechanism. Much cheaper than a full
+re-run:
+
+1. Read the previous brief (find it in `verdicts/` by slug if only a topic is
+   given). Extract the recommendation, scores, dealbreakers, and the **Revisit
+   when** triggers.
+2. Research **only the triggers** plus two standing checks: any license change
+   and any major-release/abandonment signal since the brief's run date. One
+   Explore sub-agent per option, narrow scope — not the full five angles.
+3. Emit a short **addendum**, not a new brief: per trigger — fired / not fired /
+   unknown, with citation — and an overall call: **verdict stands / weakened
+   (why) / overturned → recommend a full re-run**. Never silently flip a
+   recommendation from a partial check; an overturn verdict recommends the
+   re-run, the human decides.
+4. Save as `verdicts/<slug>-revisit-<YYYY-MM-DD>.md` (markdown only — no HTML
+   for addenda) and link the original brief in its header.
 
 ## Output files
 

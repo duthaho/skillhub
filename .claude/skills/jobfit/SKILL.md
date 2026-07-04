@@ -7,7 +7,9 @@ description: >-
   remote), and EVALUATE takes job URLs/descriptions you provide. Either way it fans
   out parallel sub-agents to research compensation, company signal, and posting
   legitimacy, scores each role A–F across weighted dimensions, and emits a ranked
-  decision brief with tailored CV-bullet suggestions. Keyless and human-in-the-loop:
+  decision brief with tailored CV-bullet suggestions. Remembers every role it has
+  evaluated in jobfit-tracker.md so repeat runs skip what you already passed on.
+  Keyless and human-in-the-loop:
   it never applies for you and discourages low-fit roles. Use when the user wants to
   find/source matching jobs, evaluate/triage job postings, decide whether a role is
   worth applying to, compare several openings, or tailor a CV to a JD — e.g. "find
@@ -50,6 +52,32 @@ User-facing content and scores draw **only** from:
 metrics, titles, or achievements the profile doesn't support. Never pull "facts"
 about the user from memory or cross-session inference. Tailoring = surfacing and
 rephrasing what's genuinely there to mirror the JD's language.
+
+## The tracker — memory across runs
+
+Job search is a multi-week process; this skill must not start from zero every day.
+Maintain `jobfit-tracker.md` in the working directory (**gitignored** — it holds
+personal data). One row per role ever evaluated:
+
+```markdown
+| Date | Role @ Company | URL | Score | Verdict | Status | Notes |
+|------|----------------|-----|-------|---------|--------|-------|
+| 2026-07-04 | Senior BE @ Acme | <url> | 4.2/5 (B+) | APPLY | new | |
+```
+
+`Status` is the user's to update (`new` / `applied` / `interviewing` / `offer` /
+`rejected` / `passed`) — never change it yourself, but read it.
+
+- **At the start of every run:** read the tracker if it exists.
+- **DISCOVER:** dedup candidates against the tracker before building the
+  shortlist. Drop roles previously verdicted SKIP (mention the count); mark
+  previously seen roles as "seen <date>, scored <x>" instead of re-researching
+  them — unless the user explicitly asks for a re-evaluation.
+- **EVALUATE:** if a role is already in the tracker, note the previous score in
+  the brief and call out what changed (reposted? comp updated? profile updated?).
+- **At the end of every run:** append the newly evaluated roles to the tracker
+  (create the file if missing, keep it sorted newest-first) and tell the user
+  it was updated. Never overwrite user-edited `Status`/`Notes` cells.
 
 ## Step 0 — Resolve the profile & inputs
 
@@ -134,6 +162,10 @@ seniority match) — note in the brief which roles were triaged out and why.
 
 - Extract stated comp from the JD. If absent, `WebSearch` for the range (levels.fyi,
   Glassdoor, Blind, job-board aggregates) for that title/level/location.
+- **Caveat:** most comp sites are login-walled or JS-heavy — direct `WebFetch` of
+  levels.fyi/Glassdoor/Blind pages usually fails. Prefer numbers that surface in
+  `WebSearch` result snippets and public discussions (HN "who's hiring" threads,
+  Reddit salary threads), and lower the confidence label accordingly.
 - Return: a best-estimate range + confidence, and how it compares to the user's target.
   Label estimates clearly as estimates.
 
@@ -222,6 +254,14 @@ Render this template **in chat**, then save it as `.md` and a self-contained `.h
 Flat list of every cited URL, grouped by role.
 ```
 
+### Cover letter (opt-in)
+
+If the user asks for one (never by default), draft a short cover letter (≤ 200
+words) per APPLY-verdict role, built **strictly** from profile evidence under the
+same no-fabrication rule — it mirrors the JD's language using only what the
+profile supports. Save as `jobfit-reports/<slug>-cover-letter.md`. Drafting only:
+it is never sent or submitted anywhere.
+
 ## Output files
 
 Save to `./jobfit-reports/` in the current working directory:
@@ -269,7 +309,10 @@ If `frontend-design` is unavailable, fall back to a clean self-contained no-JS l
   note how many candidates were filtered/dropped — never imply it's the whole market.
 - **Keyless.** Native `WebSearch`/`WebFetch` + free endpoints only. Never ask for API
   keys. Degrade gracefully and mark unknowns honestly.
-- **Privacy.** Reports hold personal comp/CV data — save under `jobfit-reports/`, keep
-  it gitignored, and never post it externally.
+- **Privacy.** Reports and the tracker hold personal comp/CV data — save under
+  `jobfit-reports/` / `jobfit-tracker.md`, keep both gitignored, and never post
+  them externally.
+- **Tracker is memory, not authority.** Read it to avoid rework; never let an old
+  score silently override fresh evidence, and never edit the user's Status column.
 - **Estimates are labeled.** Comp ranges pulled from the web are estimates with
   confidence, not the employer's offer.

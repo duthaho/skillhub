@@ -84,8 +84,9 @@ Use `subagent_type: "Explore"` (read-only, fast) for fetch-heavy sources.
 
 - Search: `WebFetch` →
   `https://hn.algolia.com/api/v1/search?query=<TOPIC>&tags=story&numericFilters=created_at_i>UNIX_START`
-  (compute `UNIX_START` from the window; for relevance over recency use
-  `/search` instead of `/search_by_date`).
+  (compute `UNIX_START` with a real shell command — e.g. `date -d '30 days ago' +%s`
+  — never guess the timestamp; for relevance over recency use `/search` instead
+  of `/search_by_date`).
 - `engagement` = `points` and `num_comments`.
 - Deepen top 2–3: fetch `https://hn.algolia.com/api/v1/items/<objectID>` and pull the
   highest-signal top-level comments (the actual takes).
@@ -97,8 +98,10 @@ Use `subagent_type: "Explore"` (read-only, fast) for fetch-heavy sources.
   window: `week`/`month`/`year`), and/or `https://www.reddit.com/r/<SUB>/search.json?...&restrict_sr=1`.
 - `engagement` = `ups` (upvotes) and `num_comments`.
 - Deepen top 2–3: fetch the thread JSON (`<permalink>.json`) and pull top comments.
-- **Fallback on 403/empty:** use `WebSearch` for `site:reddit.com <topic>` and
-  `WebFetch` the threads. **Note in the brief that Reddit was reached via fallback.**
+- **Fallback chain on 403/empty:** first retry the same JSON paths on
+  `old.reddit.com` (often served when `www` is blocked); if that also fails, use
+  `WebSearch` for `site:reddit.com <topic>` and `WebFetch` the threads.
+  **Note in the brief that Reddit was reached via fallback.**
 
 ### GitHub sub-agent (keyless REST, 60 req/hr)
 
@@ -114,6 +117,13 @@ If a source returns nothing usable after its fallback, record it as **unreachabl
 
 ## Step 2 — Synthesize (main agent)
 
+0. **Check for a previous pulse (delta memory):** look for earlier
+   `pulse-briefs/<slug>-*.md` files for this topic. If one exists, read the most
+   recent one and compute the delta for a **Since last pulse** section: which
+   clusters are new, which previous stories have faded, and which previously
+   Disputed/Unconfirmed items have since been confirmed or debunked (say which,
+   with a source). This is what makes repeat pulses on a tracked topic useful —
+   the delta, not a second snapshot. Skip silently on the first run for a topic.
 1. **Dedup & cluster:** merge the same story appearing across sources into one
    cluster; keep the strongest engagement signal and cite all sources in the cluster.
 2. **Rank** clusters by engagement (normalize across kinds — treat HN points, Reddit
@@ -137,6 +147,12 @@ file (see Output files). Cite inline as `([source], <engagement>)` with a linked
 
 ## TL;DR
 - 3–5 bullets: the headline state of the conversation right now.
+
+## Since last pulse (<date of previous brief>)
+- **New:** <clusters that weren't in the previous brief>
+- **Faded:** <previous headline items with no fresh activity>
+- **Resolved:** <previously unconfirmed items now confirmed/debunked, with source>
+(omit this section entirely on the first pulse for a topic)
 
 ## Key Developments
 For each ranked cluster:
@@ -188,8 +204,9 @@ this specific brief, treating the topic as the design subject:
   `.html` file, **inline CSS only, no JavaScript, no external requests/CDNs/web
   fonts** (system font stack), keep all source links and engagement numbers, must be
   readable on mobile and when printed, and **must include every section** of the
-  brief template (header with sources-reached, TL;DR, Key Developments, Best Takes,
-  Disputed/Unconfirmed, Sources) with the exact same content as the `.md`.
+  brief template (header with sources-reached, TL;DR, Since last pulse when
+  present, Key Developments, Best Takes, Disputed/Unconfirmed, Sources) with the
+  exact same content as the `.md`.
 - Render the markdown brief content faithfully into that design — design changes the
   presentation, never the facts, citations, or engagement metrics.
 

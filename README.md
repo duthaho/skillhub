@@ -20,7 +20,9 @@ any rumors flagged as unconfirmed.
 /pulse "claude code" last week, focus on Reddit
 ```
 
-Saves a markdown brief and an HTML version to `pulse-briefs/`.
+Saves a markdown brief and an HTML version to `pulse-briefs/`. Run it again on
+the same topic later and it opens with a "Since last pulse" delta — what's new,
+what faded, and which rumors got confirmed or debunked.
 
 ### /jobfit — job evaluation and discovery
 
@@ -38,7 +40,9 @@ each role A–F, and suggests how to tailor your CV — without ever applying fo
 ```
 
 Roles are scored on fit, CV match, pay, company health, and how legitimate the posting is,
-then marked APPLY, MAYBE, or SKIP. Saves a report to `jobfit-reports/`.
+then marked APPLY, MAYBE, or SKIP. Saves a report to `jobfit-reports/` and keeps a
+`jobfit-tracker.md` of everything it has evaluated, so tomorrow's search skips
+what you already passed on and remembers what you applied to.
 
 ### /verdict — technology decisions
 
@@ -52,23 +56,31 @@ called ties, not false winners.
 ```
 /verdict postgres vs mongodb for an event-sourced order system, team knows SQL
 /verdict kafka vs nats, ops burden matters most
+/verdict revisit verdicts/postgres-vs-mongodb-2026-07-04.md
 ```
 
-Saves the brief to `verdicts/`.
+Saves the brief to `verdicts/`. Every brief ends with "revisit when" triggers —
+and `revisit` cheaply re-checks just those triggers later and tells you whether
+the verdict still stands.
 
 ### /daybrief — morning briefing
 
 One command to start the day: today's calendar and emails that need a reply (if your
-Google account is connected), uncommitted and unpushed work across your repos, and a
-quick check on a few topics you track. It leads with the three things to focus on,
-fits on one screen, and is strictly read-only — it never sends, replies, or pushes.
+Google account is connected), uncommitted and unpushed work across your repos, your
+open todos (a `TODO.md` and/or GitHub issues assigned to you), and a quick check on
+a few topics you track. It leads with the three things to focus on, fits on one
+screen, and is strictly read-only — it never sends, replies, or pushes.
 
 ```
 /daybrief
 /daybrief skip email, just repos
 ```
 
-Configure repos and tracked topics in `daybrief-config.md` (it offers to create one).
+With `save: on` it also remembers yesterday's brief: unfinished focus items carry
+over to today, and it tells you how much of yesterday actually got done.
+
+Configure repos, tasks, and tracked topics in `daybrief-config.md` (it offers to
+create one).
 
 ## Installing
 
@@ -85,6 +97,13 @@ Or make them available everywhere:
 
 ```bash
 cp -r skillhub/.claude/skills/* ~/.claude/skills/
+```
+
+Prefer staying up to date? Symlink instead of copying, and a `git pull` in the
+clone updates every install:
+
+```bash
+for s in skillhub/.claude/skills/*; do ln -s "$(realpath "$s")" ~/.claude/skills/; done
 ```
 
 Then type `/pulse`, `/jobfit`, `/verdict`, or `/daybrief` in Claude Code.

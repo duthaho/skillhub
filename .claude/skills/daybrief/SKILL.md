@@ -4,8 +4,10 @@ description: >-
   Morning work briefing — "what does my day look like, in one scan?" Gathers
   today's calendar and emails needing attention (via connected Google MCP tools
   when available), recent git activity and unfinished work across your local
-  repos, and a quick radar check on topics you track — all in parallel — and
-  renders one compact, prioritized brief in chat. Every source is optional and
+  repos, your open tasks (TODO file / assigned GitHub issues), and a quick radar
+  check on topics you track — all in parallel — and renders one compact,
+  prioritized brief in chat, carrying over unfinished focus items from
+  yesterday's saved brief. Every source is optional and
   degrades gracefully; strictly read-only (never sends email, never touches the
   calendar, never pushes). Use at the start of a workday or when the user asks
   "what's on today", "morning brief", "daybrief", "catch me up", "what should I
@@ -30,8 +32,11 @@ Look for `daybrief-config.md` in the current working directory. It defines:
 
 ```markdown
 # daybrief config
-## Repos            # local paths, or workspace roots to scan one level deep
-- D:\hop\code
+## Repos            # absolute paths, or workspace roots to scan one level deep
+- /home/hop/code
+## Tasks            # optional: where your todos live (any/all of these)
+- file: TODO.md     # a local markdown todo file (path relative to a repo or absolute)
+- github: assigned  # issues assigned to you, via `gh` if authenticated
 ## Radar topics     # 2–4 topics to check for movement
 - claude code
 - postgres
@@ -39,12 +44,19 @@ Look for `daybrief-config.md` in the current working directory. It defines:
 - timezone: Asia/Ho_Chi_Minh
 - email: on        # on / off
 - calendar: on     # on / off
-- save: off        # on = also write brief to daybriefs/
+- save: off        # on = also write brief to daybriefs/ (enables carry-over)
 ```
 
 If missing, **don't block**: run with what's inferable (current repo, no radar
-topics) and offer to create the config at the end from what you learned. Honor
-one-off steering from the arguments over the config.
+topics). Then, **after** delivering the brief, offer to create the config via a
+short interview — ask (in one compact question set, prefilled with what you
+learned this run): which repos/workspace roots to watch, 2–4 radar topics, where
+todos live (file path / GitHub / none), email & calendar on/off, and whether to
+save briefs (`save: on` enables carry-over). Confirm the timezone from the
+system rather than asking. Write `daybrief-config.md` from the answers and
+remind that it's gitignored. If the user declines, don't ask again on later
+runs — just note "no config" in the footer. Honor one-off steering from the
+arguments over the config.
 
 ## Step 1 — Gather all sources in parallel
 
@@ -78,6 +90,17 @@ footer and move on. Never let one dead source stall the brief.
 - Surface **unfinished work first**: dirty trees and unpushed commits are
   today's loose ends.
 
+### Tasks (local file and/or GitHub — if configured)
+
+- `file:` entries — read the todo file(s) and pull **open** items only (unchecked
+  boxes / non-struck lines), top ~5 by position. Read-only; never reorder or
+  check anything off.
+- `github: assigned` — if `gh` is authenticated: `gh issue list --assignee @me
+  --state open` across the configured repos (plus `gh search issues` for the rest),
+  top ~5 by recency. Skip silently if `gh` is missing/unauthenticated.
+- These feed the Focus ranking (Step 2) — an explicit task list beats inference
+  from git activity.
+
 ### Radar (keyless web — if topics configured)
 
 - One Explore sub-agent for all topics together: HN Algolia last-24h search per
@@ -87,12 +110,22 @@ footer and move on. Never let one dead source stall the brief.
 
 ## Step 2 — Synthesize: priorities first
 
+**Carry-over (if `save: on`):** before ranking, read the most recent brief in
+`daybriefs/`. For each of its Focus items, judge from today's evidence whether it
+happened — commits/pushes touching it, the PR merged, the meeting past — and
+sort into **done** vs **carried over**. Carried-over items start near the top of
+today's ranking (unfinished yesterday-priorities outrank new shiny things), and
+the brief reports the follow-through score ("yesterday: 2/3 done"). When
+judgment is uncertain, mark it "status unclear" — never claim something was done
+without evidence. Skip silently if there is no previous brief.
+
 From all sources, derive **Top 3 focus items** for today. Ranking instinct:
 
-1. Hard deadlines/meetings needing prep that is not done
-2. Loose ends blocking others (unpushed work, PRs awaiting the user, unreplied
-   direct asks)
-3. The most important deep-work task, matched to the largest free block
+1. Items carried over from yesterday's Focus (unless overtaken by events)
+2. Hard deadlines/meetings needing prep that is not done
+3. Loose ends blocking others (unpushed work, PRs awaiting the user, unreplied
+   direct asks) and explicit open tasks (from the Tasks source)
+4. The most important deep-work task, matched to the largest free block
 
 Everything else is detail below the fold.
 
@@ -103,9 +136,9 @@ Compact, scannable, in chat — this is the product. Skeleton:
 ```markdown
 # Daybrief — <weekday> <YYYY-MM-DD>
 
-## Focus today
+## Focus today                (yesterday: 2/3 done — omit note if no carry-over data)
 1. <item — why it's #1, and when to do it (e.g. "in the 9–11 free block")>
-2. ...
+2. <item (carried from <date>)>
 3. ...
 
 ## Calendar        (omit section if empty/unavailable)
@@ -117,11 +150,19 @@ Compact, scannable, in chat — this is the product. Skeleton:
 ## Repos
 - <repo>: <n> uncommitted files · branch <x> 2 commits unpushed
 - PR #<n> awaiting your review (<repo>)
+## Tasks           (omit if not configured)
+- <top open todos / assigned issues, one line each>
 ## Radar           (omit if no topics)
 - <topic>: <headline> (<engagement>) [link]
 
-Sources: calendar ✓ · email ✓ · repos ✓ · radar ✓/— <note any unavailable>
+Sources: calendar ✓ · email ✓ · repos ✓ · tasks ✓/— · radar ✓/— <note any unavailable>
 ```
+
+**Tip — run it before you sit down:** this skill pairs well with a scheduled
+routine (e.g. Claude Code's `/schedule` or a cron job) that runs `/daybrief`
+each workday morning with `save: on`, so the brief — and the carry-over chain —
+is waiting when the day starts. Suggest this once if the user runs daybrief
+manually on consecutive days; don't nag.
 
 Dates/times from real commands (`date`), never guessed. If config `save: on`
 (or the user asks), also write `daybriefs/<YYYY-MM-DD>.md` — no HTML for this
