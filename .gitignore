@@ -8,3 +8,10 @@ jobfit-reports/
 # jobfit filled-in profile (personal data — the template stays tracked)
 jobfit-profile.md
 cv.md
+
+# verdict skill output (may contain internal project context)
+verdicts/
+
+# daybrief skill output + config (personal data)
+daybriefs/
+daybrief-config.md
