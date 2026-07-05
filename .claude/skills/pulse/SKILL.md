@@ -73,10 +73,21 @@ for every item — `title`, `url`, `source`, `engagement` (the raw metric + its 
 
 Use `subagent_type: "Explore"` (read-only, fast) for fetch-heavy sources.
 
+**Effort scaling:** match the fan-out to the ask. A niche topic or an explicit
+"quick check" needs only the 2 best-matched sources from the table; the full
+fan-out is for broad or clearly hot topics. **Lossless hand-off:** if a
+sub-agent's deepened findings run long (many quotes/threads), have it write the
+full extracts to `pulse-briefs/.work/<source>.md` and return just its ranked
+summary — read the files at synthesis instead of losing detail in the relay.
+
 ### Web sub-agent
 
 - Use `WebSearch` with several query variations (topic + "news"/"review"/"discussion"
   + recency terms). Prefer results inside the window.
+- **Authority over SEO:** prefer primary sources (official posts, the actual
+  thread/repo, named practitioners) over SEO-optimized aggregators and listicle
+  farms. A claim that appears *only* on low-quality aggregator sites is
+  low-trust — mark it accordingly.
 - Engagement proxy: publication prominence + how often a story recurs across results.
 - Deepen top 2–3: `WebFetch` the article and extract the core claim + any quotes.
 

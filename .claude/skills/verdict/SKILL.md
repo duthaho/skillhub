@@ -61,7 +61,9 @@ unverified marked as such:
 2. **Community sentiment:** HN Algolia (`hn.algolia.com/api/v1/search?query=...`)
    + web search + Reddit fallback — what practitioners report *after adopting*:
    praise, recurring pain points, migration-away stories. Weight experience
-   reports over launch-day hype.
+   reports over launch-day hype — and over SEO comparison content ("X vs Y in
+   2026" listicle farms are marketing surface, not adoption evidence; a real
+   practitioner thread outweighs ten of them).
 3. **Technical claims:** official docs + independent benchmarks/comparisons for
    the capabilities the context actually needs. **Label every claim vendor-made
    vs independently verified.** Note version/date — a 2022 benchmark may be void.
@@ -76,6 +78,11 @@ unverified marked as such:
    dealbreaker in its own right.
 
 If an angle returns nothing usable, record it as **unknown** — never fabricate.
+
+**Lossless hand-off:** each sub-agent writes its full findings to
+`verdicts/.work/<option>.md` and returns a compact summary; score in Step 2
+from the files, not the summaries — the evidence that decides a verdict must
+not be flattened by the relay.
 
 ## Step 2 — Score
 

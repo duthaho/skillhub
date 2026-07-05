@@ -64,6 +64,16 @@ Launch everything concurrently. Each source is independent and optional — if
 its tools aren't connected or it errors, mark it "unavailable" in the brief
 footer and move on. Never let one dead source stall the brief.
 
+With five optional sources it's easy to silently drop one. Track this
+checklist through the run — the brief isn't done until every box is ✓ or a
+conscious ✗ with the reason shown in the footer (a skip is a decision, not an
+oversight):
+
+```
+- [ ] calendar  - [ ] email  - [ ] repos  - [ ] tasks  - [ ] radar
+- [ ] carry-over judged (if save: on)  - [ ] Focus = top 3, each with a "when"
+```
+
 ### Calendar (Google Calendar MCP, if connected)
 
 - Load the tools via ToolSearch (e.g. `+calendar list events`) only if

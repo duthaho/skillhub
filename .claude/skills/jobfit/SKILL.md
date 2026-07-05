@@ -173,6 +173,8 @@ seniority match) — note in the brief which roles were triaged out and why.
 
 - `WebSearch` recent signals: funding/stage, growth or layoffs, Glassdoor/Blind
   sentiment, leadership/team stability, product/market position, notable recent news.
+- Prefer primary/news sources and real employee threads over SEO content mills
+  ("top companies to work for" listicles carry no signal).
 - Return: 3–5 signal bullets (positive and negative), each with a source URL.
 
 ### Legitimacy sub-agent

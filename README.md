@@ -82,6 +82,25 @@ over to today, and it tells you how much of yesterday actually got done.
 Configure repos, tasks, and tracked topics in `daybrief-config.md` (it offers to
 create one).
 
+### /teach — personal tutor
+
+Learn anything in short, remembered sessions. The first run interviews you (what do
+you want to be able to *do*, where are you starting from, how long per session) and
+proposes a syllabus you can edit. Every session after that opens with a quick recall
+quiz on what you learned before, teaches exactly one new unit with examples hooked
+onto your background, and ends with a check — what you miss comes back in a later
+session until you get it right.
+
+```
+/teach rust ownership
+/teach                 # list topics in progress and what's due
+/teach quiz sql        # recall-only session, no new material
+```
+
+Progress, quiz scores, and weak spots live in `teach-log/<topic>.md` — a plain
+markdown file you can read and edit yourself. Fast-moving topics get a web check
+before the syllabus is drafted, so you're not taught last year's API.
+
 ## Installing
 
 These are standard Claude Code skills — copy the ones you want into your skills folder.
@@ -106,7 +125,7 @@ clone updates every install:
 for s in skillhub/.claude/skills/*; do ln -s "$(realpath "$s")" ~/.claude/skills/; done
 ```
 
-Then type `/pulse`, `/jobfit`, `/verdict`, or `/daybrief` in Claude Code.
+Then type `/pulse`, `/jobfit`, `/verdict`, `/daybrief`, or `/teach` in Claude Code.
 That's it — no keys or setup.
 
 ## License
