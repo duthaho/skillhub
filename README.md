@@ -1,137 +1,171 @@
 # skillhub
 
-A small collection of [Claude Code](https://claude.com/claude-code) skills I use and maintain.
+[Claude Code](https://claude.com/claude-code) skills I use every day — to research
+like a skeptic, run my mornings, learn things properly, and ship code I can defend.
 
-Each skill teaches Claude Code a repeatable workflow you trigger with a slash command.
-They all share the same approach: no API keys, sources are always cited, and nothing is
-sent or submitted on your behalf — the skills do the research and drafting, you make the calls.
+They started as prompts I kept retyping. Every time I asked "what are people saying
+about X," the agent trusted whatever the search engine served. Every job hunt, every
+tech decision, every morning briefing started from zero. So I wrote each workflow
+down once, gave it memory, and made it show its sources.
 
-Everything the skills write — briefs, reports, trackers, learning logs — lands under a
-single gitignored `out/` folder (`out/pulse/`, `out/verdicts/`, `out/jobfit/`,
-`out/daybrief/`, `out/teach/`), so personal data never gets committed and there's one
-folder to browse, back up, or serve.
+No API keys. No accounts. Nothing is ever sent, submitted, or pushed on your behalf.
 
-## Skills
-
-### /pulse — community research
-
-Find out what people are actually saying about a topic right now. It searches the web,
-Hacker News, Reddit, and GitHub in parallel, ranks what it finds by real engagement
-(upvotes, points, stars, comments), and writes up a short brief with the best takes and
-any rumors flagged as unconfirmed.
-
-```
-/pulse ollama
-/pulse "claude code" last week, focus on Reddit
-```
-
-Saves a markdown brief and an HTML version to `out/pulse/`. Run it again on
-the same topic later and it opens with a "Since last pulse" delta — what's new,
-what faded, and which rumors got confirmed or debunked.
-
-### /jobfit — job evaluation and discovery
-
-Two ways to use it:
-
-- Give it your CV or profile and it finds matching roles on job boards.
-- Give it a job posting and it tells you whether it's worth applying to.
-
-Either way it researches the pay, the company, and whether the posting is real, scores
-each role A–F, and suggests how to tailor your CV — without ever applying for you.
-
-```
-/jobfit find senior backend roles that fit my CV, remote only
-/jobfit https://boards.greenhouse.io/acme/jobs/123 ./cv.md
-```
-
-Roles are scored on fit, CV match, pay, company health, and how legitimate the posting is,
-then marked APPLY, MAYBE, or SKIP. Saves a report to `out/jobfit/` and keeps a
-tracker of everything it has evaluated, so tomorrow's search skips
-what you already passed on and remembers what you applied to.
-
-### /verdict — technology decisions
-
-Choosing between two databases, frameworks, or build-vs-buy? Give it the options and
-your context (scale, team, constraints) and it researches each one the same way —
-project health, what practitioners report after adopting it, benchmarks, licensing —
-then scores them on weighted criteria and writes an ADR-style recommendation you can
-bring to a design review. Vendor claims are labeled as such, and close calls are
-called ties, not false winners.
-
-```
-/verdict postgres vs mongodb for an event-sourced order system, team knows SQL
-/verdict kafka vs nats, ops burden matters most
-/verdict revisit verdicts/postgres-vs-mongodb-2026-07-04.md
-```
-
-Saves the brief to `out/verdicts/`. Every brief ends with "revisit when" triggers —
-and `revisit` cheaply re-checks just those triggers later and tells you whether
-the verdict still stands.
-
-### /daybrief — morning briefing
-
-One command to start the day: today's calendar and emails that need a reply (if your
-Google account is connected), uncommitted and unpushed work across your repos, your
-open todos (a `TODO.md` and/or GitHub issues assigned to you), and a quick check on
-a few topics you track. It leads with the three things to focus on, fits on one
-screen, and is strictly read-only — it never sends, replies, or pushes.
-
-```
-/daybrief
-/daybrief skip email, just repos
-```
-
-With `save: on` it also remembers yesterday's brief: unfinished focus items carry
-over to today, and it tells you how much of yesterday actually got done.
-
-Configure repos, tasks, and tracked topics in `daybrief-config.md` (it offers to
-create one).
-
-### /teach — personal tutor
-
-Learn anything in short, remembered sessions. The first run interviews you (what do
-you want to be able to *do*, where are you starting from, how long per session) and
-proposes a syllabus you can edit. Every session after that opens with a quick recall
-quiz on what you learned before, teaches exactly one new unit with examples hooked
-onto your background, and ends with a check — what you miss comes back in a later
-session until you get it right.
-
-```
-/teach rust ownership
-/teach                 # list topics in progress and what's due
-/teach quiz sql        # recall-only session, no new material
-```
-
-Progress, quiz scores, and weak spots live in `out/teach/<topic>.md` — a plain
-markdown file you can read and edit yourself. Fast-moving topics get a web check
-before the syllabus is drafted, so you're not taught last year's API.
-
-## Installing
-
-These are standard Claude Code skills — copy the ones you want into your skills folder.
-
-For a single project:
+## Quickstart
 
 ```bash
 git clone https://github.com/duthaho/skillhub.git
-cp -r skillhub/.claude/skills/jobfit your-project/.claude/skills/
+cp -r skillhub/.claude/skills/* ~/.claude/skills/    # or copy just the ones you want
 ```
 
-Or make them available everywhere:
-
-```bash
-cp -r skillhub/.claude/skills/* ~/.claude/skills/
-```
-
-Prefer staying up to date? Symlink instead of copying, and a `git pull` in the
-clone updates every install:
+Prefer staying current? Symlink instead — a `git pull` in the clone updates every install:
 
 ```bash
 for s in skillhub/.claude/skills/*; do ln -s "$(realpath "$s")" ~/.claude/skills/; done
 ```
 
-Then type `/pulse`, `/jobfit`, `/verdict`, `/daybrief`, or `/teach` in Claude Code.
-That's it — no keys or setup.
+Then type `/pulse`, `/verdict`, `/jobfit`, `/daybrief`, `/teach`, `/feature`,
+`/bugfix`, or `/done` in Claude Code. That's the whole setup.
+
+## Why these skills exist
+
+I built these against four failure modes I kept hitting with coding agents.
+
+### #1 — The agent believes the internet
+
+Ask an agent what the community thinks of a tool and it returns the top of the
+search results: SEO listicles, vendor marketing, "X vs Y in 2026" content farms.
+That isn't what practitioners think; it's what ranks.
+
+**The fix** is ranking by real engagement and citing everything:
+
+- [`/pulse`](./.claude/skills/pulse/SKILL.md) — what people are actually saying
+  about a topic, ranked by upvotes/points/stars, rumors flagged as unconfirmed.
+- [`/verdict`](./.claude/skills/verdict/SKILL.md) — X-vs-Y technology decisions
+  scored on weighted criteria, where one real post-adoption thread outweighs ten
+  listicles and vendor claims are labeled as vendor claims.
+- [`/jobfit`](./.claude/skills/jobfit/SKILL.md) — job postings scored against
+  your actual CV, with the pay researched and ghost postings called out.
+
+Every claim in every brief links to a real fetched source. If a source was
+unreachable, the brief says so instead of improvising.
+
+### #2 — Every session starts from zero
+
+Run the same research next month and a stock agent re-discovers everything.
+Ask it to continue yesterday's work and it has no yesterday.
+
+**The fix** is cross-run memory in plain markdown — files you can read and edit
+yourself:
+
+- `/pulse` opens repeat runs with a **"Since last pulse"** delta: what's new,
+  what faded, which rumors got confirmed.
+- `/jobfit` keeps a tracker of every role it has scored, so tomorrow's search
+  skips what you already passed on.
+- `/verdict revisit` re-checks only a past decision's "revisit when" triggers
+  and tells you whether it still stands.
+- [`/daybrief`](./.claude/skills/daybrief/SKILL.md) carries yesterday's
+  unfinished focus items into today and scores the follow-through.
+- [`/teach`](./.claude/skills/teach/SKILL.md) remembers what you got wrong and
+  re-drills it sessions later, spaced-repetition style.
+
+### #3 — "Looks done" isn't done
+
+Agents stop when the work *looks* finished. Tests get edited into passing,
+TODOs stand in for behavior, and nobody ever actually ran the thing.
+
+**The fix** is a coding loop where evidence gates every exit:
+
+- [`/feature`](./.claude/skills/feature/SKILL.md) — sizes the change first (a
+  one-sentence diff skips the ceremony), then spec by interview → a plan of
+  2–5-minute tasks you approve → test-first execution with a checkpoint commit
+  per task. State lives in `out/dev/<change>/`, so any later session resumes at
+  the first unchecked task.
+- [`/bugfix`](./.claude/skills/bugfix/SKILL.md) — deliberately lighter: no code
+  until the bug reproduces on demand, no fix until the root-cause hypothesis is
+  confirmed with evidence, and the original repro re-run as proof.
+- [`/done`](./.claude/skills/done/SKILL.md) — the shipping gate. An evidence
+  checklist with quoted output (including *actually running the change*),
+  fake-green tripwires, and a fresh-context review by sub-agents that see only
+  the diff and the spec. Verdict: SHIP, FIX FIRST, or NEEDS HUMAN.
+
+### #4 — The agent acts on your behalf
+
+The scariest failure mode isn't wrong output — it's an agent that applies to
+the job, sends the email, or pushes the branch while you were getting coffee.
+
+**The fix** is structural, not politeness: `/jobfit` evaluates and drafts but
+never submits. `/daybrief` reads email and calendar but never replies or
+RSVPs. `/done` commits locally but never pushes without an explicit yes.
+`/feature` won't write code before you've approved the spec and the plan.
+You make the calls; the skills make them informed.
+
+## The skills
+
+**Research** — outward-looking, cited, engagement-ranked
+| Skill | One line | Try |
+|---|---|---|
+| [pulse](./.claude/skills/pulse/SKILL.md) | What the community is saying about anything, right now | `/pulse ollama last week` |
+| [verdict](./.claude/skills/verdict/SKILL.md) | ADR-style tech decisions you can defend in review | `/verdict kafka vs nats, ops burden matters most` |
+| [jobfit](./.claude/skills/jobfit/SKILL.md) | Find and score roles against your real CV | `/jobfit find senior backend roles, remote only` |
+
+**Day to day** — memory-first, read-only where it counts
+| Skill | One line | Try |
+|---|---|---|
+| [daybrief](./.claude/skills/daybrief/SKILL.md) | Your day in one scan, priorities first | `/daybrief skip email` |
+| [teach](./.claude/skills/teach/SKILL.md) | A tutor that remembers what you got wrong | `/teach rust ownership` |
+
+**The coding loop** — effort-scaled, evidence-gated
+| Skill | One line | Try |
+|---|---|---|
+| [feature](./.claude/skills/feature/SKILL.md) | Spec → plan → test-first build, resumable | `/feature add rate limiting` |
+| [bugfix](./.claude/skills/bugfix/SKILL.md) | Reproduce → root-cause → prove, minimal diff | `/bugfix login 500s on empty password` |
+| [done](./.claude/skills/done/SKILL.md) | The gate: prove it works, then ship | `/done` |
+
+## How the memory works
+
+Everything the skills write lands in one gitignored folder in whatever project
+you run them from:
+
+```
+out/
+├── pulse/          briefs (.md + a designed .html per run)
+├── verdicts/       decision briefs + revisit addenda
+├── jobfit/         reports + tracker.md   ← every role ever scored
+├── daybrief/       saved briefs           ← yesterday's focus, carried over
+├── teach/          one log per topic      ← syllabus, scores, review queue
+└── dev/            per-change spec/plan/log + bugfix-log.md
+```
+
+Plain markdown, human-readable, yours to edit — the skills read these files at
+the start of every run and update them at the end. One `.gitignore` line
+(`out/`) keeps all of it out of your commits.
+
+## What these skills won't do
+
+- Apply to a job, send an email, accept an invite, or reply to anything.
+- Push, open a PR, or publish without an explicit yes.
+- Use an API key, a paid service, or anything behind a login.
+- Present a rumor as a fact, a vendor claim as a benchmark, or an estimate as
+  an offer.
+- Mark work "done" without having run it.
+
+## FAQ
+
+**Why keyless?** Setup friction kills daily-use tools. Everything here runs on
+the agent's native web search/fetch plus free public endpoints (HN Algolia,
+Reddit JSON, GitHub REST) — clone and go. The trade-off is honest degradation:
+when a source is blocked, the brief says "unreachable" instead of pretending.
+
+**Where does my data go?** Nowhere. Profiles, trackers, logs, and briefs are
+local markdown in `out/`, gitignored by default. Nothing is uploaded anywhere.
+
+**Do these work outside Claude Code?** They're written as standard `SKILL.md`
+files. The research skills lean on Claude Code's sub-agents and web tools;
+other harnesses that support agent skills should run them with minor friction.
+
+**Why not one big workflow framework?** Frameworks that own your whole loop are
+hard to leave and harder to debug. These are eight independent skills that
+share conventions — use one, use all, delete the ones you don't like.
 
 ## License
 
