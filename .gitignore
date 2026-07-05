@@ -1,23 +1,8 @@
 
-# pulse skill output
-pulse-briefs/
+# All skill output — briefs, reports, trackers, learning logs (personal data)
+out/
 
-# jobfit skill output (contains personal comp/CV data)
-jobfit-reports/
-
-# jobfit filled-in profile (personal data — the template stays tracked)
+# Personal input files kept at repo root (user-authored config, never committed)
 jobfit-profile.md
 cv.md
-
-# jobfit cross-run tracker (personal application history)
-jobfit-tracker.md
-
-# verdict skill output (may contain internal project context)
-verdicts/
-
-# daybrief skill output + config (personal data)
-daybriefs/
 daybrief-config.md
-
-# teach skill learning logs (personal progress data)
-teach-log/

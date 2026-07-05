@@ -7,7 +7,7 @@ description: >-
   recall quiz on earlier material (spaced repetition), teaches the next unit
   with examples matched to the learner's background, and closes with an
   active-recall check. Progress, quiz scores, and weak spots persist in
-  teach-log/<topic>.md, so every session resumes where the last one ended and
+  out/teach/<topic>.md, so every session resumes where the last one ended and
   re-drills what was missed. Keyless; verifies version- or fact-sensitive
   content via web search with cited sources instead of trusting memory. Use
   when the user wants to learn or study a topic — e.g. "/teach rust
@@ -33,7 +33,7 @@ questions in chat; you grade what they actually wrote.
 
 ## Modes (auto-detect)
 
-- **NEW** — no `teach-log/<slug>.md` exists for the topic → interview + syllabus.
+- **NEW** — no `out/teach/<slug>.md` exists for the topic → interview + syllabus.
 - **CONTINUE** — a log exists → run the session loop from where it left off.
 - **STATUS** — `/teach` with no topic → summarize all logs: per topic, progress
   (`x/y` units), last session date, review items due, and a suggested next step.
@@ -42,7 +42,7 @@ questions in chat; you grade what they actually wrote.
 
 ## The learning log — memory across sessions
 
-One file per topic: `teach-log/<slug>.md` (`<slug>` = topic lowercased,
+One file per topic: `out/teach/<slug>.md` (`<slug>` = topic lowercased,
 non-alphanumerics → hyphens), **gitignored**. It is the skill's entire memory
 and it is the learner's file too — plain markdown they can read and edit.
 Respect manual edits (a unit hand-marked done stays done; ask nothing).
@@ -139,6 +139,6 @@ quizzing but mark the unit ◐ — unpassed — and say why it stays that way.
   go in the queue even when it feels pedantic.
 - **One unit per session.** Durable beats fast. The syllabus is the pace.
 - **The log is the learner's.** Human-readable, hand-editable, gitignored
-  (`teach-log/`), and respected — never overwrite their manual edits.
+  (`out/teach/`), and respected — never overwrite their manual edits.
 - **Keyless.** Never ask for API keys; degrade gracefully (no web → teach
   from knowledge and label freshness honestly).
