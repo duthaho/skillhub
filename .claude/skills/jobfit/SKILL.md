@@ -8,7 +8,7 @@ description: >-
   out parallel sub-agents to research compensation, company signal, and posting
   legitimacy, scores each role A–F across weighted dimensions, and emits a ranked
   decision brief with tailored CV-bullet suggestions. Remembers every role it has
-  evaluated in jobfit-tracker.md so repeat runs skip what you already passed on.
+  evaluated in out/jobfit/tracker.md so repeat runs skip what you already passed on.
   Keyless and human-in-the-loop:
   it never applies for you and discourages low-fit roles. Use when the user wants to
   find/source matching jobs, evaluate/triage job postings, decide whether a role is
@@ -56,7 +56,7 @@ rephrasing what's genuinely there to mirror the JD's language.
 ## The tracker — memory across runs
 
 Job search is a multi-week process; this skill must not start from zero every day.
-Maintain `jobfit-tracker.md` in the working directory (**gitignored** — it holds
+Maintain `out/jobfit/tracker.md` in the working directory (**gitignored** — it holds
 personal data). One row per role ever evaluated:
 
 ```markdown
@@ -173,6 +173,8 @@ seniority match) — note in the brief which roles were triaged out and why.
 
 - `WebSearch` recent signals: funding/stage, growth or layoffs, Glassdoor/Blind
   sentiment, leadership/team stability, product/market position, notable recent news.
+- Prefer primary/news sources and real employee threads over SEO content mills
+  ("top companies to work for" listicles carry no signal).
 - Return: 3–5 signal bullets (positive and negative), each with a source URL.
 
 ### Legitimacy sub-agent
@@ -259,21 +261,21 @@ Flat list of every cited URL, grouped by role.
 If the user asks for one (never by default), draft a short cover letter (≤ 200
 words) per APPLY-verdict role, built **strictly** from profile evidence under the
 same no-fabrication rule — it mirrors the JD's language using only what the
-profile supports. Save as `jobfit-reports/<slug>-cover-letter.md`. Drafting only:
+profile supports. Save as `out/jobfit/<slug>-cover-letter.md`. Drafting only:
 it is never sent or submitted anywhere.
 
 ## Output files
 
-Save to `./jobfit-reports/` in the current working directory:
+Save to `./out/jobfit/` in the current working directory:
 
-- `jobfit-reports/<slug>-<YYYY-MM-DD>.md` — the markdown report verbatim.
-- `jobfit-reports/<slug>-<YYYY-MM-DD>.html` — a **bespoke, distinctively designed**
+- `out/jobfit/<slug>-<YYYY-MM-DD>.md` — the markdown report verbatim.
+- `out/jobfit/<slug>-<YYYY-MM-DD>.html` — a **bespoke, distinctively designed**
   report. Self-contained: inline `<style>`, **no JavaScript**, links preserved, scores
   and scorecards as first-class visual elements, responsive, print-friendly.
 
 `<slug>` = for one role, `company-role`; for a batch, `batch`. Lowercase,
 non-alphanumerics → hyphens. Compute the date with a shell command (`date +%F`) — do
-not guess. Create `jobfit-reports/` if needed and ensure `.gitignore` ignores it (the
+not guess. Create `out/jobfit/` if needed; ensure `out/` is gitignored (the
 report may contain personal salary/CV data — never commit it).
 
 Tell the user the two saved paths at the end.
@@ -310,7 +312,7 @@ If `frontend-design` is unavailable, fall back to a clean self-contained no-JS l
 - **Keyless.** Native `WebSearch`/`WebFetch` + free endpoints only. Never ask for API
   keys. Degrade gracefully and mark unknowns honestly.
 - **Privacy.** Reports and the tracker hold personal comp/CV data — save under
-  `jobfit-reports/` / `jobfit-tracker.md`, keep both gitignored, and never post
+  `out/jobfit/` / `out/jobfit/tracker.md`, keep both gitignored, and never post
   them externally.
 - **Tracker is memory, not authority.** Read it to avoid rework; never let an old
   score silently override fresh evidence, and never edit the user's Status column.

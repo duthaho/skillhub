@@ -44,7 +44,7 @@ Look for `daybrief-config.md` in the current working directory. It defines:
 - timezone: Asia/Ho_Chi_Minh
 - email: on        # on / off
 - calendar: on     # on / off
-- save: off        # on = also write brief to daybriefs/ (enables carry-over)
+- save: off        # on = also write brief to out/daybrief/ (enables carry-over)
 ```
 
 If missing, **don't block**: run with what's inferable (current repo, no radar
@@ -63,6 +63,16 @@ arguments over the config.
 Launch everything concurrently. Each source is independent and optional — if
 its tools aren't connected or it errors, mark it "unavailable" in the brief
 footer and move on. Never let one dead source stall the brief.
+
+With five optional sources it's easy to silently drop one. Track this
+checklist through the run — the brief isn't done until every box is ✓ or a
+conscious ✗ with the reason shown in the footer (a skip is a decision, not an
+oversight):
+
+```
+- [ ] calendar  - [ ] email  - [ ] repos  - [ ] tasks  - [ ] radar
+- [ ] carry-over judged (if save: on)  - [ ] Focus = top 3, each with a "when"
+```
 
 ### Calendar (Google Calendar MCP, if connected)
 
@@ -111,7 +121,7 @@ footer and move on. Never let one dead source stall the brief.
 ## Step 2 — Synthesize: priorities first
 
 **Carry-over (if `save: on`):** before ranking, read the most recent brief in
-`daybriefs/`. For each of its Focus items, judge from today's evidence whether it
+`out/daybrief/`. For each of its Focus items, judge from today's evidence whether it
 happened — commits/pushes touching it, the PR merged, the meeting past — and
 sort into **done** vs **carried over**. Carried-over items start near the top of
 today's ranking (unfinished yesterday-priorities outrank new shiny things), and
@@ -165,8 +175,8 @@ is waiting when the day starts. Suggest this once if the user runs daybrief
 manually on consecutive days; don't nag.
 
 Dates/times from real commands (`date`), never guessed. If config `save: on`
-(or the user asks), also write `daybriefs/<YYYY-MM-DD>.md` — no HTML for this
-skill; a daybrief is ephemeral by design. Ensure `daybriefs/` and
+(or the user asks), also write `out/daybrief/<YYYY-MM-DD>.md` — no HTML for this
+skill; a daybrief is ephemeral by design. Ensure `out/daybrief/` and
 `daybrief-config.md` are gitignored (personal data).
 
 ## Guardrails

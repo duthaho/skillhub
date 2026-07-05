@@ -61,7 +61,9 @@ unverified marked as such:
 2. **Community sentiment:** HN Algolia (`hn.algolia.com/api/v1/search?query=...`)
    + web search + Reddit fallback — what practitioners report *after adopting*:
    praise, recurring pain points, migration-away stories. Weight experience
-   reports over launch-day hype.
+   reports over launch-day hype — and over SEO comparison content ("X vs Y in
+   2026" listicle farms are marketing surface, not adoption evidence; a real
+   practitioner thread outweighs ten of them).
 3. **Technical claims:** official docs + independent benchmarks/comparisons for
    the capabilities the context actually needs. **Label every claim vendor-made
    vs independently verified.** Note version/date — a 2022 benchmark may be void.
@@ -76,6 +78,11 @@ unverified marked as such:
    dealbreaker in its own right.
 
 If an angle returns nothing usable, record it as **unknown** — never fabricate.
+
+**Lossless hand-off:** each sub-agent writes its full findings to
+`out/verdicts/.work/<option>.md` and returns a compact summary; score in Step 2
+from the files, not the summaries — the evidence that decides a verdict must
+not be flattened by the relay.
 
 ## Step 2 — Score
 
@@ -147,7 +154,7 @@ Every cited URL, grouped by option; vendor sources marked.
 **Revisit when** section from a wish into a mechanism. Much cheaper than a full
 re-run:
 
-1. Read the previous brief (find it in `verdicts/` by slug if only a topic is
+1. Read the previous brief (find it in `out/verdicts/` by slug if only a topic is
    given). Extract the recommendation, scores, dealbreakers, and the **Revisit
    when** triggers.
 2. Research **only the triggers** plus two standing checks: any license change
@@ -158,22 +165,22 @@ re-run:
    (why) / overturned → recommend a full re-run**. Never silently flip a
    recommendation from a partial check; an overturn verdict recommends the
    re-run, the human decides.
-4. Save as `verdicts/<slug>-revisit-<YYYY-MM-DD>.md` (markdown only — no HTML
+4. Save as `out/verdicts/<slug>-revisit-<YYYY-MM-DD>.md` (markdown only — no HTML
    for addenda) and link the original brief in its header.
 
 ## Output files
 
-Save to `./verdicts/` in the current working directory:
+Save to `./out/verdicts/` in the current working directory:
 
-- `verdicts/<slug>-<YYYY-MM-DD>.md` — the brief verbatim.
-- `verdicts/<slug>-<YYYY-MM-DD>.html` — a **bespoke, distinctively designed**
+- `out/verdicts/<slug>-<YYYY-MM-DD>.md` — the brief verbatim.
+- `out/verdicts/<slug>-<YYYY-MM-DD>.html` — a **bespoke, distinctively designed**
   version. Self-contained: inline `<style>`, **no JavaScript, no external
   requests** (system fonts), links preserved, the scorecard and recommendation
   as first-class visual elements, responsive, print-friendly.
 
 `<slug>` = options joined by `-vs-`, lowercased. Compute the date with a shell
-command (`date +%F`) — do not guess. Create `verdicts/` if needed and ensure
-`.gitignore` covers it (briefs may contain internal project context).
+command (`date +%F`) — do not guess. Create `out/verdicts/` if needed; ensure
+`out/` is gitignored — briefs may contain internal project context.
 
 Design the HTML via the **`frontend-design`** skill: subject is *an engineering
 decision record*; the page's one job is to make the recommendation, scorecard,

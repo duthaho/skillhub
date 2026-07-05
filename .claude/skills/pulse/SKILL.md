@@ -73,10 +73,21 @@ for every item — `title`, `url`, `source`, `engagement` (the raw metric + its 
 
 Use `subagent_type: "Explore"` (read-only, fast) for fetch-heavy sources.
 
+**Effort scaling:** match the fan-out to the ask. A niche topic or an explicit
+"quick check" needs only the 2 best-matched sources from the table; the full
+fan-out is for broad or clearly hot topics. **Lossless hand-off:** if a
+sub-agent's deepened findings run long (many quotes/threads), have it write the
+full extracts to `out/pulse/.work/<source>.md` and return just its ranked
+summary — read the files at synthesis instead of losing detail in the relay.
+
 ### Web sub-agent
 
 - Use `WebSearch` with several query variations (topic + "news"/"review"/"discussion"
   + recency terms). Prefer results inside the window.
+- **Authority over SEO:** prefer primary sources (official posts, the actual
+  thread/repo, named practitioners) over SEO-optimized aggregators and listicle
+  farms. A claim that appears *only* on low-quality aggregator sites is
+  low-trust — mark it accordingly.
 - Engagement proxy: publication prominence + how often a story recurs across results.
 - Deepen top 2–3: `WebFetch` the article and extract the core claim + any quotes.
 
@@ -118,7 +129,7 @@ If a source returns nothing usable after its fallback, record it as **unreachabl
 ## Step 2 — Synthesize (main agent)
 
 0. **Check for a previous pulse (delta memory):** look for earlier
-   `pulse-briefs/<slug>-*.md` files for this topic. If one exists, read the most
+   `out/pulse/<slug>-*.md` files for this topic. If one exists, read the most
    recent one and compute the delta for a **Since last pulse** section: which
    clusters are new, which previous stories have faded, and which previously
    Disputed/Unconfirmed items have since been confirmed or debunked (say which,
@@ -174,16 +185,16 @@ If the user asked for ELI5, prepend a short plain-language summary above TL;DR.
 
 ## Output files
 
-Save to `./pulse-briefs/` in the current working directory:
+Save to `./out/pulse/` in the current working directory:
 
-- `pulse-briefs/<slug>-<YYYY-MM-DD>.md` — the markdown brief verbatim.
-- `pulse-briefs/<slug>-<YYYY-MM-DD>.html` — a **bespoke, distinctively designed**
+- `out/pulse/<slug>-<YYYY-MM-DD>.md` — the markdown brief verbatim.
+- `out/pulse/<slug>-<YYYY-MM-DD>.html` — a **bespoke, distinctively designed**
   brief (see below). Self-contained: inline `<style>`, **no JavaScript**, links
   preserved, engagement metrics visible, responsive, print-friendly.
 
 `<slug>` = topic lowercased, non-alphanumerics → hyphens. Compute the date with a
-shell command (e.g. `date +%F`) — do not guess it. Create `pulse-briefs/` if needed,
-and ensure `.gitignore` ignores it (the skill setup adds this once).
+shell command (e.g. `date +%F`) — do not guess it. Create `out/pulse/` if needed;
+ensure `out/` is gitignored — one rule covers every skill's output.
 
 Tell the user the two saved paths at the end.
 
