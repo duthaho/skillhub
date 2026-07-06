@@ -105,7 +105,8 @@ On SHIP (human-in-the-loop, in this order):
 4. **One-line retro (optional but offered):** if the session surfaced a
    recurring agent mistake — a convention repeatedly missed, a check
    repeatedly forgotten — suggest the one-line `CLAUDE.md` rule or lint that
-   would make it impossible next time. Harness engineering beats repetition.
+   would make it impossible next time. Harness engineering beats repetition;
+   the **tune** skill runs this same audit at scale across past sessions.
 
 ## Guardrails
 
