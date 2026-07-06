@@ -24,11 +24,12 @@ for s in skillhub/.claude/skills/*; do ln -s "$(realpath "$s")" ~/.claude/skills
 ```
 
 Then type `/pulse`, `/verdict`, `/jobfit`, `/daybrief`, `/teach`, `/feature`,
-`/bugfix`, or `/done` in Claude Code. That's the whole setup.
+`/bugfix`, `/done`, `/factcheck`, or `/tune` in Claude Code. That's the whole
+setup.
 
 ## Why these skills exist
 
-I built these against four failure modes I kept hitting with coding agents.
+I built these against five failure modes I kept hitting with coding agents.
 
 ### #1 — The agent believes the internet
 
@@ -45,6 +46,9 @@ That isn't what practitioners think; it's what ranks.
   listicles and vendor claims are labeled as vendor claims.
 - [`/jobfit`](./.claude/skills/jobfit/SKILL.md) — job postings scored against
   your actual CV, with the pay researched and ghost postings called out.
+- [`/factcheck`](./.claude/skills/factcheck/SKILL.md) — the audit for documents
+  that already *claim* to be cited: does each linked source actually assert the
+  claim? A resolving link is not verification.
 
 Every claim in every brief links to a real fetched source. If a source was
 unreachable, the brief says so instead of improvising.
@@ -99,6 +103,21 @@ RSVPs. `/done` commits locally but never pushes without an explicit yes.
 `/feature` won't write code before you've approved the spec and the plan.
 You make the calls; the skills make them informed.
 
+### #5 — You fix the agent, never the harness
+
+Every session, the same corrections: don't use that command, run the linter
+first, stop touching that folder. The agent apologizes, complies — and the
+next session starts from the same blank slate. The corrections live in your
+patience instead of your config.
+
+**The fix** is a retro for the setup itself:
+[`/tune`](./.claude/skills/tune/SKILL.md) mines your recent session
+transcripts for repeated corrections, permission friction, and rules that get
+ignored anyway, then proposes the one-line fix — a `CLAUDE.md` rule, an
+allowlist entry, a script replacing re-derived steps — one finding at a time,
+each with quoted evidence, applied only on your yes. It proposes deletions as
+readily as additions, because a bloated config degrades the agent too.
+
 ## The skills
 
 **Research** — outward-looking, cited, engagement-ranked
@@ -107,12 +126,14 @@ You make the calls; the skills make them informed.
 | [pulse](./.claude/skills/pulse/SKILL.md) | What the community is saying about anything, right now | `/pulse ollama last week` |
 | [verdict](./.claude/skills/verdict/SKILL.md) | ADR-style tech decisions you can defend in review | `/verdict kafka vs nats, ops burden matters most` |
 | [jobfit](./.claude/skills/jobfit/SKILL.md) | Find and score roles against your real CV | `/jobfit find senior backend roles, remote only` |
+| [factcheck](./.claude/skills/factcheck/SKILL.md) | Do the cited sources actually say that? | `/factcheck report.md` |
 
 **Day to day** — memory-first, read-only where it counts
 | Skill | One line | Try |
 |---|---|---|
 | [daybrief](./.claude/skills/daybrief/SKILL.md) | Your day in one scan, priorities first | `/daybrief skip email` |
 | [teach](./.claude/skills/teach/SKILL.md) | A tutor that remembers what you got wrong | `/teach rust ownership` |
+| [tune](./.claude/skills/tune/SKILL.md) | Turn recurring agent mistakes into one-line fixes | `/tune` |
 
 **The coding loop** — effort-scaled, evidence-gated
 | Skill | One line | Try |
@@ -133,6 +154,8 @@ out/
 ├── jobfit/         reports + tracker.md   ← every role ever scored
 ├── daybrief/       saved briefs           ← yesterday's focus, carried over
 ├── teach/          one log per topic      ← syllabus, scores, review queue
+├── factcheck/      audit tables           ← one per document checked
+├── tune/           learnings.md           ← accepted/rejected harness fixes
 └── dev/            per-change spec/plan/log + bugfix-log.md
 ```
 
@@ -164,7 +187,7 @@ files. The research skills lean on Claude Code's sub-agents and web tools;
 other harnesses that support agent skills should run them with minor friction.
 
 **Why not one big workflow framework?** Frameworks that own your whole loop are
-hard to leave and harder to debug. These are eight independent skills that
+hard to leave and harder to debug. These are ten independent skills that
 share conventions — use one, use all, delete the ones you don't like.
 
 ## License
