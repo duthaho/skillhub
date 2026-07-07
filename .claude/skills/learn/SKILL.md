@@ -1,5 +1,5 @@
 ---
-name: teach
+name: learn
 description: >-
   Personalized tutor with memory across sessions — "teach me X, at my pace."
   Interviews the learner once (goal, current level, session length), builds a
@@ -7,20 +7,20 @@ description: >-
   recall quiz on earlier material (spaced repetition), teaches the next unit
   with examples matched to the learner's background, and closes with an
   active-recall check. Progress, quiz scores, and weak spots persist in
-  out/teach/<topic>.md, so every session resumes where the last one ended and
+  out/learn/<topic>.md, so every session resumes where the last one ended and
   re-drills what was missed. Keyless; verifies version- or fact-sensitive
   content via web search with cited sources instead of trusting memory. Use
-  when the user wants to learn or study a topic — e.g. "/teach rust
+  when the user wants to learn or study a topic — e.g. "/learn rust
   ownership", "teach me kubernetes", "quiz me on X", "continue the SQL
-  lessons"; "/teach" alone lists topics in progress. For community buzz on a
+  lessons"; "/learn" alone lists topics in progress. For community buzz on a
   topic use pulse; for choosing between technologies use verdict.
 ---
 
-# teach — personalized tutor with memory
+# learn — personalized tutor with memory
 
-`/teach <topic>` — start or continue learning a topic
-`/teach` — list topics in progress and what's due
-`/teach quiz <topic>` — quiz-only session (no new material)
+`/learn <topic>` — start or continue learning a topic
+`/learn` — list topics in progress and what's due
+`/learn quiz <topic>` — quiz-only session (no new material)
 
 Answer one question per session: **what should this learner do for the next
 N minutes to durably advance toward their goal?** One unit per session,
@@ -33,22 +33,22 @@ questions in chat; you grade what they actually wrote.
 
 ## Modes (auto-detect)
 
-- **NEW** — no `out/teach/<slug>.md` exists for the topic → interview + syllabus.
+- **NEW** — no `out/learn/<slug>.md` exists for the topic → interview + syllabus.
 - **CONTINUE** — a log exists → run the session loop from where it left off.
-- **STATUS** — `/teach` with no topic → summarize all logs: per topic, progress
+- **STATUS** — `/learn` with no topic → summarize all logs: per topic, progress
   (`x/y` units), last session date, review items due, and a suggested next step.
 - **QUIZ** — "quiz me" → recall-only session from the review queue + covered
   units; grade, update the log, teach nothing new.
 
 ## The learning log — memory across sessions
 
-One file per topic: `out/teach/<slug>.md` (`<slug>` = topic lowercased,
+One file per topic: `out/learn/<slug>.md` (`<slug>` = topic lowercased,
 non-alphanumerics → hyphens), **gitignored**. It is the skill's entire memory
 and it is the learner's file too — plain markdown they can read and edit.
 Respect manual edits (a unit hand-marked done stays done; ask nothing).
 
 ```markdown
-# teach log: <Topic>
+# learn log: <Topic>
 
 ## Learner
 Goal: <what they want to be able to DO> · Level: <self-described start point>
@@ -139,6 +139,6 @@ quizzing but mark the unit ◐ — unpassed — and say why it stays that way.
   go in the queue even when it feels pedantic.
 - **One unit per session.** Durable beats fast. The syllabus is the pace.
 - **The log is the learner's.** Human-readable, hand-editable, gitignored
-  (`out/teach/`), and respected — never overwrite their manual edits.
+  (`out/learn/`), and respected — never overwrite their manual edits.
 - **Keyless.** Never ask for API keys; degrade gracefully (no web → teach
   from knowledge and label freshness honestly).
