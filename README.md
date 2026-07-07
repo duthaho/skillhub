@@ -23,7 +23,7 @@ Prefer staying current? Symlink instead — a `git pull` in the clone updates ev
 for s in skillhub/.claude/skills/*; do ln -s "$(realpath "$s")" ~/.claude/skills/; done
 ```
 
-Then type `/pulse`, `/verdict`, `/jobfit`, `/daybrief`, `/teach`, `/feature`,
+Then type `/pulse`, `/verdict`, `/jobfit`, `/daybrief`, `/learn`, `/feature`,
 `/bugfix`, `/done`, `/factcheck`, or `/tune` in Claude Code. That's the whole
 setup.
 
@@ -69,7 +69,7 @@ yourself:
   and tells you whether it still stands.
 - [`/daybrief`](./.claude/skills/daybrief/SKILL.md) carries yesterday's
   unfinished focus items into today and scores the follow-through.
-- [`/teach`](./.claude/skills/teach/SKILL.md) remembers what you got wrong and
+- [`/learn`](./.claude/skills/learn/SKILL.md) remembers what you got wrong and
   re-drills it sessions later, spaced-repetition style.
 
 ### #3 — "Looks done" isn't done
@@ -132,7 +132,7 @@ readily as additions, because a bloated config degrades the agent too.
 | Skill | One line | Try |
 |---|---|---|
 | [daybrief](./.claude/skills/daybrief/SKILL.md) | Your day in one scan, priorities first | `/daybrief skip email` |
-| [teach](./.claude/skills/teach/SKILL.md) | A tutor that remembers what you got wrong | `/teach rust ownership` |
+| [learn](./.claude/skills/learn/SKILL.md) | A tutor that remembers what you got wrong | `/learn rust ownership` |
 | [tune](./.claude/skills/tune/SKILL.md) | Turn recurring agent mistakes into one-line fixes | `/tune` |
 
 **The coding loop** — effort-scaled, evidence-gated
@@ -153,7 +153,7 @@ out/
 ├── verdicts/       decision briefs + revisit addenda
 ├── jobfit/         reports + tracker.md   ← every role ever scored
 ├── daybrief/       saved briefs           ← yesterday's focus, carried over
-├── teach/          one log per topic      ← syllabus, scores, review queue
+├── learn/          one log per topic      ← syllabus, scores, review queue
 ├── factcheck/      audit tables           ← one per document checked
 ├── tune/           learnings.md           ← accepted/rejected harness fixes
 └── dev/            per-change spec/plan/log + bugfix-log.md
