@@ -68,8 +68,8 @@ Interview the user with **one compact question set** (`AskUserQuestion`) —
 only what the request leaves genuinely open: the goal as observable behavior,
 what's explicitly **out of scope**, acceptance criteria, and the **end-to-end
 check** that will prove it works (a command, a flow to click through, a curl).
-Read the repo's `CLAUDE.md` and nearby code first so questions are informed,
-not generic.
+Read the repo's `CLAUDE.md`/`AGENTS.md` (the map skill writes the latter) and
+nearby code first so questions are informed, not generic.
 
 Write `spec.md` — short, self-contained, someone-else-could-build-from-it —
 and get explicit approval. **The spec is the contract for the review in
