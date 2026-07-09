@@ -23,13 +23,12 @@ Prefer staying current? Symlink instead — a `git pull` in the clone updates ev
 for s in skillhub/.claude/skills/*; do ln -s "$(realpath "$s")" ~/.claude/skills/; done
 ```
 
-Then type `/pulse`, `/verdict`, `/jobfit`, `/daybrief`, `/learn`, `/map`,
-`/feature`, `/bugfix`, `/done`, `/factcheck`, or `/tune` in Claude Code. That's
-the whole setup.
+Then type any skill's command in Claude Code — pick one from [the skills](#the-skills)
+below. That's the whole setup.
 
 ## Why these skills exist
 
-I built these against six failure modes I kept hitting with coding agents.
+I built these against the failure modes I kept hitting with coding agents.
 
 ### #1 — The agent believes the internet
 
@@ -167,15 +166,9 @@ you run them from:
 
 ```
 out/
-├── pulse/          briefs (.md + a designed .html per run)
-├── verdicts/       decision briefs + revisit addenda
-├── jobfit/         reports + tracker.md   ← every role ever scored
-├── daybrief/       saved briefs           ← yesterday's focus, carried over
-├── learn/          one log per topic      ← syllabus, scores, review queue
-├── factcheck/      audit tables           ← one per document checked
-├── tune/           learnings.md           ← accepted/rejected harness fixes
-├── map/            .work/ scratch only     ← output is AGENTS.md at the repo root
-└── dev/            per-change spec/plan/log + bugfix-log.md
+├── <skill>/    one folder per skill — its briefs, trackers, logs, and memory
+│               (e.g. jobfit/tracker.md, learn/<topic>.md, tune/learnings.md)
+└── dev/        the coding loop's per-change spec, plan, and log + bugfix-log.md
 ```
 
 Plain markdown, human-readable, yours to edit — the skills read these files at
@@ -208,8 +201,8 @@ files. The research skills lean on Claude Code's sub-agents and web tools;
 other harnesses that support agent skills should run them with minor friction.
 
 **Why not one big workflow framework?** Frameworks that own your whole loop are
-hard to leave and harder to debug. These are eleven independent skills that
-share conventions — use one, use all, delete the ones you don't like.
+hard to leave and harder to debug. These are independent skills that share
+conventions — use one, use all, delete the ones you don't like.
 
 ## License
 
