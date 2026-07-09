@@ -23,13 +23,12 @@ Prefer staying current? Symlink instead — a `git pull` in the clone updates ev
 for s in skillhub/.claude/skills/*; do ln -s "$(realpath "$s")" ~/.claude/skills/; done
 ```
 
-Then type `/pulse`, `/verdict`, `/jobfit`, `/daybrief`, `/learn`, `/feature`,
-`/bugfix`, `/done`, `/factcheck`, or `/tune` in Claude Code. That's the whole
-setup.
+Then type any skill's command in Claude Code — pick one from [the skills](#the-skills)
+below. That's the whole setup.
 
 ## Why these skills exist
 
-I built these against five failure modes I kept hitting with coding agents.
+I built these against the failure modes I kept hitting with coding agents.
 
 ### #1 — The agent believes the internet
 
@@ -118,6 +117,23 @@ allowlist entry, a script replacing re-derived steps — one finding at a time,
 each with quoted evidence, applied only on your yes. It proposes deletions as
 readily as additions, because a bloated config degrades the agent too.
 
+### #6 — The agent edits before it understands
+
+Point an agent at an unfamiliar repo and it starts changing code before it knows
+where the entry points are, which layer owns what, or which conventions are
+load-bearing. So it hallucinates an internal API, edits the wrong module, or
+quietly breaks an invariant nobody wrote down. The community's own finding on
+large codebases: it's *orientation*, not model smarts, that decides success.
+
+**The fix** is to map the territory first:
+[`/map`](./.claude/skills/map/SKILL.md) fans out read-only explorers along the
+order that matters — entry points, build/test commands, architecture,
+conventions, test layout — then distills a lean `AGENTS.md` at the repo root
+where every claim points to a real file and nothing survives that isn't
+load-bearing. It lands where Claude Code and other agents auto-load it, so the
+next session — including `feature` and `bugfix` — starts oriented instead of
+cold. You approve the file before it's written — a wrong map is worse than none.
+
 ## The skills
 
 **Research** — outward-looking, cited, engagement-ranked
@@ -138,6 +154,7 @@ readily as additions, because a bloated config degrades the agent too.
 **The coding loop** — effort-scaled, evidence-gated
 | Skill | One line | Try |
 |---|---|---|
+| [map](./.claude/skills/map/SKILL.md) | Orient the agent to an unfamiliar repo, as a lean AGENTS.md | `/map` |
 | [feature](./.claude/skills/feature/SKILL.md) | Spec → plan → test-first build, resumable | `/feature add rate limiting` |
 | [bugfix](./.claude/skills/bugfix/SKILL.md) | Reproduce → root-cause → prove, minimal diff | `/bugfix login 500s on empty password` |
 | [done](./.claude/skills/done/SKILL.md) | The gate: prove it works, then ship | `/done` |
@@ -149,19 +166,16 @@ you run them from:
 
 ```
 out/
-├── pulse/          briefs (.md + a designed .html per run)
-├── verdicts/       decision briefs + revisit addenda
-├── jobfit/         reports + tracker.md   ← every role ever scored
-├── daybrief/       saved briefs           ← yesterday's focus, carried over
-├── learn/          one log per topic      ← syllabus, scores, review queue
-├── factcheck/      audit tables           ← one per document checked
-├── tune/           learnings.md           ← accepted/rejected harness fixes
-└── dev/            per-change spec/plan/log + bugfix-log.md
+├── <skill>/    one folder per skill — its briefs, trackers, logs, and memory
+│               (e.g. jobfit/tracker.md, learn/<topic>.md, tune/learnings.md)
+└── dev/        the coding loop's per-change spec, plan, and log + bugfix-log.md
 ```
 
 Plain markdown, human-readable, yours to edit — the skills read these files at
 the start of every run and update them at the end. One `.gitignore` line
-(`out/`) keeps all of it out of your commits.
+(`out/`) keeps all of it out of your commits. (`/map` is the one exception: its
+deliverable is a committed `AGENTS.md` at your repo root — the shared file other
+agents read too — not an `out/` file.)
 
 ## What these skills won't do
 
@@ -187,8 +201,8 @@ files. The research skills lean on Claude Code's sub-agents and web tools;
 other harnesses that support agent skills should run them with minor friction.
 
 **Why not one big workflow framework?** Frameworks that own your whole loop are
-hard to leave and harder to debug. These are ten independent skills that
-share conventions — use one, use all, delete the ones you don't like.
+hard to leave and harder to debug. These are independent skills that share
+conventions — use one, use all, delete the ones you don't like.
 
 ## License
 
