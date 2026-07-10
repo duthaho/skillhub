@@ -154,6 +154,22 @@ the pipeline can't settle honestly is **parked and reported**, never
 guessed through. By default it stops at an open PR — merging stays yours —
 and `--merge` hands over that last step too.
 
+### #8 — The project builds in a vacuum
+
+The five projects solving your same problem have already run the
+experiments: their users' top-reacted feature requests are public demand
+data, their changelogs are shipped answers, their gaps are open lanes.
+Never looking sideways means re-learning all of it the slow way — or worse,
+copying whatever a peer ships just because they shipped it.
+
+**The fix** is [`/scout`](./.claude/skills/scout/SKILL.md) — reconnaissance
+with a parity gate: find the peer repos, mine what their users actually
+love (issue reactions, not stars), lay out the gap both ways — including
+the moat you must not dilute — and verdict every candidate feature
+ADOPT/ADAPT/SKIP/WATCH, where SKIP is the default and every ADOPT needs
+evidence from *your* side. Ready ADOPTs hand off straight to `feature` or
+`autopilot`.
+
 ## The skills
 
 **Research** — outward-looking, cited, engagement-ranked
@@ -163,6 +179,7 @@ and `--merge` hands over that last step too.
 | [verdict](./.claude/skills/verdict/SKILL.md) | ADR-style tech decisions you can defend in review | `/verdict kafka vs nats, ops burden matters most` |
 | [jobfit](./.claude/skills/jobfit/SKILL.md) | Find and score roles against your real CV | `/jobfit find senior backend roles, remote only` |
 | [factcheck](./.claude/skills/factcheck/SKILL.md) | Do the cited sources actually say that? | `/factcheck report.md` |
+| [scout](./.claude/skills/scout/SKILL.md) | What peer projects ship, and what's worth adopting | `/scout` |
 
 **Day to day** — memory-first, read-only where it counts
 | Skill | One line | Try |
