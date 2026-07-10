@@ -122,8 +122,8 @@ that sees the incident class gone can propose the deletion.
 - **Evidence or it isn't a finding.** Every proposal carries quoted
   transcript lines with dates; "I noticed you often..." without a quote is
   not presented.
-- **Deletions as readily as additions.** The failure mode of harness
-  tuning is accretion; a run that only ever adds rules is doing it wrong.
+- **Deletions as readily as additions.** A run that only ever adds rules is
+  doing it wrong.
 - **Privacy is structural.** Transcripts stay local; quotes land only in
   `out/tune/` files — ensure that path is gitignored (quotes come from the
   user's private sessions) — and are never sent anywhere.

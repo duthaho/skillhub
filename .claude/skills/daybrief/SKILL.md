@@ -22,10 +22,6 @@ Answer one question in one scan: **what needs my attention today, in what
 order?** Pull every source in parallel, compress hard, and lead with the
 priorities — not the raw data. Target: the user reads it in under two minutes.
 
-**Strictly read-only.** This skill never sends or replies to email, never
-labels or archives anything, never accepts/declines invites, never commits or
-pushes. It reports; the user acts.
-
 ## Step 0 — Config
 
 Look for `daybrief-config.md` in the current working directory. It defines:
@@ -168,11 +164,8 @@ Compact, scannable, in chat — this is the product. Skeleton:
 Sources: calendar ✓ · email ✓ · repos ✓ · tasks ✓/— · radar ✓/— <note any unavailable>
 ```
 
-**Tip — run it before you sit down:** this skill pairs well with a scheduled
-routine (e.g. Claude Code's `/schedule` or a cron job) that runs `/daybrief`
-each workday morning with `save: on`, so the brief — and the carry-over chain —
-is waiting when the day starts. Suggest this once if the user runs daybrief
-manually on consecutive days; don't nag.
+If the user runs daybrief manually on consecutive days, suggest once — never
+nag — scheduling it each morning with `save: on` (cron or /schedule).
 
 Dates/times from real commands (`date`), never guessed. If config `save: on`
 (or the user asks), also write `out/daybrief/<YYYY-MM-DD>.md` — no HTML for this

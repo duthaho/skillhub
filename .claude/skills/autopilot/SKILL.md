@@ -44,9 +44,6 @@ The invocation is the consent. Echo this before running, then don't ask again:
   history, delete branches or issues it didn't create, weaken a test to get
   green, or touch anything outside this repo.
 
-Anything not on the WILL list doesn't happen — the charter is the whole
-consent, not its opening offer.
-
 ## Auto mode — how the other skills run here
 
 Autopilot drives **map**, **feature**, and **done** in *auto mode*, a shared

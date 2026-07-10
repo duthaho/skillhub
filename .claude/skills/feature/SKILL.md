@@ -141,11 +141,10 @@ Then archive the change folder.
 - **Process serves the change.** State the tier; never make a one-line fix
   wait for a spec, and never let a multi-file change skip the plan.
 - **Approval gates are real.** Spec and plan wait for an explicit yes —
-  they're the user's cheapest chance to steer. (In auto mode the gate is a
-  critic loop plus a logged rationale — the wait is removed, not the gate.)
+  they're the user's cheapest chance to steer.
 - **Evidence over claims** at every level: failing test seen failing, passing
   test seen passing, verification commands actually run.
-- **Files over memory.** `plan.md`/`log.md` are the truth; re-read at task
-  boundaries, update the moment reality changes.
+- **Files over memory.** `plan.md`/`log.md` are the truth; update the moment
+  reality changes.
 - **Honest logging.** `log.md` records failures and reversals too — the next
   session needs the real story, not a highlight reel.
