@@ -122,6 +122,10 @@ This file lands in **the user's repo**, so nothing is written without a yes:
 4. Note that `feature` and `bugfix` will now read this file at the start of
    their runs — the map pays off downstream.
 
+**Auto mode (under autopilot):** the draft→approve gate becomes
+write-and-log — the map is written and stamped, the run's `log.md` records
+what was generated and why, and committing still follows the run's charter.
+
 On **REFRESH**: diff the map's claims against the current tree — flag sections
 whose cited files moved, changed shape, or vanished; regenerate only those;
 re-stamp. Don't rewrite what's still true.
@@ -134,7 +138,8 @@ re-stamp. Don't rewrite what's still true.
 - **Lean or it's ignored.** The litmus test is non-negotiable — bloat is the
   documented reason agent files stop being followed. Cut ruthlessly.
 - **Never write or commit unprompted.** The output modifies the user's repo;
-  draft → approve → write, and commit only on an explicit yes.
+  draft → approve → write, and commit only on an explicit yes. (In auto
+  mode, the autopilot charter is the prompt — the write is logged, not asked.)
 - **Navigate, don't index.** Keyless by design — grep/glob/read/LSP, no
   embeddings to leak or go stale. Re-derived-but-fresh beats cached-but-wrong.
 - **Evidence is a path.** No landmark, convention, or command without a locator
