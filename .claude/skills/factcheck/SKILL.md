@@ -121,7 +121,8 @@ what to re-check and when (omit if none)
 
 Save to `out/factcheck/<slug>-<YYYY-MM-DD>.md` (`<slug>` from the document
 title; date via `date +%F` — never guessed). Create the folder if needed;
-`out/` is gitignored. Then **offer** — never do unasked — the follow-ups:
+committing the audit is the user's call. Then **offer** — never do unasked —
+the follow-ups:
 annotate the original with inline flags, or draft corrected text for the
 failing claims.
 

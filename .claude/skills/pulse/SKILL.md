@@ -194,7 +194,7 @@ Save to `./out/pulse/` in the current working directory:
 
 `<slug>` = topic lowercased, non-alphanumerics → hyphens. Compute the date with a
 shell command (e.g. `date +%F`) — do not guess it. Create `out/pulse/` if needed;
-ensure `out/` is gitignored — one rule covers every skill's output.
+the briefs are the user's to commit or ignore — don't edit `.gitignore` for them.
 
 Tell the user the two saved paths at the end.
 

@@ -189,8 +189,8 @@ and `--merge` hands over that last step too.
 
 ## How the memory works
 
-Everything the skills write lands in one gitignored folder in whatever project
-you run them from:
+Everything the skills write lands in one folder in whatever project you run
+them from:
 
 ```
 out/
@@ -199,12 +199,15 @@ out/
 └── dev/        the coding loop's per-change spec, plan, and log + bugfix-log.md
 ```
 
-Plain markdown, human-readable, yours to edit — the skills read these files at
-the start of every run and update them at the end. One `.gitignore` line
-(`out/`) keeps all of it out of your commits. (Two labeled exceptions:
-`/map`'s deliverable is a committed `AGENTS.md` at your repo root — the
-shared file other agents read too — and `/autopilot` publishes issues,
-branches, and a PR, exactly as its charter lists.)
+Plain markdown, human-readable, yours — to edit *and to commit*. The skills
+read these files at the start of every run and update them at the end.
+Whether they enter version control is your call: `out/dev/` plans and logs,
+verdict briefs, and the bugfix log make good shared history; ephemeral
+briefs don't need to. The exception is personal data — the skills that
+write it (`jobfit`, `daybrief`, `tune`) keep their own folders gitignored,
+so salary, email, and transcript quotes never land in a commit by accident.
+(`/map` and `/autopilot` also write outside `out/`: a committed `AGENTS.md`
+at your repo root, and issues, branches, and one PR per its charter.)
 
 ## What these skills won't do
 
@@ -225,7 +228,9 @@ Reddit JSON, GitHub REST) — clone and go. The trade-off is honest degradation:
 when a source is blocked, the brief says "unreachable" instead of pretending.
 
 **Where does my data go?** Nowhere. Profiles, trackers, logs, and briefs are
-local markdown in `out/`, gitignored by default. Nothing is uploaded anywhere.
+local markdown in `out/` — yours to commit or ignore, except the personal-data
+folders (`jobfit`, `daybrief`, `tune`), which stay gitignored by default.
+Nothing is uploaded anywhere.
 
 **Do these work outside Claude Code?** They're written as standard `SKILL.md`
 files. The research skills lean on Claude Code's sub-agents and web tools;

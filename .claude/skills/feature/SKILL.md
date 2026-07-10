@@ -48,8 +48,8 @@ tier if needed.
 
 ## The change folder — state across sessions
 
-`out/dev/<change-slug>/` (gitignored via `out/`; `<slug>` = short change name,
-lowercased, hyphens):
+`out/dev/<change-slug>/` (`<slug>` = short change name, lowercased, hyphens;
+committing the folder is the user's call — it makes good shared history):
 
 - `spec.md` — what & why, agreed acceptance criteria. Written once, then stable.
 - `plan.md` — the task checklist. Checkboxes are flipped as tasks complete;

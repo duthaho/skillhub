@@ -103,8 +103,8 @@ command, and a `depends-on: #n` list. Label `autopilot`, title
 `[<slug>] <task name>`. Record issue numbers back into `plan.md`.
 
 Local files stay canonical; the issues are the published mirror — and the
-hand-off that actually reaches the workers, since `out/` is gitignored and
-invisible inside the worktrees below.
+hand-off that actually reaches the workers, since the run's `out/` state is
+uncommitted mid-run and invisible inside the worktrees below.
 
 ## Step 5 — Dispatch in dependency waves
 

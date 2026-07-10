@@ -179,8 +179,9 @@ Save to `./out/verdicts/` in the current working directory:
   as first-class visual elements, responsive, print-friendly.
 
 `<slug>` = options joined by `-vs-`, lowercased. Compute the date with a shell
-command (`date +%F`) — do not guess. Create `out/verdicts/` if needed; ensure
-`out/` is gitignored — briefs may contain internal project context.
+command (`date +%F`) — do not guess. Create `out/verdicts/` if needed. Briefs
+make good shared history, but they may contain internal project context —
+committing them is the user's call, not the skill's.
 
 Design the HTML via the **`frontend-design`** skill: subject is *an engineering
 decision record*; the page's one job is to make the recommendation, scorecard,
