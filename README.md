@@ -3,14 +3,13 @@
 [Claude Code](https://claude.com/claude-code) skills I use every day — to research
 like a skeptic, run my mornings, learn things properly, and ship code I can defend.
 
-They started as prompts I kept retyping. Every time I asked "what are people saying
-about X," the agent trusted whatever the search engine served. Every job hunt, every
-tech decision, every morning briefing started from zero. So I wrote each workflow
-down once, gave it memory, and made it show its sources.
+They started as prompts I kept retyping — research that trusted whatever ranked,
+job hunts and briefings that started from zero. So I wrote each workflow down
+once, gave it memory, and made it show its sources.
 
 No API keys. No accounts. Nothing is sent, submitted, or pushed on your behalf —
-unless you start an `autopilot` run, whose one-time charter spells out exactly
-what it may do, and merging still stays yours unless you say otherwise.
+except an `autopilot` run, which executes only the itemized charter you sign
+(failure mode #7 below).
 
 ## Quickstart
 
@@ -99,17 +98,13 @@ The scariest failure mode isn't wrong output — it's an agent that applies to
 the job, sends the email, or pushes the branch while you were getting coffee.
 
 **The fix** is structural, not politeness: `/jobfit` evaluates and drafts but
-never submits. `/daybrief` reads email and calendar but never replies or
-RSVPs. `/done` commits locally but never pushes without an explicit yes.
-`/feature` won't write code before you've approved the spec and the plan.
-You make the calls; the skills make them informed.
-
-The one deliberate exception is
-[`/autopilot`](./.claude/skills/autopilot/SKILL.md): a single invocation
-signs an explicit, itemized charter — create these issues, push these
-branches, open one PR — and nothing outside it. The difference between an
-agent that acts behind your back and one that executes a mandate you signed
-is the mandate.
+never submits, `/daybrief` reads email and calendar but never replies,
+`/done` commits locally but never pushes without an explicit yes, `/feature`
+writes no code before you've approved the spec and the plan. You make the
+calls; the skills make them informed. The one deliberate exception is
+[`/autopilot`](./.claude/skills/autopilot/SKILL.md), which acts only on the
+itemized charter you sign — the difference between an agent acting behind
+your back and one executing a mandate is the mandate (see #7).
 
 ### #5 — You fix the agent, never the harness
 
@@ -131,8 +126,7 @@ readily as additions, because a bloated config degrades the agent too.
 Point an agent at an unfamiliar repo and it starts changing code before it knows
 where the entry points are, which layer owns what, or which conventions are
 load-bearing. So it hallucinates an internal API, edits the wrong module, or
-quietly breaks an invariant nobody wrote down. The community's own finding on
-large codebases: it's *orientation*, not model smarts, that decides success.
+quietly breaks an invariant nobody wrote down.
 
 **The fix** is to map the territory first:
 [`/map`](./.claude/skills/map/SKILL.md) fans out read-only explorers along the
@@ -146,13 +140,12 @@ cold. You approve the file before it's written — a wrong map is worse than non
 ### #7 — Autonomy without an arbiter
 
 Let an agent run a whole task unsupervised and the failure isn't that it
-stops — it's that it doesn't: reviewers rubber-stamp the implementer, the
-plan drifts, and "done" becomes whatever the last model said it was.
-Removing the human without installing another arbiter just makes the loop
-confident.
+stops — it's that it doesn't: reviewers rubber-stamp the implementer and
+"done" becomes whatever the last model said it was. Removing the human
+without installing another arbiter just makes the loop confident.
 
-**The fix** is `/autopilot` — the
-whole coding loop on one yes: map → spec (interviewing the codebase, not
+**The fix** is `/autopilot` — the whole
+coding loop on one yes: map → spec (interviewing the codebase, not
 you) → a plan hardened by a bounded critique loop of diverse critics →
 GitHub issues → parallel worktree implementers → fresh-context review loops
 — with the **test suite as the arbiter** at every gate (a repo without
@@ -227,10 +220,9 @@ the agent's native web search/fetch plus free public endpoints (HN Algolia,
 Reddit JSON, GitHub REST) — clone and go. The trade-off is honest degradation:
 when a source is blocked, the brief says "unreachable" instead of pretending.
 
-**Where does my data go?** Nowhere. Profiles, trackers, logs, and briefs are
-local markdown in `out/` — yours to commit or ignore, except the personal-data
-folders (`jobfit`, `daybrief`, `tune`), which stay gitignored by default.
-Nothing is uploaded anywhere.
+**Where does my data go?** Nowhere. Everything is local markdown in `out/` —
+commit-optional, personal-data folders gitignored by default (see *How the
+memory works*). Nothing is uploaded anywhere.
 
 **Do these work outside Claude Code?** They're written as standard `SKILL.md`
 files. The research skills lean on Claude Code's sub-agents and web tools;
