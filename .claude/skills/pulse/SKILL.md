@@ -20,17 +20,6 @@ Answer one question: **what is the community actually saying about this topic ri
 now, and what's resonating?** You ground every claim in a real source and rank by
 real engagement — not by what a search engine's editors surfaced.
 
-This skill is deliberately **keyless**: it uses only the agent's native `WebSearch`
-/ `WebFetch` tools plus free public endpoints. Never ask the user for API keys.
-
-## How this differs from `deep-research`
-
-- `deep-research` = exhaustive, adversarially fact-checked, authoritative web report.
-- `pulse` = fast, recent, **community/engagement-ranked** snapshot. Optimize for
-  "what's being discussed and how much it's resonating," not for proving every claim.
-
-If the user clearly wants an exhaustive verified report, suggest `deep-research`.
-
 ## Inputs
 
 - **Topic** (required): a person, product/company, project/repo, or concept/event.
@@ -147,39 +136,9 @@ If a source returns nothing usable after its fallback, record it as **unreachabl
 
 ## Step 3 — Emit the brief
 
-Render this template **in chat**, then save it as `.md` and a self-contained `.html`
-file (see Output files). Cite inline as `([source], <engagement>)` with a linked URL.
-
-```markdown
-# Pulse: <Topic>
-
-**Window:** <resolved window> · **Run:** <YYYY-MM-DD> · **Type:** <detected type>
-**Sources reached:** Web ✓ · Hacker News ✓ · Reddit ✓/fallback/�—  · GitHub ✓/�—
-
-## TL;DR
-- 3–5 bullets: the headline state of the conversation right now.
-
-## Since last pulse (<date of previous brief>)
-- **New:** <clusters that weren't in the previous brief>
-- **Faded:** <previous headline items with no fresh activity>
-- **Resolved:** <previously unconfirmed items now confirmed/debunked, with source>
-(omit this section entirely on the first pulse for a topic)
-
-## Key Developments
-For each ranked cluster:
-### <Cluster headline>
-What happened + why it resonates. Inline citations with engagement metrics and links.
-Merge cross-source coverage here.
-
-## Best Takes
-> "<quote>" — <author/handle>, <source> (<engagement>) [link]
-
-## Disputed / Unconfirmed
-- <claim> — why it's uncertain, who's pushing back. (omit section if empty)
-
-## Sources
-Flat list of every cited URL, grouped by source, with engagement metrics.
-```
+Render the brief **in chat** per `references/brief-template.md` (read it when
+you reach this step), then save it as `.md` and a self-contained `.html` file
+(see Output files). Cite inline as `([source], <engagement>)` with a linked URL.
 
 If the user asked for ELI5, prepend a short plain-language summary above TL;DR.
 
@@ -200,29 +159,9 @@ Tell the user the two saved paths at the end.
 
 ### Designing the HTML brief
 
-Do **not** pour the content into a fixed template — every brief gets its own design.
-Invoke the **`frontend-design`** skill (Skill tool) and have it design the HTML for
-this specific brief, treating the topic as the design subject:
-
-- **Brief for the designer:** the subject is *this topic and its community
-  conversation*; the audience is someone scanning "what's happening now"; the page's
-  one job is to make the TL;DR, ranked Key Developments, Best Takes, and
-  Disputed/Unconfirmed items instantly scannable, with engagement metrics as
-  first-class visual elements. Ground the aesthetic in the topic's own world (a dev
-  tool, a person, a cultural event each suggest a different visual identity) so no two
-  briefs look alike.
-- **Hard constraints (pass these to `frontend-design`):** single self-contained
-  `.html` file, **inline CSS only, no JavaScript, no external requests/CDNs/web
-  fonts** (system font stack), keep all source links and engagement numbers, must be
-  readable on mobile and when printed, and **must include every section** of the
-  brief template (header with sources-reached, TL;DR, Since last pulse when
-  present, Key Developments, Best Takes, Disputed/Unconfirmed, Sources) with the
-  exact same content as the `.md`.
-- Render the markdown brief content faithfully into that design — design changes the
-  presentation, never the facts, citations, or engagement metrics.
-
-If the `frontend-design` skill is unavailable, fall back to a clean self-contained
-dark-mode, no-JS layout — but prefer the designed output.
+Design the .html via the **`frontend-design`** skill using the brief in
+`references/html-design.md`; if unavailable, fall back to a clean self-contained
+dark-mode, no-JS layout.
 
 ## Guardrails
 

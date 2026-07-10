@@ -4,15 +4,15 @@ description: >-
   Job-fit evaluation and discovery for job seekers — "find roles that fit me" and
   "should I apply to this one, and how do I tailor for it?" Two modes: DISCOVER
   searches job boards for openings matching your profile (title/level/location/
-  remote), and EVALUATE takes job URLs/descriptions you provide. Either way it fans
+  remote), and EVALUATE takes job URLs/descriptions you provide. Both modes fan
   out parallel sub-agents to research compensation, company signal, and posting
-  legitimacy, scores each role A–F across weighted dimensions, and emits a ranked
-  decision brief with tailored CV-bullet suggestions. Remembers every role it has
-  evaluated in out/jobfit/tracker.md so repeat runs skip what you already passed on.
+  legitimacy, score each role A–F across weighted dimensions, and emit a ranked
+  decision brief with tailored CV-bullet suggestions. Remembers every evaluated
+  role in out/jobfit/tracker.md so repeat runs skip what you passed on.
   Keyless and human-in-the-loop:
-  it never applies for you and discourages low-fit roles. Use when the user wants to
-  find/source matching jobs, evaluate/triage job postings, decide whether a role is
-  worth applying to, compare several openings, or tailor a CV to a JD — e.g. "find
+  it never applies for you and discourages low-fit roles. Use when the user wants
+  to find matching jobs, triage postings, decide if a role is worth
+  applying to, compare openings, or tailor a CV to a JD — e.g. "find
   jobs that fit my CV", "/jobfit <url>", "is this job worth applying to", "score
   these roles against my CV". For general community buzz on a company, use pulse.
 ---
@@ -23,8 +23,7 @@ description: >-
 
 Answer one question per role: **is this worth applying to, and if so, how do I
 tailor for it?** You ground every judgment in the actual posting + light research,
-score against the user's real profile, and rank by fit — treating job search as a
-**filtering problem, not a spray-and-pray volume game.**
+score against the user's real profile, and rank by fit.
 
 ## Two modes (auto-detect)
 
@@ -34,11 +33,6 @@ score against the user's real profile, and rank by fit — treating job search a
 
 If jobs are given → EVALUATE. If none are given → DISCOVER. If the user gives jobs but
 also says "and find more like these," do both: evaluate the given ones and run Step 0b.
-
-Adapted from the career-ops philosophy: *"A well-targeted application to 5 companies
-beats a generic blast to 50."* This skill is deliberately **keyless** (native
-`WebSearch`/`WebFetch` + free endpoints) and **human-in-the-loop** — it evaluates
-and drafts, it **never submits**.
 
 ## Source-of-truth boundary (read first)
 
@@ -56,8 +50,8 @@ rephrasing what's genuinely there to mirror the JD's language.
 ## The tracker — memory across runs
 
 Job search is a multi-week process; this skill must not start from zero every day.
-Maintain `out/jobfit/tracker.md` in the working directory (**gitignored** — it holds
-personal data). One row per role ever evaluated:
+Maintain `out/jobfit/tracker.md` in the working directory (**gitignored** — personal
+data). One row per role ever evaluated:
 
 ```markdown
 | Date | Role @ Company | URL | Score | Verdict | Status | Notes |
@@ -111,7 +105,7 @@ role archetype is ambiguous). Otherwise proceed and state assumptions in the bri
 ## Step 0b — Discover roles (DISCOVER mode)
 
 Source openings that match the profile, then let the user choose which to evaluate.
-Discovery is **keyless** — `WebSearch`/`WebFetch` only, no scraping behind logins.
+Discovery is **keyless** — no scraping behind logins.
 
 **Build the search terms from the profile:** target title(s) + close variants,
 seniority/level, location, remote/timezone, and 2–3 signature skills. Honor any
@@ -217,44 +211,9 @@ has a specific reason, and say so.
 
 ## Step 3 — Emit the brief
 
-Render this template **in chat**, then save it as `.md` and a self-contained `.html`
+Render the brief **in chat** per `references/report-template.md` (read it when
+you reach this step), then save it as `.md` and a self-contained `.html`
 (see Output files). Cite research inline with linked URLs.
-
-```markdown
-# JobFit Report
-
-**Run:** <YYYY-MM-DD> · **Roles evaluated:** <n> · **Profile:** <source>
-**Comp target:** <target> · **Location:** <constraints>
-
-## Ranking (best fit first)
-| # | Role @ Company | Score | Letter | Verdict |
-|---|----------------|-------|--------|---------|
-| 1 | ...            | 4.2/5 | B+     | APPLY   |
-
-## <Role> @ <Company> — <Score>/5 (<Letter>) — <VERDICT>
-**Link:** <url> · **Location:** <...> · **Posted:** <...> · **Legitimacy:** <...>
-
-**Scorecard**
-- Role fit          <x>/10 — <one line>
-- CV alignment      <x>/10 — <matched strengths / key gaps>
-- Compensation      <x>/10 — <stated/estimated vs target> [source]
-- Company signal    <x>/10 — <trajectory/sentiment> [source]
-- Legitimacy/logistics <x>/10 — <read>
-
-**Why this score / what would raise it:** <2–3 sentences>
-
-**Tailoring suggestions (reformulate, never fabricate)**
-- JD asks "<keyword>" → your profile has "<real evidence>" → surface as: "<bullet>"
-- Gaps to acknowledge or address: <...>
-
-(repeat per role, in ranked order)
-
-## Dealbreakers & caveats
-- <capped roles, unverifiable comp, stale postings, missing profile info>
-
-## Sources
-Flat list of every cited URL, grouped by role.
-```
 
 ### Cover letter (opt-in)
 
@@ -282,21 +241,9 @@ Tell the user the two saved paths at the end.
 
 ### Designing the HTML report
 
-Invoke the **`frontend-design`** skill (Skill tool) to design the HTML for this
-report:
-
-- **Brief for the designer:** the subject is *a job seeker's apply/skip decision*; the
-  audience is the candidate scanning "which of these is worth my effort"; the page's
-  one job is to make the ranking, per-role scorecards, verdicts, and tailoring
-  suggestions instantly scannable, with scores and verdicts as first-class visual
-  elements (e.g. score meters, APPLY/MAYBE/SKIP badges).
-- **Hard constraints (pass these to `frontend-design`):** single self-contained
-  `.html`, **inline CSS only, no JavaScript, no external requests/CDNs/web fonts**
-  (system font stack), keep all source links and scores, readable on mobile and when
-  printed, and **must include every section** with the same content as the `.md`.
-- Design changes presentation only — never the scores, evidence, or citations.
-
-If `frontend-design` is unavailable, fall back to a clean self-contained no-JS layout.
+Design the .html via the **`frontend-design`** skill using the brief in
+`references/html-design.md`; if unavailable, fall back to a clean self-contained
+no-JS layout.
 
 ## Guardrails
 

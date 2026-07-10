@@ -26,9 +26,7 @@ Answer one question: **what would a competent engineer need to know before
 touching this repo — and nothing more?** The strongest lever in agentic coding
 isn't a smarter model, it's better orientation: an agent that knows the entry
 points, the build commands, and the load-bearing conventions makes the right
-change; one that guesses edits the wrong layer. This skill produces that
-orientation as a durable, shared file — not ephemeral context that dies with
-the session.
+change; one that guesses edits the wrong layer.
 
 ## Step 0 — Scope, and respect what exists
 
@@ -135,8 +133,8 @@ re-stamp. Don't rewrite what's still true.
 - **A wrong map is worse than none.** A confident-but-stale line actively
   degrades the agent's reasoning. Every claim cites a file that exists; when
   unsure, leave it out and say so.
-- **Lean or it's ignored.** The litmus test is non-negotiable — bloat is the
-  documented reason agent files stop being followed. Cut ruthlessly.
+- **Lean or it's ignored.** The litmus test is non-negotiable — cut
+  ruthlessly.
 - **Never write or commit unprompted.** The output modifies the user's repo;
   draft → approve → write, and commit only on an explicit yes. (In auto
   mode, the autopilot charter is the prompt — the write is logged, not asked.)

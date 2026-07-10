@@ -107,8 +107,7 @@ skipped with a stated reason:
 ```
 
 1. **Warm-up recall (~3 min):** 2–3 questions — review-queue items due this
-   session plus one from the last unit. **Ask, then stop and wait.** Never
-   answer your own questions or barrel on.
+   session plus one from the last unit. **Ask, then stop and wait.**
 2. **Grade honestly:** right/partial/wrong per answer, quoting what was wrong
    and why. Partial credit is named, not rounded up.
 3. **Teach the unit:** the concept, then a worked example grounded in the

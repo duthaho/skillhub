@@ -99,8 +99,7 @@ On SHIP (human-in-the-loop, in this order):
    recent `git log` for the house style. Commit.
 2. **Ask before push / PR** — never push or open a PR unprompted. If a PR is
    wanted, the body is the spec's summary + the evidence checklist (a
-   reviewer who sees the proof reviews faster). (In auto mode, the autopilot
-   run's charter is the standing answer.)
+   reviewer who sees the proof reviews faster).
 3. If this change came from a feature folder: move `out/dev/<change>/` to
    `out/dev/archive/`.
 4. **One-line retro (optional but offered):** if the session surfaced a
@@ -125,10 +124,9 @@ who's waiting, not what's proven.
   verdict NEEDS HUMAN — never SHIP on inspection alone.
 - **The gate doesn't fix.** Finding-then-quietly-fixing hides the finding;
   fixes happen after the verdict, on the record, then re-gate.
-- **Fresh context is the point.** Never review your own diff in the same
-  breath you wrote it; the sub-agent isolation is what makes stage 2 honest.
+- **Fresh context is the point.** The sub-agent isolation is what makes
+  stage 2 honest.
 - **Correctness only in review.** Style debates are for humans who enjoy
   them, not shipping gates.
 - **Never push without a yes.** Committing locally is reversible; pushing
-  and PRs are announcements. An autopilot charter is that yes — given once,
-  itemized, up front.
+  and PRs are announcements.
