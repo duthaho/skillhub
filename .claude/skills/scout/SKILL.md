@@ -27,8 +27,8 @@ description: >-
 Answer one question: **what have the projects solving this same problem
 learned that we haven't — and which of those lessons deserves to exist
 here?** Both halves matter: a scout that only returns "features to copy" is
-a parity trap wearing a report. The deliverable is judgment — adopt this,
-skip that, and here's the evidence either way.
+just an automated parity trap. The deliverable is judgment: adopt this,
+skip that, and the evidence either way.
 
 ## Step 0 — Know thyself first
 

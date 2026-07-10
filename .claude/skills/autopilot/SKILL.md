@@ -62,8 +62,8 @@ the waiting is removed.
   `pyproject.toml`, CI config). **No test suite?** Don't refuse — schedule a
   **testing-bootstrap phase** as the plan's first wave: stand up the
   runner, then write characterization tests around exactly the code the
-  plan will touch. Without an objective arbiter, every review loop below is
-  one model complimenting another; the bootstrap installs the arbiter first.
+  plan will touch. Without an objective test to pass, every review loop
+  below is just one model agreeing with another; the bootstrap fixes that.
 - Open `out/dev/<slug>/log.md` with the run header: charter, stop point
   (PR / merge), test command, start commit.
 
@@ -88,7 +88,7 @@ verification step, dependency order. Then replace the human approval with a
 lens — feasibility, hidden dependencies & ordering, test coverage, scope
 creep — each returning *blocking findings or an approval*. Fix the blocking
 findings, re-run the critics once. **Two rounds maximum**: past that,
-critique converges on consensus mediocrity, not quality. Surviving blocking
+critique stops finding real problems and starts agreeing with itself. Surviving blocking
 findings park the run at the plan stage — a plan the critics can't pass is
 the user's call, not a coin flip.
 
@@ -179,7 +179,7 @@ stops cleanly at the next wave boundary — worktrees intact, state saved,
   implementing.
 - **Bounded loops everywhere.** Two critique rounds, two implementation
   attempts, three review rounds. Unbounded self-correction diverges or
-  rubber-stamps; the bounds are where honesty lives.
+  rubber-stamps; the bounds are what keep it honest.
 - **Inherited hard rules hold.** Never weaken a test, no fake-green, scope
   contract, append-only honest logging — every rule from feature/done
   applies verbatim; autonomy removed the waiting, not the rules.
