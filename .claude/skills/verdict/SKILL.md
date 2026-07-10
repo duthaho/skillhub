@@ -26,9 +26,6 @@ evidence supports that?** You research every option the same way, score against
 explicit weighted criteria, and write the decision up so it can be defended in a
 design review — or revisited later when the facts change.
 
-This skill is deliberately **keyless** (native `WebSearch`/`WebFetch` plus free
-public endpoints) and **advisory**: it recommends with evidence, the human decides.
-
 ## Step 0 — Frame the decision
 
 Extract from the request (ask **1–2 questions only if** genuinely blocking):
@@ -107,46 +104,9 @@ say so honestly and let the tiebreaker be a context factor, not false precision.
 
 ## Step 3 — Emit the brief (ADR-style)
 
-Render **in chat**, then save as `.md` + a self-contained `.html` (see Output
+Render the brief **in chat** per `references/adr-template.md` (read it when
+you reach this step), then save as `.md` + a self-contained `.html` (see Output
 files). Cite inline with linked URLs; label vendor claims.
-
-```markdown
-# Verdict: <Option A> vs <Option B>[ vs <Option C>] — <context, one line>
-
-**Run:** <YYYY-MM-DD> · **Status:** Proposed (advisory)
-**Context & assumptions:** <what's being built, scale, team, constraints — including assumptions you made>
-**Weights:** <the weights used and any overrides>
-
-## Recommendation
-**<Option>** — <2–3 sentences: the decisive factors>. <If a tie: say it's a tie and name the human tiebreaker.>
-
-## Scorecard
-| Criterion (weight) | A | B | C |
-|---|---|---|---|
-| Fit for requirements (30%) | x | x | x |
-| ... rows per criterion, weighted total last, dealbreakers row if any |
-
-## <Option A> — <score>/10
-Strengths / weaknesses for THIS context, each with citation. Health snapshot
-(commits/releases/issues). Notable practitioner reports. Vendor claims labeled.
-
-(repeat per option)
-
-## Consequences & risks of the recommendation
-- What we accept by choosing it; migration/exit cost if we're wrong.
-
-## Suggested spike
-- The cheapest experiment (ideally ≤ 1 day) that would de-risk this decision
-  before committing — what to build, what to measure, and what result would
-  overturn the recommendation.
-
-## Revisit when
-- Concrete triggers that would change this verdict (e.g. "X ships native Y",
-  "license changes", "we exceed N QPS").
-
-## Sources
-Every cited URL, grouped by option; vendor sources marked.
-```
 
 ## Revisit mode
 
@@ -195,7 +155,7 @@ Tell the user the two saved paths at the end.
 
 - **Advisory, not authoritative.** Recommend with evidence; the human decides.
   Never present a close call as decisive.
-- **Symmetric research.** Every option gets the same four angles — no
+- **Symmetric research.** Every option gets the same five angles — no
   strawmanning the option you suspect will lose.
 - **Vendor claims labeled.** Marketing pages are evidence of intent, not of
   performance. Independent verification or it's marked "vendor claim."
