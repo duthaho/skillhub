@@ -125,7 +125,8 @@ that sees the incident class gone can propose the deletion.
 - **Deletions as readily as additions.** The failure mode of harness
   tuning is accretion; a run that only ever adds rules is doing it wrong.
 - **Privacy is structural.** Transcripts stay local; quotes land only in
-  gitignored `out/` files — never in committed files, never sent anywhere.
+  `out/tune/` files — ensure that path is gitignored (quotes come from the
+  user's private sessions) — and are never sent anywhere.
 - **learnings.md stays under ~100 lines.** Prune resolved entries oldest
   first; it's a steering file the next run reads, not an archive.
 - **Respect the ladder.** Reaching for a hook when a rule would do adds

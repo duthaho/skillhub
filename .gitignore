@@ -1,6 +1,9 @@
 
-# All skill output — briefs, reports, trackers, learning logs (personal data)
-out/
+# Skill output under out/ is yours — commit what's useful, ignore what's not.
+# Only the folders that hold personal data by design stay ignored:
+out/jobfit/      # reports and tracker hold salary/CV data
+out/daybrief/    # briefs summarize your email and calendar
+out/tune/        # findings quote your session transcripts
 
 # Personal input files kept at repo root (user-authored config, never committed)
 jobfit-profile.md

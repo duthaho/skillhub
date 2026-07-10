@@ -97,7 +97,9 @@ root-cause work is not wasted, it's the spec's first paragraph.
 
 - Commit per the repo's convention, with a message naming the root cause,
   not just the symptom. For anything beyond a
-  trivial diff, offer the **done** gate before shipping.
+  trivial diff, offer the **done** gate before shipping. (In auto mode —
+  under the **autopilot** skill — the commit and the done gate run without
+  asking; anything that would need the user's ruling parks instead.)
 
 ## Guardrails
 

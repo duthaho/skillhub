@@ -275,8 +275,8 @@ Save to `./out/jobfit/` in the current working directory:
 
 `<slug>` = for one role, `company-role`; for a batch, `batch`. Lowercase,
 non-alphanumerics → hyphens. Compute the date with a shell command (`date +%F`) — do
-not guess. Create `out/jobfit/` if needed; ensure `out/` is gitignored (the
-report may contain personal salary/CV data — never commit it).
+not guess. Create `out/jobfit/` if needed; ensure `out/jobfit/` is gitignored
+(the report may contain personal salary/CV data — never commit it).
 
 Tell the user the two saved paths at the end.
 

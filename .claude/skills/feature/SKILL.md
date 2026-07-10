@@ -12,7 +12,8 @@ description: >-
   start non-trivial coding work — e.g. "/feature add rate limiting",
   "implement X", "build a Y that Z", "resume the <change> feature". For
   fixing something broken use bugfix; for just the end-of-session shipping
-  gate use done.
+  gate use done; to run this whole loop end-to-end without approval stops
+  use autopilot.
 ---
 
 # feature — spec → plan → build, effort-scaled
@@ -47,8 +48,8 @@ tier if needed.
 
 ## The change folder — state across sessions
 
-`out/dev/<change-slug>/` (gitignored via `out/`; `<slug>` = short change name,
-lowercased, hyphens):
+`out/dev/<change-slug>/` (`<slug>` = short change name, lowercased, hyphens;
+committing the folder is the user's call — it makes good shared history):
 
 - `spec.md` — what & why, agreed acceptance criteria. Written once, then stable.
 - `plan.md` — the task checklist. Checkboxes are flipped as tasks complete;
@@ -118,6 +119,16 @@ fresh agent per task (the plan's task text is its full briefing), review each
 diff as it lands. Default remains main-agent execution — it's simpler and
 usually right.
 
+## Auto mode — under autopilot
+
+When the **autopilot** skill drives this loop (or the user explicitly asks
+for auto mode), the approval gates become self-approvals **on the record**:
+Step 1 interviews the codebase instead of the user — questions it can't
+answer become stated assumptions in `spec.md` — and Step 2's approval is a
+bounded critique loop of parallel critics instead of a human yes. Every
+gate decision lands in `log.md` with its reason. Everything else — sizing,
+TDD, the scope contract, the hard rules — is unchanged.
+
 ## Step 4 — Finish
 
 Run the **done** skill: evidence checklist, fresh-context two-stage review,
@@ -130,7 +141,8 @@ Then archive the change folder.
 - **Process serves the change.** State the tier; never make a one-line fix
   wait for a spec, and never let a multi-file change skip the plan.
 - **Approval gates are real.** Spec and plan wait for an explicit yes —
-  they're the user's cheapest chance to steer.
+  they're the user's cheapest chance to steer. (In auto mode the gate is a
+  critic loop plus a logged rationale — the wait is removed, not the gate.)
 - **Evidence over claims** at every level: failing test seen failing, passing
   test seen passing, verification commands actually run.
 - **Files over memory.** `plan.md`/`log.md` are the truth; re-read at task

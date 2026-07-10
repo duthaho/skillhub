@@ -43,7 +43,7 @@ questions in chat; you grade what they actually wrote.
 ## The learning log — memory across sessions
 
 One file per topic: `out/learn/<slug>.md` (`<slug>` = topic lowercased,
-non-alphanumerics → hyphens), **gitignored**. It is the skill's entire memory
+non-alphanumerics → hyphens). It is the skill's entire memory
 and it is the learner's file too — plain markdown they can read and edit.
 Respect manual edits (a unit hand-marked done stays done; ask nothing).
 
@@ -138,7 +138,7 @@ quizzing but mark the unit ◐ — unpassed — and say why it stays that way.
 - **Honest grading.** A wrong answer marked right poisons the log. Weak spots
   go in the queue even when it feels pedantic.
 - **One unit per session.** Durable beats fast. The syllabus is the pace.
-- **The log is the learner's.** Human-readable, hand-editable, gitignored
-  (`out/learn/`), and respected — never overwrite their manual edits.
+- **The log is the learner's.** Human-readable, hand-editable, theirs to
+  commit or ignore, and respected — never overwrite their manual edits.
 - **Keyless.** Never ask for API keys; degrade gracefully (no web → teach
   from knowledge and label freshness honestly).

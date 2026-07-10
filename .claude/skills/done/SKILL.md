@@ -99,7 +99,8 @@ On SHIP (human-in-the-loop, in this order):
    recent `git log` for the house style. Commit.
 2. **Ask before push / PR** — never push or open a PR unprompted. If a PR is
    wanted, the body is the spec's summary + the evidence checklist (a
-   reviewer who sees the proof reviews faster).
+   reviewer who sees the proof reviews faster). (In auto mode, the autopilot
+   run's charter is the standing answer.)
 3. If this change came from a feature folder: move `out/dev/<change>/` to
    `out/dev/archive/`.
 4. **One-line retro (optional but offered):** if the session surfaced a
@@ -107,6 +108,15 @@ On SHIP (human-in-the-loop, in this order):
    repeatedly forgotten — suggest the one-line `CLAUDE.md` rule or lint that
    would make it impossible next time. Harness engineering beats repetition;
    the **tune** skill runs this same audit at scale across past sessions.
+
+## Auto mode — under autopilot
+
+Driven by the **autopilot** skill, the gate's logic is unchanged — only the
+waiting is removed: the run's itemized charter (not a question) governs
+commit, push, and PR, and a **NEEDS HUMAN** verdict **parks** the change
+with its findings on the record instead of blocking on a conversation. The
+gate still never fixes, and evidence rules still apply — auto mode changes
+who's waiting, not what's proven.
 
 ## Guardrails
 
@@ -120,4 +130,5 @@ On SHIP (human-in-the-loop, in this order):
 - **Correctness only in review.** Style debates are for humans who enjoy
   them, not shipping gates.
 - **Never push without a yes.** Committing locally is reversible; pushing
-  and PRs are announcements.
+  and PRs are announcements. An autopilot charter is that yes — given once,
+  itemized, up front.
