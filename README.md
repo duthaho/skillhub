@@ -8,7 +8,9 @@ about X," the agent trusted whatever the search engine served. Every job hunt, e
 tech decision, every morning briefing started from zero. So I wrote each workflow
 down once, gave it memory, and made it show its sources.
 
-No API keys. No accounts. Nothing is ever sent, submitted, or pushed on your behalf.
+No API keys. No accounts. Nothing is sent, submitted, or pushed on your behalf —
+unless you start an `autopilot` run, whose one-time charter spells out exactly
+what it may do, and merging still stays yours unless you say otherwise.
 
 ## Quickstart
 
@@ -102,6 +104,13 @@ RSVPs. `/done` commits locally but never pushes without an explicit yes.
 `/feature` won't write code before you've approved the spec and the plan.
 You make the calls; the skills make them informed.
 
+The one deliberate exception is
+[`/autopilot`](./.claude/skills/autopilot/SKILL.md): a single invocation
+signs an explicit, itemized charter — create these issues, push these
+branches, open one PR — and nothing outside it. The difference between an
+agent that acts behind your back and one that executes a mandate you signed
+is the mandate.
+
 ### #5 — You fix the agent, never the harness
 
 Every session, the same corrections: don't use that command, run the linter
@@ -134,6 +143,24 @@ load-bearing. It lands where Claude Code and other agents auto-load it, so the
 next session — including `feature` and `bugfix` — starts oriented instead of
 cold. You approve the file before it's written — a wrong map is worse than none.
 
+### #7 — Autonomy without an arbiter
+
+Let an agent run a whole task unsupervised and the failure isn't that it
+stops — it's that it doesn't: reviewers rubber-stamp the implementer, the
+plan drifts, and "done" becomes whatever the last model said it was.
+Removing the human without installing another arbiter just makes the loop
+confident.
+
+**The fix** is `/autopilot` — the
+whole coding loop on one yes: map → spec (interviewing the codebase, not
+you) → a plan hardened by a bounded critique loop of diverse critics →
+GitHub issues → parallel worktree implementers → fresh-context review loops
+— with the **test suite as the arbiter** at every gate (a repo without
+tests gets a testing-bootstrap phase first). Every loop is bounded; a task
+the pipeline can't settle honestly is **parked and reported**, never
+guessed through. By default it stops at an open PR — merging stays yours —
+and `--merge` hands over that last step too.
+
 ## The skills
 
 **Research** — outward-looking, cited, engagement-ranked
@@ -158,6 +185,7 @@ cold. You approve the file before it's written — a wrong map is worse than non
 | [feature](./.claude/skills/feature/SKILL.md) | Spec → plan → test-first build, resumable | `/feature add rate limiting` |
 | [bugfix](./.claude/skills/bugfix/SKILL.md) | Reproduce → root-cause → prove, minimal diff | `/bugfix login 500s on empty password` |
 | [done](./.claude/skills/done/SKILL.md) | The gate: prove it works, then ship | `/done` |
+| [autopilot](./.claude/skills/autopilot/SKILL.md) | The whole loop on one yes — issues, parallel agents, review loops, PR | `/autopilot add rate limiting` |
 
 ## How the memory works
 
@@ -173,14 +201,17 @@ out/
 
 Plain markdown, human-readable, yours to edit — the skills read these files at
 the start of every run and update them at the end. One `.gitignore` line
-(`out/`) keeps all of it out of your commits. (`/map` is the one exception: its
-deliverable is a committed `AGENTS.md` at your repo root — the shared file other
-agents read too — not an `out/` file.)
+(`out/`) keeps all of it out of your commits. (Two labeled exceptions:
+`/map`'s deliverable is a committed `AGENTS.md` at your repo root — the
+shared file other agents read too — and `/autopilot` publishes issues,
+branches, and a PR, exactly as its charter lists.)
 
 ## What these skills won't do
 
 - Apply to a job, send an email, accept an invite, or reply to anything.
-- Push, open a PR, or publish without an explicit yes.
+- Push, open a PR, or publish without an explicit yes — a single
+  `/autopilot` invocation is that yes, for exactly what its charter lists
+  and nothing more.
 - Use an API key, a paid service, or anything behind a login.
 - Present a rumor as a fact, a vendor claim as a benchmark, or an estimate as
   an offer.
