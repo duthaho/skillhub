@@ -3,7 +3,7 @@
 
 ## What this is
 
-A collection of 13 Claude Code skills (`.claude/skills/<name>/SKILL.md`) for
+A collection of 14 Claude Code skills (`.claude/skills/<name>/SKILL.md`) for
 research, daily work, and a coding loop. No application code, no build system —
 every skill is a markdown file with YAML frontmatter that Claude Code loads.
 Entry point for a reader is `README.md`; entry point for a user is any skill's
@@ -35,8 +35,8 @@ Validation is by inspection:
   The `SKILL.md` body loads on every trigger, so keep it lean.
 - **State model:** skills write to `out/<skill>/` in whatever project they run
   in (`out/dev/` for the coding loop). See `README.md` "How the memory works".
-- **The coding loop composes:** `map` → `feature`/`bugfix` → `done`, with
-  `autopilot` wrapping the whole loop and `scout` feeding it candidate features.
+- **The coding loop composes:** `map` → `feature`/`bugfix`/`refactor` → `done`,
+  with `autopilot` wrapping the whole loop and `scout` feeding it candidates.
 
 ## Conventions & gotchas
 
