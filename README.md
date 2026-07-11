@@ -1,6 +1,6 @@
 # skillhub
 
-Thirteen [Claude Code](https://claude.com/claude-code) skills for research, daily
+Fourteen [Claude Code](https://claude.com/claude-code) skills for research, daily
 work, and shipping code. They started as prompts I kept retyping, so I wrote each
 one down once, gave it memory, and made it cite its sources.
 
@@ -186,6 +186,7 @@ to `feature` or `autopilot`.
 | [map](./.claude/skills/map/SKILL.md) | Orient the agent to an unfamiliar repo, as a lean AGENTS.md | `/map` |
 | [feature](./.claude/skills/feature/SKILL.md) | Spec → plan → test-first build, resumable | `/feature add rate limiting` |
 | [bugfix](./.claude/skills/bugfix/SKILL.md) | Reproduce → root-cause → prove, minimal diff | `/bugfix login 500s on empty password` |
+| [refactor](./.claude/skills/refactor/SKILL.md) | Evidence-picked refactors in small behavior-preserving steps | `/refactor` |
 | [done](./.claude/skills/done/SKILL.md) | The gate: prove it works, then ship | `/done` |
 | [autopilot](./.claude/skills/autopilot/SKILL.md) | The whole loop on one yes: issues, parallel agents, review loops, PR | `/autopilot add rate limiting` |
 
