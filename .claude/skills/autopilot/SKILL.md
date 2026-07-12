@@ -87,7 +87,7 @@ verification step, dependency order. Then replace the human approval with a
 **bounded critique loop**: parallel critic sub-agents, each with a different
 lens — feasibility, hidden dependencies & ordering, test coverage, scope
 creep — each returning *blocking findings or an approval*. If another
-model's agent CLI is installed (`command -v codex gemini`), give one critic
+model's agent CLI is installed (detect per **done** Step 2), give one critic
 seat to it: fresh context varies the perspective, a different model varies
 the blind spots. Fix the blocking
 findings, re-run the critics once. **Two rounds maximum**: past that,
