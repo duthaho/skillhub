@@ -14,10 +14,11 @@ slash command (e.g. `/pulse`).
 There is nothing to compile and no test suite — this is a docs-only repo.
 Validation is by inspection:
 
-- **Skill frontmatter** must have `name` and `description`. The `description`
-  has a **hard 1024-character limit** (measure it before committing — we've
-  hit the limit twice: see `jobfit` and `scout` history). Check with:
-  `python3 -c "import yaml; print(len(yaml.safe_load(open('.claude/skills/<s>/SKILL.md').read().split('---')[1])['description']))"`
+- **Validate before committing:** `python3 scripts/validate-skills.py` —
+  frontmatter (`name` = folder, `description` present and under the **hard
+  1024-character limit** we've hit five times), marketplace coverage both
+  ways, README rows, references/ integrity. Trigger evals (does each
+  description actually win its prompts?) run per `evals/README.md`.
 - **Install** (from `README.md`): `/plugin marketplace add duthaho/skillhub`
   (plugins defined in `.claude-plugin/marketplace.json` — a new skill must be
   added to a plugin's `skills` list there too), or `cp -r`/symlink the folders.
