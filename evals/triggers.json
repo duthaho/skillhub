@@ -1,0 +1,28 @@
+{
+  "_comment": "Trigger evals: for each prompt, the skill whose description should win. Routing pairs (marked route) are the hard cases — two skills plausibly match and the descriptions' routing hints must break the tie. Run per evals/README.md.",
+  "cases": [
+    { "prompt": "I just cloned this repo and have no idea how it's structured", "expect": "map" },
+    { "prompt": "generate an AGENTS.md for this project", "expect": "map" },
+    { "prompt": "add rate limiting to the public API", "expect": "feature" },
+    { "prompt": "login returns 500 when the password field is empty", "expect": "bugfix" },
+    { "prompt": "this test is flaky, sometimes it passes sometimes not", "expect": "bugfix", "route": "not feature" },
+    { "prompt": "this module is a mess — clean up the architecture without changing behavior", "expect": "refactor" },
+    { "prompt": "where would paying down tech debt actually be worth it here?", "expect": "refactor" },
+    { "prompt": "is this ready to ship?", "expect": "done" },
+    { "prompt": "review and commit this", "expect": "done", "route": "not feature" },
+    { "prompt": "take this whole task and come back with a PR, don't ask me at every step", "expect": "autopilot", "route": "not feature" },
+    { "prompt": "what are people saying about Bun lately?", "expect": "pulse" },
+    { "prompt": "what's the community buzz on the new React compiler?", "expect": "pulse", "route": "not verdict" },
+    { "prompt": "should we use Kafka or NATS for event streaming?", "expect": "verdict" },
+    { "prompt": "compare Postgres vs MongoDB for our analytics workload", "expect": "verdict", "route": "not pulse" },
+    { "prompt": "is this job posting worth applying to?", "expect": "jobfit" },
+    { "prompt": "do the sources in this report actually say what it claims?", "expect": "factcheck" },
+    { "prompt": "what are similar projects shipping that we're missing?", "expect": "scout" },
+    { "prompt": "compare our repo to LangChain — what's worth adopting?", "expect": "scout", "route": "not verdict" },
+    { "prompt": "what's on my plate today?", "expect": "daybrief" },
+    { "prompt": "teach me Rust ownership from scratch", "expect": "learn" },
+    { "prompt": "quiz me on what I learned about SQL", "expect": "learn" },
+    { "prompt": "Claude keeps making the same mistake every session — fix my setup", "expect": "tune" },
+    { "prompt": "why does the agent keep ignoring my CLAUDE.md rule?", "expect": "tune", "route": "not bugfix" }
+  ]
+}
