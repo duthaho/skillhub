@@ -3,10 +3,12 @@ name: learn
 description: >-
   Personalized tutor with memory across sessions — "teach me X, at my pace."
   Interviews the learner once (goal, current level, session length), builds a
-  syllabus, then teaches one focused unit per session: opens with a short
-  recall quiz on earlier material (spaced repetition), teaches the next unit
-  with examples matched to the learner's background, and closes with an
-  active-recall check. Progress, quiz scores, and weak spots persist in
+  syllabus with a pass rubric per unit, then teaches one focused unit per
+  session: opens with a recall quiz on what's due (date-based spaced
+  repetition), teaches with examples matched to the learner's background,
+  and closes with an active-recall check — answers carry confidence tags
+  and are graded against the rubric. Progress,
+  scores, calibration, and weak spots persist in
   out/learn/<topic>.md, so every session resumes where the last one ended and
   re-drills what was missed. Keyless; verifies version- or fact-sensitive
   content via web search with cited sources instead of trusting memory. Use
@@ -56,11 +58,12 @@ Background: <relevant experience to hook examples onto> · Session length: ~<N> 
 
 ## Syllabus                <!-- status: ☐ not started · ◐ taught, not passed · ✓ passed -->
 1. ✓ <unit — one teachable idea>
+   pass: <the check question/exercise that proves it> · rubric: <2–3 criteria>
 2. ◐ <unit>
-3. ☐ <unit>
+   pass: <…> · rubric: <…>
 
-## Review queue            <!-- weak spots; due = session number, not a date -->
-- <item missed> — missed <date>, due session <n>
+## Review queue            <!-- weak spots; due dates, not session counts -->
+- <item missed> — missed 2026-07-05 (conf: sure) · due 2026-07-06 · passes 0/3
 
 ## Sessions
 | # | Date | Unit | Warm-up | Check | Notes |
@@ -68,9 +71,13 @@ Background: <relevant experience to hook examples onto> · Session length: ~<N> 
 | 1 | 2026-07-05 | 1. <unit> | — | 3/4 | confused X with Y |
 ```
 
-**At the start of every run:** read the log if it exists. **At the end:**
-update it — statuses, scores, new review-queue items — and tell the user.
-Compute dates with `date +%F`, never guess.
+**At the start of every run:** read the log if it exists. **Write as you
+grade, not at goodbye:** update the log immediately after each graded step —
+warm-up scores right after the warm-up, check results right after the check.
+A crashed or compacted session must not lose answers the learner already
+gave. Compute dates with `date +%F`, never guess. Older logs (session-number
+dues, no rubrics) upgrade in place on the next run: session dues become
+dates (due today), a unit's rubric is written when it's next touched.
 
 ## NEW — interview, then syllabus (human-in-the-loop)
 
@@ -87,6 +94,9 @@ Compute dates with `date +%F`, never guess.
    you verified. Don't fan out sub-agents; this is a check, not research.
 3. **Draft the syllabus:** 5–12 units, each **one teachable idea** sized to a
    session, sequenced so every unit builds on passed ones, ending at the goal.
+   **Write each unit's pass check now** — the question or micro-exercise that
+   will prove it, plus a 2–3-criterion rubric — so later grading is against a
+   contract written before the teaching, not the tutor's mood after it.
    Present it and let the learner reorder/cut/add before saving. Then save the
    log and either start unit 1 (if the session has time) or stop cleanly.
 
@@ -97,35 +107,53 @@ complete — the session isn't done until every box is ✓ or consciously
 skipped with a stated reason:
 
 ```
-- [ ] Log read; due reviews + next unit picked
-- [ ] Warm-up recall asked — and ANSWERED by the learner
-- [ ] Warm-up graded honestly, gaps explained
+- [ ] Log read; reviews due by date + next unit picked
+- [ ] Warm-up recall asked — ANSWERED, with confidence tags
+- [ ] Warm-up graded against rubrics; log updated NOW
 - [ ] Unit taught (concept → example on their background → misconception)
-- [ ] Check questions asked — and ANSWERED
-- [ ] Check graded; weak spots into the review queue
-- [ ] Log updated; next unit previewed
+- [ ] Check questions asked — ANSWERED, with confidence tags
+- [ ] Check graded; misses + confidence into the queue; log updated NOW
+- [ ] Statuses final; next unit previewed
 ```
 
-1. **Warm-up recall (~3 min):** 2–3 questions — review-queue items due this
-   session plus one from the last unit. **Ask, then stop and wait.**
-2. **Grade honestly:** right/partial/wrong per answer, quoting what was wrong
-   and why. Partial credit is named, not rounded up.
+1. **Warm-up recall (~3 min):** 2–3 questions — review-queue items due today
+   or earlier, plus one from the last unit. Ask the learner to tag each
+   answer with confidence in the same message — `sure / mostly / half /
+   guessing` — **before any grading is shown**. Never infer a missing tag;
+   log it as untagged. **Ask, then stop and wait.**
+2. **Grade honestly, against the rubric:** right/partial/wrong per answer,
+   naming the rubric criterion that failed. Partial credit is named, not
+   rounded up. A miss tagged `sure` is gold — correct it explicitly and put
+   it at the front of the queue: high-confidence errors, once corrected, are
+   the stickiest learning there is. **Strict mode** (when the learner asks):
+   grade blind — a fresh-context sub-agent sees only the verbatim answers
+   and the rubric, never the lesson; the tutor who just taught grades with
+   an optimism bias, the same reason done uses fresh reviewers.
 3. **Teach the unit:** the concept, then a worked example grounded in the
    learner's stated background, then the most common misconception and why
    it's wrong. Match depth to the session length; **one unit only** — resist
    finishing the syllabus early. If the unit involves anything
    version-sensitive, verify before asserting (same rule as NEW step 2).
 4. **Active-recall check:** 2–4 questions or one small exercise applying the
-   unit. Wait for answers; grade as above.
+   unit — confidence tags requested with the answers, exactly as in the
+   warm-up. Wait for answers; grade as in step 2, against the unit's rubric,
+   naming any failed criterion.
 5. **Update the log:** unit status (✓ needs a passed check — being taught is
    only ◐), session row, misses into the review queue.
 6. **Preview:** one line on what the next session covers, and anything worth
    doing between sessions (a ≤15-min hands-on task when the topic allows).
 
-**Spacing rule (simple, no ceremony):** a missed item is due **next session**;
-passed once on review → due **3 sessions later**; passed twice → retired from
-the queue. If the learner says "just tell me, skip the quiz," teach without
-quizzing but mark the unit ◐ — unpassed — and say why it stays that way.
+**Spacing rule (dates, not session counts):** a missed item is due
+**tomorrow**; each pass on review roughly doubles the interval — **3 days →
+7 → 16** — and the third pass (the 16-day review) retires it. The queue row's
+`passes n/3` carries this state, so any later session knows the next interval;
+a new miss resets it to 0/3. Forgetting runs on
+days; session counts break the moment the learner's schedule is irregular.
+**Amnesty on return:** facing a large overdue backlog, don't quiz all of it —
+pick the 3 most valuable items (latest units, `sure`-tagged misses), push
+the rest one interval forward, and say so plainly. Backlog shame is how
+learners quit. If the learner says "just tell me, skip the quiz," teach
+without quizzing but mark the unit ◐ — unpassed — and say why it stays so.
 
 ## Guardrails
 
@@ -135,7 +163,8 @@ quizzing but mark the unit ◐ — unpassed — and say why it stays that way.
 - **Wait for answers.** Recall only works if the learner retrieves. Never
   fill in their answer, never grade an answer they didn't give.
 - **Honest grading.** A wrong answer marked right poisons the log. Weak spots
-  go in the queue even when it feels pedantic.
+  go in the queue even when it feels pedantic. Confidence is the learner's
+  word only — never invented, never inferred.
 - **One unit per session.** Durable beats fast. The syllabus is the pace.
 - **The log is the learner's.** Human-readable, hand-editable, theirs to
   commit or ignore, and respected — never overwrite their manual edits.
