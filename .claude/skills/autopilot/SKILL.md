@@ -86,7 +86,10 @@ Write `plan.md` per **feature** Step 2 — 2–5-minute tasks, exact files, own
 verification step, dependency order. Then replace the human approval with a
 **bounded critique loop**: parallel critic sub-agents, each with a different
 lens — feasibility, hidden dependencies & ordering, test coverage, scope
-creep — each returning *blocking findings or an approval*. Fix the blocking
+creep — each returning *blocking findings or an approval*. If another
+model's agent CLI is installed (`command -v codex gemini`), give one critic
+seat to it: fresh context varies the perspective, a different model varies
+the blind spots. Fix the blocking
 findings, re-run the critics once. **Two rounds maximum**: past that,
 critique stops finding real problems and starts agreeing with itself. Surviving blocking
 findings park the run at the plan stage — a plan the critics can't pass is
@@ -119,7 +122,10 @@ uncommitted mid-run and invisible inside the worktrees below.
 - Fresh-context reviewers per **done** Step 2: they see only the diff, the
   task briefing, and the spec — never the implementer's conversation. A
   reviewer with no memory of writing the code has no loyalty to it.
-  Spec-compliance first, correctness second, style never.
+  Spec-compliance first, correctness second, style never. That includes
+  done's optional **cross-model second opinion** when a `codex`/`gemini`
+  CLI is on the PATH — it earns the most here, where no human sits at any
+  gate.
 - Run **done**'s fake-green tripwires on every diff: tests modified or
   deleted in the diff that makes them pass, new skips, hardcoded
   expectations, TODO stand-ins.
@@ -175,8 +181,8 @@ stops cleanly at the next wave boundary — worktrees intact, state saved,
   with the evidence, run continues. A guessed answer costs more than a
   parked task.
 - **Tests are the arbiter.** No LLM verdict — critic, reviewer, or
-  implementer — outranks the suite. No suite → bootstrap one before
-  implementing.
+  implementer, local model or cross — outranks the suite. No suite →
+  bootstrap one before implementing.
 - **Bounded loops everywhere.** Two critique rounds, two implementation
   attempts, three review rounds. Unbounded self-correction diverges or
   rubber-stamps; the bounds are what keep it honest.
