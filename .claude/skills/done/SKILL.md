@@ -5,7 +5,9 @@ description: >-
   evidence checklist (full test suite, lint/typecheck, build, and actually
   running the change — output quoted, never asserted), then a fresh-context
   two-stage review by a sub-agent that sees only the diff and the spec:
-  spec-compliance first, correctness second, style never. Flags fake-green
+  spec-compliance first, correctness second, style never — joined by a
+  cross-model second opinion when a codex/gemini CLI is installed. Flags
+  fake-green
   tripwires (edited or deleted tests, new TODOs or skips, hardcoded
   expectations) and ends with a verdict — SHIP, FIX FIRST, or NEEDS HUMAN —
   before drafting the commit/PR for the user's approval. Use at the end of
@@ -78,6 +80,17 @@ to it. Run both concurrently:
    preferences are out of scope."* (Unbounded reviewers always find
    something; that way lies over-engineering.)
 
+**Second opinion — optional, cross-model:** if another model's agent CLI is
+installed (`command -v codex gemini` — also check `~/.local/bin`, which
+non-login shells often drop from PATH), run it as one more correctness
+reviewer with exactly the same inputs and instructions — the diff, the
+yardstick, the "style is out of scope" line — e.g.
+`codex exec "Review this diff for defects that affect behavior... <diff>"`.
+Fresh context removes loyalty to the code; a **different model** removes
+shared blind spots — a same-model reviewer tends to miss what the author
+missed, and LLM judges measurably favor their own model's output. No such
+CLI on the PATH → skip this layer and note it; never install one for it.
+
 Weigh the findings — a reviewer can be wrong; check disputed claims against
 the code before accepting them. Don't silently drop any finding: each one is
 **accepted (→ fix list)** or **rejected (with the reason)**.
@@ -128,5 +141,8 @@ who's waiting, not what's proven.
   stage 2 honest.
 - **Correctness only in review.** Style debates are for humans who enjoy
   them, not shipping gates.
+- **A second model is another reviewer, not an arbiter.** Its findings enter
+  the same accept/reject triage with no extra weight; no model's verdict —
+  local or cross — outranks the test suite.
 - **Never push without a yes.** Committing locally is reversible; pushing
   and PRs are announcements.
