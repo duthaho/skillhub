@@ -18,8 +18,9 @@ Validation is by inspection:
   has a **hard 1024-character limit** (measure it before committing — we've
   hit the limit twice: see `jobfit` and `scout` history). Check with:
   `python3 -c "import yaml; print(len(yaml.safe_load(open('.claude/skills/<s>/SKILL.md').read().split('---')[1])['description']))"`
-- **Install** (from `README.md`): `cp -r .claude/skills/* ~/.claude/skills/`,
-  or symlink each folder so a `git pull` updates every install.
+- **Install** (from `README.md`): `/plugin marketplace add duthaho/skillhub`
+  (plugins defined in `.claude-plugin/marketplace.json` — a new skill must be
+  added to a plugin's `skills` list there too), or `cp -r`/symlink the folders.
 - **Run** a skill by typing its command in Claude Code; skills lean on
   Claude Code's sub-agents and web tools, no external services.
 
@@ -40,8 +41,9 @@ Validation is by inspection:
 
 ## Conventions & gotchas
 
-- **Adding a skill touches one place:** create the folder, then add one row to
-  the skills table in `README.md`. Counts and command lists were deliberately
+- **Adding a skill touches two places:** create the folder, add one row to
+  the skills table in `README.md`, and list it in a plugin's `skills` array in
+  `.claude-plugin/marketplace.json`. Counts and command lists were deliberately
   removed so nothing else drifts (see README history around the map skill).
 - **`out/` is commit-optional**, but `out/jobfit/`, `out/daybrief/`, and
   `out/tune/` stay gitignored — they hold personal data (`.gitignore`).

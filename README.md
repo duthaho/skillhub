@@ -13,6 +13,17 @@ Written and refined with Claude's help; the design opinions are mine.
 
 ## Quickstart
 
+Inside Claude Code, as plugins (pick the groups you want):
+
+```
+/plugin marketplace add duthaho/skillhub
+/plugin install coding-loop@skillhub     # map, feature, bugfix, refactor, done, autopilot
+/plugin install research@skillhub        # pulse, verdict, jobfit, factcheck, scout
+/plugin install daily@skillhub           # daybrief, learn, tune
+```
+
+Or copy the files, if you'd rather own and edit them:
+
 ```bash
 git clone https://github.com/duthaho/skillhub.git
 cp -r skillhub/.claude/skills/* ~/.claude/skills/    # or copy just the ones you want

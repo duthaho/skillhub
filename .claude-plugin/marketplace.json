@@ -1,0 +1,53 @@
+{
+  "name": "skillhub",
+  "owner": {
+    "name": "duthaho"
+  },
+  "metadata": {
+    "description": "Fourteen keyless Claude Code skills with memory: research, daily work, and an evidence-gated coding loop",
+    "version": "1.0.0"
+  },
+  "plugins": [
+    {
+      "name": "coding-loop",
+      "description": "The evidence-gated coding loop: orient (map), build (feature), fix (bugfix), improve (refactor), gate (done), and run it all on one yes (autopilot)",
+      "version": "1.0.0",
+      "source": "./",
+      "strict": false,
+      "skills": [
+        "./.claude/skills/map",
+        "./.claude/skills/feature",
+        "./.claude/skills/bugfix",
+        "./.claude/skills/refactor",
+        "./.claude/skills/done",
+        "./.claude/skills/autopilot"
+      ]
+    },
+    {
+      "name": "research",
+      "description": "Cited, engagement-ranked research: community pulse, tech-decision verdicts, job-fit scoring, citation auditing, and competitive recon",
+      "version": "1.0.0",
+      "source": "./",
+      "strict": false,
+      "skills": [
+        "./.claude/skills/pulse",
+        "./.claude/skills/verdict",
+        "./.claude/skills/jobfit",
+        "./.claude/skills/factcheck",
+        "./.claude/skills/scout"
+      ]
+    },
+    {
+      "name": "daily",
+      "description": "Day-to-day skills with memory: a morning briefing, a tutor that remembers what you got wrong, and a retro that turns agent mistakes into one-line fixes",
+      "version": "1.0.0",
+      "source": "./",
+      "strict": false,
+      "skills": [
+        "./.claude/skills/daybrief",
+        "./.claude/skills/learn",
+        "./.claude/skills/tune"
+      ]
+    }
+  ]
+}
