@@ -4,7 +4,7 @@
     "name": "duthaho"
   },
   "metadata": {
-    "description": "Fourteen keyless Claude Code skills with memory: research, daily work, and an evidence-gated coding loop",
+    "description": "Keyless Claude Code skills with memory: research, daily work, and an evidence-gated coding loop",
     "version": "1.0.0"
   },
   "plugins": [
@@ -16,6 +16,7 @@
       "strict": false,
       "skills": [
         "./.claude/skills/map",
+        "./.claude/skills/blueprint",
         "./.claude/skills/feature",
         "./.claude/skills/bugfix",
         "./.claude/skills/refactor",
