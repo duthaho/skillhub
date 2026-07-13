@@ -1,15 +1,20 @@
 # Output layout — read at Step 4; the exact shape of docs/blueprint/
 
 Three file kinds, all markdown, all rendered natively by GitHub/GitLab.
+Placeholders in angle brackets are filled at write time — `<date>` from
+`date +%F`, `<short-sha>` from `git rev-parse --short HEAD`, never typed
+from memory.
 
 ## `docs/blueprint/README.md` — the front door
 
-```markdown
+````markdown
 # Architecture: <project name>
-<!-- blueprint 2026-07-13 @ <short-sha> · regenerate with /blueprint refresh -->
+<!-- blueprint <date> @ <short-sha> · regenerate with /blueprint refresh -->
 
 <One paragraph: what the system does and its overall shape — verb-first,
 no filler.>
+
+Sources: <file>:<lines>, …
 
 ## System overview
 
@@ -22,7 +27,8 @@ no filler.>
 | Component | Path | Job |
 |---|---|---|
 | [<display name>](<component-slug>.md) | `<path>` | <one line> |
-<!-- link column only for components that earned a drill-down page -->
+<!-- link column only for components that earned a drill-down page;
+     the Path column is this section's source citation -->
 
 ## How a <core operation> flows
 
@@ -30,18 +36,20 @@ no filler.>
 file. This is the section a new team member actually reads.>
 
 Sources: <file>:<lines>, <file>:<lines>, …
-```
+````
 
 ## `docs/blueprint/<component-slug>.md` — one per drill-down
 
 Written for SCOPED runs and for components too big for one table row.
 
-```markdown
+````markdown
 # <Display name>
-<!-- blueprint 2026-07-13 @ <short-sha> · component: <comp-id> -->
+<!-- blueprint <date> @ <short-sha> · component: <comp-id> -->
 
 <What it does and why the boundary sits here — the "why" the code can't
-say. Every section ends with Sources.>
+say.>
+
+Sources: <file>:<lines>, …
 
 ## Inside
 
@@ -54,17 +62,16 @@ say. Every section ends with Sources.>
 | Direction | With | Verb | Where |
 |---|---|---|---|
 | in/out | <comp-id> | <verb> | `<file>:<line>` |
-
-Sources: …
-```
+<!-- the Where column is this section's source citation -->
+````
 
 ## `docs/blueprint/manifest.md` — the refresh contract
 
 The machine-readable half; refresh depends on it, so the format is fixed:
 
-```markdown
+````markdown
 # Blueprint manifest
-<!-- stamp: 2026-07-13 @ <short-sha> -->
+<!-- stamp: <date> @ <short-sha> -->
 
 ## Nodes
 
@@ -77,13 +84,15 @@ The machine-readable half; refresh depends on it, so the format is fixed:
 | From | To | Verb | Locator |
 |---|---|---|---|
 | comp-a | comp-b | calls | `<file>:<line>` |
-```
+````
 
 Rules the layout enforces:
 
-- The stamp comment (date via `date +%F`, sha via
-  `git rev-parse --short HEAD`) appears in **every** generated file —
-  refresh reads the manifest's, humans see each page's.
+- The stamp comment appears in **every** generated file — refresh reads
+  the manifest's, humans see each page's.
+- **Every prose section carries its sources** — a `Sources:` footer, or a
+  table whose locator column serves as one (Components, Boundaries, the
+  manifest tables). A section with neither gets rewritten or cut.
 - IDs are the identity: refresh matches changed paths against the `Path`
   column, regenerates only the pages those IDs own, and updates renamed
   display names in place.

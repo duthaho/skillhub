@@ -35,9 +35,12 @@ locator, no mermaid the checklist didn't render, no write without a yes.
 
 Look before generating:
 
-- **Existing output?** Check for `docs/blueprint/` and its `manifest.md`. If
-  present, this is a **REFRESH** — read the manifest first and jump to the
-  refresh path in Step 5 rather than regenerating from scratch. An existing
+- **Existing output?** Check for `docs/blueprint/` and its `manifest.md`.
+  **The explicit command wins:** a scope argument runs SCOPED and
+  `/blueprint refresh` runs REFRESH regardless. A bare `/blueprint` with
+  existing output defaults to REFRESH — read the manifest first and jump to
+  the refresh path in Step 5; offer a full regenerate only if the user asks
+  or the manifest looks obsolete. An existing
   hand-written `docs/architecture*` file is context to read and link, never
   to overwrite.
 - **Orient cheaply first.** Read `AGENTS.md`/`CLAUDE.md`/`README` if present
@@ -146,7 +149,10 @@ changed paths to component IDs via the manifest's node table, and
 regenerate **only the pages and diagram sections those IDs own**; re-stamp.
 Component identity is the stable ID, not the display name — a renamed
 component updates in place instead of forking a new page. Pages whose
-components saw no diff are left byte-identical.
+components saw no diff are left byte-identical. **Changed paths that map to
+no node** (new, moved, or deleted territory) mean the graph itself moved:
+re-derive the affected part of the node table and regenerate the overview
+and manifest, not just member pages.
 
 ## Guardrails
 
@@ -164,5 +170,6 @@ components saw no diff are left byte-identical.
   byte-identical pages — churn-free diffs are what make the docs
   re-runnable, and re-runnable is what keeps them alive.
 - **Out of scope, on purpose:** HTML viewers, CI auto-regeneration,
-  static-analysis engines, multi-repo — machinery this repo's axis
-  (keyless, zero-dependency, prose-only) exists to avoid.
+  static-analysis engines, multi-repo, and non-mermaid formats (dot, d2,
+  images) — machinery this repo's axis (keyless, zero-dependency,
+  prose-only) exists to avoid.
