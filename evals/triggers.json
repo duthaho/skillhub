@@ -1,8 +1,12 @@
 {
   "_comment": "Trigger evals: for each prompt, the skill whose description should win. Routing pairs (marked route) are the hard cases — two skills plausibly match and the descriptions' routing hints must break the tie. Run per evals/README.md.",
   "cases": [
-    { "prompt": "I just cloned this repo and have no idea how it's structured", "expect": "map" },
-    { "prompt": "generate an AGENTS.md for this project", "expect": "map" },
+    { "prompt": "I just cloned this repo and have no idea how it's structured", "expect": "map", "route": "not blueprint" },
+    { "prompt": "generate an AGENTS.md for this project", "expect": "map", "route": "not blueprint" },
+    { "prompt": "generate an architecture diagram for this codebase", "expect": "blueprint" },
+    { "prompt": "write human-facing architecture docs for the payment module", "expect": "blueprint", "route": "not map" },
+    { "prompt": "create a mermaid diagram of how this feature works", "expect": "blueprint" },
+    { "prompt": "document this codebase for new team members", "expect": "blueprint", "route": "not map" },
     { "prompt": "add rate limiting to the public API", "expect": "feature" },
     { "prompt": "login returns 500 when the password field is empty", "expect": "bugfix" },
     { "prompt": "this test is flaky, sometimes it passes sometimes not", "expect": "bugfix", "route": "not feature" },
