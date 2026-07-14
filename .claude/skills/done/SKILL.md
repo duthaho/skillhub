@@ -95,8 +95,9 @@ diff — are the reviewer-side twin of fake-green.)
 **Second opinion — optional, cross-model:** if another model's agent CLI is
 installed (`command -v codex`, `command -v gemini` — checked separately,
 since one exit code for both false-negatives when only one exists; also
-check `~/.local/bin`, which non-login shells often drop from PATH), run it
-as one more correctness
+check `~/.local/bin`, which non-login shells often drop from PATH), invoke
+it **by the path detection found** — a CLI discovered in `~/.local/bin`
+won't resolve by bare name — and run it as one more correctness
 reviewer with exactly the same inputs and instructions — the diff, the
 yardstick, the "style is out of scope" line — e.g.
 `codex exec "Review only the diff below — do not read skill definitions,
