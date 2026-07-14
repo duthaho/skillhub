@@ -74,6 +74,9 @@ A crashed or compacted session must not lose answers the learner already
 gave. Compute dates with `date +%F`, never guess. Older logs (session-number
 dues, no rubrics) upgrade in place on the next run: session dues become
 dates (due today), a unit's rubric is written when it's next touched.
+**Supersede, don't delete:** a revised unit or rubric strikes the old line
+and adds the new one — how the plan and the learner's understanding evolved
+is itself signal for future sessions.
 
 ## NEW — interview, then syllabus (human-in-the-loop)
 
@@ -119,7 +122,9 @@ skipped with a stated reason:
    log it as untagged. **Ask, then stop and wait.**
 2. **Grade honestly, against the rubric:** right/partial/wrong per answer,
    naming the rubric criterion that failed. Partial credit is named, not
-   rounded up. A miss tagged `sure` is gold — correct it explicitly and put
+   rounded up. A fast correct answer minutes after teaching is **fluency**;
+   the spaced warm-up measures **storage strength**, the real goal — say so
+   when a learner aces a check and asks why the material still comes back. A miss tagged `sure` is gold — correct it explicitly and put
    it at the front of the queue: high-confidence errors, once corrected, are
    the stickiest learning there is. **Strict mode** (when the learner asks):
    grade blind — a fresh-context sub-agent sees only the verbatim answers

@@ -63,7 +63,11 @@ For each candidate: **REFACTOR / PREP / LEAVE / WATCH**.
   proposal that introduces one names the problem *in this codebase* (with a
   file:line locator and its evidence), why *this* pattern fits, and what
   simpler shape was considered first. "The textbook recommends it" is
-  discarded, not weighed.
+  discarded, not weighed. Two quick tests: **the deletion test** — imagine
+  deleting the module; if complexity vanishes it was a pass-through, if it
+  reappears across N callers it was earning its keep — and **one adapter is
+  a hypothetical seam, two are a real one**: don't introduce a seam until
+  something actually varies across it.
 - **The score is interface depth, not pattern count.** A proposal wins if
   interfaces get simpler and callers get dumber — abstractions that hide
   more than they add. A refactor that grows the number of things a reader
@@ -105,6 +109,12 @@ suite, checkpoint commit titled with the move. The rhythm is the safety:
   Rethink the move or split it smaller.
 - Every checkpoint leaves the tree shippable. There is no big-bang branch
   where everything is broken until the end.
+- **Wide mechanical moves** (a rename or retype fanning across hundreds of
+  call sites) sequence as **expand–contract**: add the new form beside the
+  old so nothing breaks, migrate call sites in blast-radius-sized batches
+  (per package or directory, checkpoint each), then contract — delete the
+  old form once no caller remains. The tree stays shippable through the
+  whole fan-out.
 
 ### Step 3 — Behavior-preserving is the definition
 
