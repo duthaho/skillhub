@@ -88,8 +88,11 @@ def main() -> int:
             for f in failures:
                 print(f"  - {f}", file=sys.stderr)
             return 1
-        print(json.dumps({k: v.get("description", "") for k, v in frontmatters.items()},
-                         indent=2, ensure_ascii=False))
+        # Mirror the real trigger surface: user-invoked-only skills
+        # (disable-model-invocation) never reach the model's skill list.
+        visible = {k: v.get("description", "") for k, v in frontmatters.items()
+                   if not v.get("disable-model-invocation")}
+        print(json.dumps(visible, indent=2, ensure_ascii=False))
         return 0
 
     # Marketplace coverage, both directions, no duplicates
