@@ -34,16 +34,26 @@ had three timezone bugs in this module"). Mention any match. Also skim recent
 ## Step 1 — Reproduce (before touching any code)
 
 Turn the report into a **deterministic reproduction**: a command, a failing
-test invocation, a curl, a click path — something that fails on demand and
-will pass when the bug is dead.
+test invocation, a curl, a click path, a `git bisect run` harness —
+something that fails on demand and will pass when the bug is dead.
 
-- Capture the exact error output now; it's the baseline the fix is judged
-  against.
+- **The gate is checkable:** a command you have **already run at least
+  once**, with the invocation and its output pasted. That output is the
+  baseline the fix is judged against — a repro described but never run
+  doesn't count.
+- **Tighten the loop** — Step 2 re-runs it on every hypothesis, so its
+  speed is your debugging speed: faster, sharper signal, more deterministic
+  (pin time, seed RNG, isolate the filesystem).
+- **Minimise** (skip when the repro is already one obvious line): cut
+  inputs, steps, config, and data one at a time, re-running after each cut,
+  until every remaining element is load-bearing. A minimal repro shrinks
+  the hypothesis space and becomes Step 3's failing test nearly for free.
 - **Can't reproduce it?** Stop. Report what was tried, what extra information
   would help (versions, data, environment, timing), and ask. Do not fix code
   you can't watch fail — "fixed" without a repro is unfalsifiable.
-- Flaky bug? Reproduce the *flakiness* (run N times, note the failure rate)
-  so the fix can be judged the same way.
+- Flaky bug? Don't settle for noting the failure rate — **raise it**: loop
+  the trigger, pin nondeterminism until it fails most runs. A 50% flake is
+  debuggable; a 1% flake is not. The fix is judged against the same rate.
 
 ## Step 2 — Root-cause (hypothesis, then evidence)
 
@@ -51,11 +61,15 @@ Work from symptom back to cause; don't pattern-match a fix onto the error
 message.
 
 1. Read the failing path — the actual code, not just the stack trace.
-2. **State a hypothesis out loud**: "X fails because Y, so Z should show W."
-3. Confirm it with evidence: a log line, a debugger/print probe, a minimal
-   experiment that isolates the suspect. The hypothesis must *predict*
-   something you then observe.
-4. Wrong? Say so, log what was ruled out, form the next hypothesis.
+2. **List 3–5 ranked hypotheses** before probing any — a single hypothesis
+   anchors on the first plausible idea. Each must be **falsifiable**: "if X
+   is the cause, then Z will show W." No prediction = a vibe; sharpen it or
+   drop it. Show the user the ranked list, but don't block on a reply.
+3. Probe the top one. Confirm with evidence: a log line, a debugger/print
+   probe, a minimal experiment — the hypothesis must *predict* something
+   you then observe. Tag every probe line with a unique prefix (e.g.
+   `[DEBUG-a4f2]`) so cleanup is a single grep.
+4. Wrong? Cross it off, log what was ruled out, move down the list.
    **Two dead hypotheses → step back**: re-read the repro, question an
    assumption, or bring the user the map of what's been ruled out. Grinding
    the same theory harder is not investigation.
@@ -86,6 +100,8 @@ root-cause work is not wasted, it's the spec's first paragraph.
   wrong thing).
 - Quick blast-radius check: who else calls the changed code? Any caller
   relying on the old (broken) behavior gets flagged, not silently re-broken.
+- Strip instrumentation: `grep` for the `[DEBUG-` tag from Step 2 — tagged
+  probes die in one sweep; untagged ones survive review.
 - Append one line to `out/dev/bugfix-log.md`
   (create it if missing; date via `date +%F`):
 
