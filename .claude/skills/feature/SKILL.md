@@ -78,7 +78,9 @@ reshape the questions after it, drop to one at a time, each with a
 recommended answer.
 
 Write `spec.md` — short, self-contained, decisions and assumptions numbered
-(**D1…**, **A1…**) so plan tasks can cite them. The bar is checkable: **an
+(**D1…**, **A1…**) so plan tasks can cite them. An assumption here is a
+default the user let stand, never a question dodged; in auto mode it's a
+gap evidence couldn't settle. The bar is checkable: **an
 implementer could build from it without asking a single question** — a
 question remaining means the spec isn't done. Then get explicit approval.
 **The spec is the contract for the review in done**; vagueness here becomes
@@ -90,7 +92,8 @@ Explore first (read the relevant code; use Explore sub-agents for unfamiliar
 areas so the main context stays clean), then write `plan.md`:
 
 - Each task is **2–5 minutes of work**, names the **exact files** it touches,
-  cites the spec decision it implements (`[D2]`) where one applies, and
+  cites the spec decision or assumption it implements (`[D2, A1]`) where
+  one applies, and
   carries its **own verification step** (the command that proves this task
   done). Small enough that a fresh sub-agent with no context could execute one
   from its text alone.
