@@ -1,20 +1,17 @@
 ---
 name: jobfit
 description: >-
-  Job-fit evaluation and discovery for job seekers — "find roles that fit me" and
-  "should I apply to this one, and how do I tailor for it?" Two modes: DISCOVER
-  searches job boards for openings matching your profile (title/level/location/
-  remote), and EVALUATE takes job URLs/descriptions you provide. Both modes fan
-  out parallel sub-agents to research compensation, company signal, and posting
-  legitimacy, score each role A–F across weighted dimensions, and emit a ranked
-  decision brief with tailored CV-bullet suggestions. Remembers every evaluated
-  role in out/jobfit/tracker.md so repeat runs skip what you passed on.
-  Keyless and human-in-the-loop:
-  it never applies for you and discourages low-fit roles. Use when the user wants
-  to find matching jobs, triage postings, decide if a role is worth
-  applying to, compare openings, or tailor a CV to a JD — e.g. "find
-  jobs that fit my CV", "/jobfit <url>", "is this job worth applying to", "score
-  these roles against my CV". For general community buzz on a company, use pulse.
+  Job-fit evaluation and discovery for job seekers — "find roles that fit
+  me" and "should I apply to this one?" DISCOVER searches job boards for
+  openings matching your profile; EVALUATE takes job URLs/descriptions you
+  provide. Both research compensation, company signal, and posting
+  legitimacy in parallel, score each role A–F, and emit a ranked decision
+  brief with tailored CV-bullet suggestions. Evaluated roles persist in
+  out/jobfit/tracker.md so repeat runs skip what you passed on. Keyless and
+  human-in-the-loop: it never applies for you. Use to find matching jobs,
+  triage postings, decide whether a role is worth applying to, or tailor a
+  CV to a JD — e.g. "find jobs that fit my CV", "/jobfit <url>", "score
+  these roles against my CV". For community buzz on a company use pulse.
 ---
 
 # jobfit — job-fit evaluation & tailoring

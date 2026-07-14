@@ -1,21 +1,18 @@
 ---
 name: scout
 description: >-
-  Competitive reconnaissance for your project — "what do the repos solving
-  this same problem do better, and what's worth adopting?" Starts from your
-  own repo (AGENTS.md, README, issues) to pin down its job and
-  differentiation axis, finds peers by topic and registry-keyword
-  overlap — ranked by activity, downloads, dependents, never raw stars —
-  then fans out a sub-agent per peer to mine what their users beg
-  for: issues sorted by reactions, release history, docs claims,
-  every finding with a locator. Emits a two-way gap analysis and an
-  ADOPT/ADAPT/SKIP/WATCH verdict per candidate feature, where SKIP is
-  the default and "a competitor has it" is never a reason; ADOPT items become
-  ready seeds for feature or autopilot. Tracks verdicts in
-  out/scout/tracker.md so repeat runs open with what changed. Keyless. Use
-  for "what are similar projects doing", "compare us to X", "what are we
-  missing" — e.g. "/scout", "/scout vercel/next.js", "/scout deep
-  <repo>". For X-vs-Y tech choices use verdict; for community buzz use pulse.
+  Competitive reconnaissance for your project — what do the repos solving
+  this same problem do better, and what's worth adopting? Finds peer repos
+  (ranked by activity, downloads, dependents — never raw stars), mines what
+  their users beg for — issue reactions, releases, docs claims, every
+  finding with a locator — and verdicts each candidate feature
+  ADOPT/ADAPT/SKIP/WATCH, where SKIP is the default and "a competitor has
+  it" is never a reason. ADOPT items become ready seeds for feature or
+  autopilot; verdicts persist in out/scout/tracker.md so repeat runs open
+  with what changed. Keyless. Use for "what are similar projects doing",
+  "compare us to X", "what are we missing" — e.g. "/scout",
+  "/scout <owner/repo>", "/scout deep <repo>". For X-vs-Y tech choices use
+  verdict; for community buzz use pulse.
 ---
 
 # scout — know the neighbors before building blind

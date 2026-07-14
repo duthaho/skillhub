@@ -2,19 +2,16 @@
 name: tune
 description: >-
   Harness retro — turn recurring agent mistakes into one-line fixes. Mines
-  recent Claude Code session transcripts (plus the bugfix log and past tune
-  runs) for repeated user corrections, permission-prompt friction, re-typed
-  instructions, and rules that get violated anyway; cross-references the
-  findings against the current CLAUDE.md, skills, and settings; and proposes
-  ranked changes one at a time on an escalation ladder — a CLAUDE.md rule
-  (only for a mistake made twice), a permission allowlist entry, a script
-  replacing repeated prose, a new-skill candidate, or the deletion of a rule
-  that no longer earns its context cost. Nothing is applied without explicit
-  approval, and accepted/rejected findings persist in out/tune/learnings.md
-  so future runs adapt. Use when the user says "/tune", "improve my setup",
-  "why does claude keep doing X", "the agent keeps making the same mistake",
-  or after a frustrating session. done's one-line retro catches one lesson
-  at ship time; tune is the periodic audit of the whole harness.
+  recent session transcripts (plus the bugfix log and past runs) for
+  repeated corrections, permission friction, and rules that get violated
+  anyway, then proposes ranked changes one at a time: a CLAUDE.md rule, an
+  allowlist entry, a script replacing repeated prose, a new-skill
+  candidate, or a deletion that no longer earns its context cost. Nothing
+  applies without approval; accepted/rejected findings persist in
+  out/tune/learnings.md. Use when the user says "/tune", "improve my
+  setup", "why does claude keep doing X", or after a frustrating session.
+  done's one-line retro catches one lesson at ship time; tune is the
+  periodic audit of the whole harness.
 ---
 
 # tune — the harness retro
