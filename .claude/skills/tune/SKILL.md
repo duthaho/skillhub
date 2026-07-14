@@ -100,6 +100,12 @@ work*:
    procedure; sketch the skill, don't build it unbidden.
 6. **Deletion** — of a rule, hook, or skill that no longer earns its cost.
 
+**Prove the rules bite** — for the mechanical rungs (allowlist, script,
+hook), applying isn't done: with the change in place, inject the exact
+violation it exists to catch, observe the block or failure, revert the
+injection, observe green again. A config that doesn't fail on its violation
+is a no-op wearing a diff.
+
 After the session, update `out/tune/learnings.md`:
 
 ```markdown
