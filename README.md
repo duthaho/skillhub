@@ -171,7 +171,10 @@ gate: find the peer repos, mine what their users actually want (issue reactions,
 stars), lay out the gap both ways (including the strengths you should keep), and
 verdict each candidate feature ADOPT/ADAPT/SKIP/WATCH. SKIP is the default, and every
 ADOPT needs evidence from your side, not just "a peer has it." Ready ADOPTs hand off
-to `feature` or `autopilot`.
+to `feature` or `autopilot`. And for the vacuum *before* a project exists,
+[`/priorart`](./.claude/skills/priorart/SKILL.md) asks the upstream question — does
+this idea already exist? — and answers with a locator-backed landscape and exactly one
+verdict: Build / Fork / Contribute / Use / Investigate first.
 
 ## The skills
 
@@ -183,6 +186,7 @@ to `feature` or `autopilot`.
 | [jobfit](./.claude/skills/jobfit/SKILL.md) | Find and score roles against your real CV | `/jobfit find senior backend roles, remote only` |
 | [factcheck](./.claude/skills/factcheck/SKILL.md) | Do the cited sources actually say that? | `/factcheck report.md` |
 | [scout](./.claude/skills/scout/SKILL.md) | What peer projects ship, and what's worth adopting | `/scout` |
+| [priorart](./.claude/skills/priorart/SKILL.md) | Does your idea already exist? Landscape + one verdict | `/priorart a CLI that syncs dotfiles` |
 
 **Day to day** — memory-first, read-only where it counts
 | Skill | One line | Try |
