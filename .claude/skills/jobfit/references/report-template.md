@@ -27,6 +27,9 @@
 - JD asks "<keyword>" → your profile has "<real evidence>" → surface as: "<bullet>"
 - Gaps to acknowledge or address: <...>
 
+**Comp questions to verify with the recruiter** (APPLY roles only)
+- <2–3 questions, e.g. guaranteed base vs. OTE split, advertised range vs. offer band>
+
 (repeat per role, in ranked order)
 
 ## Dealbreakers & caveats

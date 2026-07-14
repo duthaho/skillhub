@@ -41,8 +41,10 @@ User-facing content and scores draw **only** from:
 
 **Keywords get reformulated, never fabricated.** Never invent experience, skills,
 metrics, titles, or achievements the profile doesn't support. Never pull "facts"
-about the user from memory or cross-session inference. Tailoring = surfacing and
-rephrasing what's genuinely there to mirror the JD's language.
+about the user from memory or cross-session inference. Using a tool is not building
+it — never claim authorship of systems the profile only shows the user used.
+Tailoring = surfacing and rephrasing what's genuinely there to mirror the JD's
+language.
 
 ## The tracker — memory across runs
 
@@ -149,6 +151,18 @@ With many roles, do a cheap first-pass triage on the JD text alone and only fan 
 full research for roles that clear a rough bar (e.g. no hard dealbreaker, plausible
 seniority match) — note in the brief which roles were triaged out and why.
 
+**Liveness pre-gate:** a role enters the fan-out only if its posting reads as
+**open** — a dead/expired/closed posting burns four sub-agents on phantom content,
+and a page can fetch fine while saying "no longer accepting applications". For
+EVALUATE, judge the Step 0 fetch's content; for DISCOVER shortlist picks, re-confirm
+the URL still resolves to an open posting (for Greenhouse/Ashby/Lever URLs, the
+board's public JSON endpoint is a reliable keyless check). Not open → report it as
+such, no research.
+
+**Research budget:** give each sub-agent a hard cap of ~5 web searches per role. At
+the cap it stops, summarizes what it found, and marks the rest **unavailable** —
+digging past the cap buys tokens, not signal.
+
 ### Compensation sub-agent
 
 - Extract stated comp from the JD. If absent, `WebSearch` for the range (levels.fyi,
@@ -157,8 +171,12 @@ seniority match) — note in the brief which roles were triaged out and why.
   levels.fyi/Glassdoor/Blind pages usually fails. Prefer numbers that surface in
   `WebSearch` result snippets and public discussions (HN "who's hiring" threads,
   Reddit salary threads), and lower the confidence label accordingly.
+- Quote **advertised comp verbatim** and keep it separate from researched estimates —
+  never blend the two into one range. Advertised ≠ take-home: note what's guaranteed
+  base vs. variable/equity where the posting distinguishes.
 - Return: a best-estimate range + confidence, and how it compares to the user's target.
-  Label estimates clearly as estimates.
+  Label estimates clearly as estimates. For roles trending APPLY, add 2–3
+  **verification questions** for the recruiter (e.g. guaranteed base vs. OTE split).
 
 ### Company-signal sub-agent
 
@@ -171,9 +189,12 @@ seniority match) — note in the brief which roles were triaged out and why.
 ### Legitimacy sub-agent
 
 - Assess whether the posting is real and actively hiring: posting age, whether it's a
-  ghost/evergreen post, reposted-many-times pattern, vague-JD red flags, direct
-  careers-page presence vs. only aggregators.
-- Return: a legitimacy read (Likely active / Stale / Suspicious) + evidence.
+  ghost/evergreen post, repost pattern (relisted 2+ times in ~90 days is a flag),
+  vague-JD red flags, direct careers-page presence vs. only aggregators.
+- Return: a legitimacy read (Likely active / Stale / Suspicious) + evidence. Never
+  verdict `Suspicious` without citable evidence, and note legitimate explanations for
+  concerning signals (evergreen pipelines, agency reposts) — this read can smear a
+  real employer.
 
 ### CV-alignment sub-agent (analysis, not research)
 
@@ -205,6 +226,11 @@ cap the overall at **C** regardless of other scores, and are called out explicit
 **Verdict per role:** `APPLY` (≥ 4.0) · `MAYBE` (3.0–3.9, list what would move it) ·
 `SKIP` (< 3.0). Mirror career-ops: **discourage applying below 4.0** unless the user
 has a specific reason, and say so.
+
+**Learn from pushback:** when the user disagrees with a score ("too high", "comp
+matters more to me"), offer to record the correction in `jobfit-profile.md` —
+adjusted weights or a stated preference — so future runs start from it. Offer only;
+never write to the profile silently.
 
 ## Step 3 — Emit the brief
 
