@@ -14,7 +14,7 @@
     { "prompt": "where would paying down tech debt actually be worth it here?", "expect": "refactor" },
     { "prompt": "is this ready to ship?", "expect": "done" },
     { "prompt": "review and commit this", "expect": "done", "route": "not feature" },
-    { "prompt": "take this whole task and come back with a PR, don't ask me at every step", "expect": "autopilot", "route": "not feature" },
+    { "prompt": "take this whole task and come back with a PR, don't ask me at every step", "expect": "feature", "route": "autopilot is user-invoked-only; feature is the model-side answer" },
     { "prompt": "what are people saying about Bun lately?", "expect": "pulse" },
     { "prompt": "what's the community buzz on the new React compiler?", "expect": "pulse", "route": "not verdict" },
     { "prompt": "should we use Kafka or NATS for event streaming?", "expect": "verdict" },

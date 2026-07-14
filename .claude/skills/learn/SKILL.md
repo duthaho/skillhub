@@ -1,21 +1,17 @@
 ---
 name: learn
 description: >-
-  Personalized tutor with memory across sessions — "teach me X, at my pace."
-  Interviews the learner once (goal, current level, session length), builds a
-  syllabus with a pass rubric per unit, then teaches one focused unit per
-  session: opens with a recall quiz on what's due (date-based spaced
-  repetition), teaches with examples matched to the learner's background,
-  and closes with an active-recall check — answers carry confidence tags
-  and are graded against the rubric. Progress,
-  scores, calibration, and weak spots persist in
-  out/learn/<topic>.md, so every session resumes where the last one ended and
-  re-drills what was missed. Keyless; verifies version- or fact-sensitive
-  content via web search with cited sources instead of trusting memory. Use
-  when the user wants to learn or study a topic — e.g. "/learn rust
-  ownership", "teach me kubernetes", "quiz me on X", "continue the SQL
-  lessons"; "/learn" alone lists topics in progress. For community buzz on a
-  topic use pulse; for choosing between technologies use verdict.
+  Personalized tutor with memory across sessions — "teach me X, at my
+  pace." Builds a syllabus with a pass rubric per unit, teaches one unit
+  per session: a recall quiz on what's due (date-based spaced repetition),
+  examples matched to your background, and an active-recall check graded
+  against the rubric with confidence tags. Progress and weak spots persist
+  in out/learn/<topic>.md, so sessions resume and re-drill what was missed;
+  fact-sensitive content is verified by web search, not memory. Keyless.
+  Use to learn or study a topic — e.g. "/learn rust ownership", "teach me
+  kubernetes", "quiz me on X", "continue the SQL lessons"; "/learn" alone
+  lists topics in progress. For community buzz use pulse; for choosing
+  between technologies use verdict.
 ---
 
 # learn — personalized tutor with memory

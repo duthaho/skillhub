@@ -12,8 +12,8 @@ description: >-
   start non-trivial coding work — e.g. "/feature add rate limiting",
   "implement X", "build a Y that Z", "resume the <change> feature". For
   fixing something broken use bugfix; for just the end-of-session shipping
-  gate use done; to run this whole loop end-to-end without approval stops
-  use autopilot.
+  gate use done; for this whole loop end-to-end without approval stops,
+  suggest the user run /autopilot (explicit invocation only).
 ---
 
 # feature — spec → plan → build, effort-scaled

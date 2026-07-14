@@ -1,21 +1,18 @@
 ---
 name: refactor
 description: >-
-  Evidence-driven refactoring — "where does structural improvement actually
-  pay off here, and make that change without changing behavior." Survey mode
-  diagnoses by evidence, not aesthetics: git churn × complexity hotspots,
-  the recurring-bug log, upcoming work — then a verdict per candidate
-  (REFACTOR / PREP / LEAVE / WATCH) where LEAVE is the default and "the
-  textbook recommends it" is never a reason; every proposal names a located
-  problem in this codebase. Execute mode takes one
-  approved candidate: characterization tests first where untested,
-  then small named behavior-preserving moves, suite green and checkpoint
-  commit after each — a red step is reverted, never patched forward.
-  Mid-refactor bugs are logged for bugfix, not fixed in flight. Keeps a
-  debt register in out/refactor/tracker.md so repeat surveys open with what
-  changed. Use for "clean up this module", "improve the architecture", "pay
-  down tech debt" — e.g. "/refactor", "/refactor <target>". For new
-  behavior use feature; for something broken use bugfix.
+  Evidence-driven refactoring — where does structural improvement actually
+  pay off, then make that change without changing behavior. Survey mode
+  diagnoses by evidence, not aesthetics — git churn × complexity hotspots,
+  the recurring-bug log, upcoming work — and verdicts each candidate
+  REFACTOR/PREP/LEAVE/WATCH, where LEAVE is the default and "the textbook
+  recommends it" is never a reason. Execute mode takes one approved
+  candidate in small behavior-preserving moves, suite green after each.
+  Keeps a debt register in out/refactor/tracker.md so repeat surveys open
+  with what changed. Use for "clean up this module", "improve the
+  architecture", "pay down tech debt" — e.g. "/refactor",
+  "/refactor <target>". For new behavior use feature; for something broken
+  use bugfix.
 ---
 
 # refactor — earn it first, then preserve behavior

@@ -1,20 +1,13 @@
 ---
 name: autopilot
 description: >-
-  The whole coding loop, end-to-end, on one yes — "take this task and come
-  back with a PR." A single invocation signs an itemized charter, then the
-  pipeline runs without approval stops: orient (map), spec by interviewing
-  the codebase instead of the user, harden the plan through a bounded
-  critique loop of diverse critics, break it into GitHub issues, implement
-  each task in parallel git-worktree sub-agents, review every diff with
-  fresh-context reviewers until clean, integrate wave by wave with the test
-  suite as the arbiter, and open one PR with the evidence. Default stops at
-  the PR — merging stays yours; --merge lets it merge once every gate is
-  green. A repo without tests gets a testing-bootstrap phase before any
-  implementation. Stuck tasks are parked and reported, never guessed
-  through; touch out/dev/<change>/ABORT to stop a run cleanly. Use to hand
-  over a whole task — e.g. "/autopilot add rate limiting", "/autopilot
-  resume <change>". For step-by-step approval gates use feature instead.
+  The whole coding loop on one deliberate yes: map, spec, critic-hardened
+  plan, GitHub issues, parallel worktree implementers, fresh-context review
+  loops, one PR with the evidence. Acts only on its itemized charter; parks
+  what it can't settle honestly. Commands: /autopilot <task> [--merge],
+  resume, status. It signs a charter and pushes branches, so it never
+  auto-triggers — explicit invocation only.
+disable-model-invocation: true
 ---
 
 # autopilot — the whole loop, one yes
