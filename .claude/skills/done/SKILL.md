@@ -47,7 +47,8 @@ exact failure this skill exists to prevent.
 - [ ] Lint / typecheck: <command> → <result>          (✗ if repo has none)
 - [ ] Build: <command> → <result>                     (✗ if n/a)
 - [ ] Ran the actual change: <command / flow> → <observed behavior>
-- [ ] Diff hygiene: no debug prints, no commented-out code, no stray files
+- [ ] Diff hygiene: no debug prints (grep the diff for [DEBUG- — the tag
+      bugfix leaves), no commented-out code, no stray files
 - [ ] Tripwires (below): clean
 ```
 
@@ -63,10 +64,14 @@ loudly and blocks a SHIP verdict until the user rules on it:
 - new `skip` / `xfail` / `.only` / commented-out assertions
 - new TODOs or "temporary" workarounds standing in for the actual behavior
 - assertions hardcoded to the current output rather than the intended behavior
+- a test whose expected value is **recomputed the way the code computes it**
+  — expected values come from an independent source of truth
 
 ## Step 2 — Fresh-context review (two stages, one sub-agent each)
 
-Spawn reviewers that see **only** the diff plus the yardstick — not this
+Preflight first: confirm the yardstick resolves and the diff is non-empty —
+reviewers fanned out on a wrong ref or an empty diff are pure waste. Then
+spawn reviewers that see **only** the diff plus the yardstick — not this
 conversation. A reviewer with no memory of writing the code has no loyalty
 to it. Run both concurrently:
 
