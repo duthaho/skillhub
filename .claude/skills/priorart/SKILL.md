@@ -52,9 +52,12 @@ ideas under a different name; the framings are where that name gets found.
 
 ## Step 3 — Search where builders publish
 
-Budget: **≤10 queries for the whole check.** Fan out 2–3 sub-agents grouped
-by venue class, each briefed with 2–3 framings and an explicit share of the
-budget (say the numbers; agents without a stated allowance keep searching):
+Budget: **≤10 queries for the whole check, with 1–2 held back for Step 4's
+lead-tracing.** Fan out 2–3 sub-agents grouped by venue class, each briefed
+with 2–3 framings and an explicit share of the rest (say the numbers; agents
+without a stated allowance keep searching). Together the briefs cover every
+vantage point from Step 2 — framings left out of every brief defeat the
+point of writing them:
 
 - **Registries & code** — GitHub/GitLab search, PyPI, npm, crates.io,
   Hugging Face for ML.
@@ -79,8 +82,8 @@ Read what each direct match is built on: "wraps X", "built on top of W",
 dedicated query. This check fails most often not at finding projects but at
 stopping one layer too early and crowning a thin wrapper the incumbent.
 Stop early only when the landscape is clear after 3–4 queries AND at least
-one of them followed such a lead; past 10 queries without confidence, say
-so plainly and report what was found.
+one of them followed such a lead; at the cap without confidence, say so
+plainly and report what was found.
 
 ## Step 5 — The landscape
 
@@ -104,8 +107,9 @@ manufactured novelty costs the user their next quarter.
 
 ## Step 6 — One verdict, then the record
 
-Open the verdict section with exactly one of these, first line, no hedging
-(nuance goes after the verdict, not instead of it):
+State exactly one of these in the verdict section's heading itself —
+`## Verdict: <one of the five>` — no hedging (nuance goes after the
+verdict, not instead of it):
 
 - **Build it** — genuine gap, and the differentiator is real.
 - **Fork X** — the right base exists but has diverged from the need.
