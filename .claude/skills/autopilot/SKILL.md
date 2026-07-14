@@ -74,11 +74,12 @@ only if stale. Every downstream agent starts oriented instead of cold.
 
 ## Step 2 — Spec: interview the codebase, not the user
 
-**feature** Step 1 with the questions turned inward. Every open question is
-answered by reading code, docs, tests, and `git log`; whatever genuinely
-can't be answered becomes a **stated assumption** in `spec.md` — visible,
-numbered, and revisable at the PR, where wrong assumptions are cheap to
-catch. The spec remains the contract every review below is judged against.
+**feature** Step 1 with the questions turned inward — the facts-vs-decisions
+split holds with no user present. Every *fact* is answered by reading code,
+docs, tests, and `git log`; a *decision* evidence can't settle is never made
+silently — it becomes a numbered assumption (**A1…**) in `spec.md`, visible
+and revisable at the PR, where wrong assumptions are cheap to catch. The
+spec remains the contract every review below is judged against.
 
 ## Step 3 — Plan, hardened by critique instead of approval
 
@@ -97,10 +98,16 @@ the user's call, not a coin flip.
 
 ## Step 4 — Tasks become GitHub issues
 
-One issue per plan task: the full briefing (a fresh agent must be able to
-execute from the issue text alone), the files it touches, its verification
-command, and a `depends-on: #n` list. Label `autopilot`, title
-`[<slug>] <task name>`. Record issue numbers back into `plan.md`.
+One issue per plan task, **created in dependency order** so every
+`depends-on: #n` names a real number: the full briefing (a fresh agent must
+be able to execute from the issue text alone), the files it touches, its
+verification command, and the spec IDs it implements (`[D2, A1]`). Label
+`autopilot`, title `[<slug>] <task name>`. Record issue numbers back into
+`plan.md`. Issue prose describes **behavior, not code** — "the sync service
+drops the patch", never `applyPatch()` at line 42; analysis artifacts cite
+file:line because they're verified now, tracker artifacts must outlive the
+refactor. (The files-touched list stays — it's the worker's briefing, not
+durable prose.)
 
 Local files stay canonical; the issues are the published mirror — and the
 hand-off that actually reaches the workers, since the run's `out/` state is
