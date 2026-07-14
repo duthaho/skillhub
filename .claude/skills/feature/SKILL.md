@@ -51,7 +51,8 @@ tier if needed.
 `out/dev/<change-slug>/` (`<slug>` = short change name, lowercased, hyphens;
 committing the folder is the user's call — it makes good shared history):
 
-- `spec.md` — what & why, agreed acceptance criteria. Written once, then stable.
+- `spec.md` — what & why, agreed acceptance criteria, decisions/assumptions
+  numbered (D1…/A1…). Written once, then stable.
 - `plan.md` — the task checklist. Checkboxes are flipped as tasks complete;
   never delete a task, strike it with a reason instead.
 - `log.md` — **append-only** progress journal: one line per task/session
@@ -65,16 +66,25 @@ conversation memory over the files. When the change ships, move the folder to
 
 ## Step 1 — Spec by interview (standard tier)
 
-Interview the user with **one compact question set** (`AskUserQuestion`) —
-only what the request leaves genuinely open: the goal as observable behavior,
-what's explicitly **out of scope**, acceptance criteria, and the **end-to-end
-check** that will prove it works (a command, a flow to click through, a curl).
 Read the repo's `CLAUDE.md`/`AGENTS.md` (the map skill writes the latter) and
-nearby code first so questions are informed, not generic.
+nearby code first. **Facts vs decisions, no third category:** a fact that
+can be looked up (code, docs, `git log`) is never a question; a decision is
+the user's — put each one to them. Interview with **one compact question
+set** (`AskUserQuestion`) covering the decisions the request leaves
+genuinely open: the goal as observable behavior, what's explicitly **out of
+scope**, acceptance criteria, and the **end-to-end check** that will prove
+it works (a command, a flow to click through, a curl). When an answer would
+reshape the questions after it, drop to one at a time, each with a
+recommended answer.
 
-Write `spec.md` — short, self-contained, someone-else-could-build-from-it —
-and get explicit approval. **The spec is the contract for the review in
-done**; vagueness here becomes an argument later.
+Write `spec.md` — short, self-contained, decisions and assumptions numbered
+(**D1…**, **A1…**) so plan tasks can cite them. An assumption here is a
+default the user let stand, never a question dodged; in auto mode it's a
+gap evidence couldn't settle. The bar is checkable: **an
+implementer could build from it without asking a single question** — a
+question remaining means the spec isn't done. Then get explicit approval.
+**The spec is the contract for the review in done**; vagueness here becomes
+an argument later.
 
 ## Step 2 — Plan as executable tasks
 
@@ -82,7 +92,9 @@ Explore first (read the relevant code; use Explore sub-agents for unfamiliar
 areas so the main context stays clean), then write `plan.md`:
 
 - Each task is **2–5 minutes of work**, names the **exact files** it touches,
-  and carries its **own verification step** (the command that proves this task
+  cites the spec decision or assumption it implements (`[D2, A1]`) where
+  one applies, and
+  carries its **own verification step** (the command that proves this task
   done). Small enough that a fresh sub-agent with no context could execute one
   from its text alone.
 - Order by dependency; put the riskiest/unknown-most task first, not last.
@@ -124,7 +136,8 @@ usually right.
 When the **autopilot** skill drives this loop (or the user explicitly asks
 for auto mode), the approval gates become self-approvals **on the record**:
 Step 1 interviews the codebase instead of the user — questions it can't
-answer become stated assumptions in `spec.md` — and Step 2's approval is a
+answer become numbered assumptions (A1…) in `spec.md` — and Step 2's
+approval is a
 bounded critique loop of parallel critics instead of a human yes. Every
 gate decision lands in `log.md` with its reason. Everything else — sizing,
 TDD, the scope contract, the hard rules — is unchanged.

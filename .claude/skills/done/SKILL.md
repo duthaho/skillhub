@@ -73,7 +73,8 @@ to it. Run both concurrently:
 1. **Spec compliance:** does the diff do what the spec/intent asked — fully,
    and *nothing beyond it*? Unrequested changes are findings (scope creep),
    missing acceptance criteria are findings. Returns: covered / missing /
-   out-of-scope, each tied to a spec line and a diff location.
+   out-of-scope, each tied to a spec line — by decision/assumption ID
+   (`D2`, `A1`) when the spec numbers them — and a diff location.
 2. **Correctness:** bugs only — logic errors, unhandled edge cases, broken
    callers, concurrency/resource hazards. Instruct it explicitly: *"report
    only defects that affect behavior; style, naming, and architecture
