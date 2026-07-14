@@ -93,8 +93,10 @@ verdict. (Phantom findings — confident claims about code that isn't in the
 diff — are the reviewer-side twin of fake-green.)
 
 **Second opinion — optional, cross-model:** if another model's agent CLI is
-installed (`command -v codex gemini` — also check `~/.local/bin`, which
-non-login shells often drop from PATH), run it as one more correctness
+installed (`command -v codex`, `command -v gemini` — checked separately,
+since one exit code for both false-negatives when only one exists; also
+check `~/.local/bin`, which non-login shells often drop from PATH), run it
+as one more correctness
 reviewer with exactly the same inputs and instructions — the diff, the
 yardstick, the "style is out of scope" line — e.g.
 `codex exec "Review only the diff below — do not read skill definitions,
@@ -113,11 +115,12 @@ Weigh the findings — a reviewer can be wrong; check disputed claims against
 the code before accepting them. Don't silently drop any finding: each one is
 **accepted (→ fix list)** or **rejected (with the reason)**. Cross-model
 findings carry two extra rules: **agreement** (both models flag it
-independently) is near-certain — accept it; a **material disagreement**
-(one model calls a behavior-affecting defect, the other denies it) is never
-self-arbitrated — the local model rejecting its own critic re-creates the
-self-judging this layer exists to break. That's a disputed finding: it goes
-to NEEDS HUMAN.
+independently) is near-certain — accept it; and the gate **rejecting the
+other model's behavior-affecting finding** is itself the material
+disagreement — silence from one reviewer isn't consent, and the local
+model overruling its cross-model critic re-creates the self-judging this
+layer exists to break. That rejection isn't the gate's to make: route the
+finding to NEEDS HUMAN.
 
 ## Step 3 — Verdict, then ship
 
