@@ -100,6 +100,19 @@ areas so the main context stays clean), then write `plan.md`:
 - Order by dependency; put the riskiest/unknown-most task first, not last.
 - End with the spec's end-to-end check as the final task.
 
+**Optional cross-model plan check (standard tier):** before asking for
+approval, if another model's agent CLI is installed (`command -v codex`,
+`command -v gemini` — each checked separately, and look in `~/.local/bin`
+too, which non-login shells drop from PATH), send the plan for **one
+bounded review** (~5-min timeout, prompt opening with "review only the
+plan below — don't read other files"): infeasible tasks, hidden
+dependencies or ordering problems, missing test coverage. Findings must
+quote the plan line they're about; present them **alongside the plan** as
+input to the user's approval, never as changes already applied. No CLI →
+skip silently — a same-model check would mostly approve its own plan.
+(Under autopilot, the critique loop that replaces this approval already
+holds a cross-model critic seat — don't run this twice.)
+
 Show the plan, invite edits, get approval. Human edits to `plan.md` are
 welcome at any point — re-read it at every task boundary.
 

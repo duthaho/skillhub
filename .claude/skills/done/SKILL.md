@@ -86,12 +86,27 @@ to it. Run both concurrently:
    preferences are out of scope."* (Unbounded reviewers always find
    something; that way lies over-engineering.)
 
+Every finding — from either stage or the second opinion below — **quotes
+the diff lines that motivate it**. A finding that can't quote its evidence
+is reported as *unverified*: on the record, but it never blocks the
+verdict. (Phantom findings — confident claims about code that isn't in the
+diff — are the reviewer-side twin of fake-green.)
+
 **Second opinion — optional, cross-model:** if another model's agent CLI is
-installed (`command -v codex gemini` — also check `~/.local/bin`, which
-non-login shells often drop from PATH), run it as one more correctness
+installed (`command -v codex`, `command -v gemini` — checked separately,
+since one exit code for both false-negatives when only one exists; also
+check `~/.local/bin`, which non-login shells often drop from PATH), invoke
+it **by the path detection found** — a CLI discovered in `~/.local/bin`
+won't resolve by bare name — and run it as one more correctness
 reviewer with exactly the same inputs and instructions — the diff, the
 yardstick, the "style is out of scope" line — e.g.
-`codex exec "Review this diff for defects that affect behavior... <diff>"`.
+`codex exec "Review only the diff below — do not read skill definitions,
+.claude/, or other repo files. Report defects that affect behavior...
+<diff>"`. The leading boundary line matters: an unscoped reviewer wanders
+off into whatever else it finds in the repo. Bound the call with a timeout
+(~5 min); a timeout or error means **second opinion unavailable** — note it
+in the gate and move on, never retry, and never substitute a same-model
+stand-in (a Claude sub-agent isn't *outside*).
 Fresh context removes loyalty to the code; a **different model** removes
 shared blind spots — a same-model reviewer tends to miss what the author
 missed, and LLM judges measurably favor their own model's output. No such
@@ -99,7 +114,14 @@ CLI on the PATH → skip this layer and note it; never install one for it.
 
 Weigh the findings — a reviewer can be wrong; check disputed claims against
 the code before accepting them. Don't silently drop any finding: each one is
-**accepted (→ fix list)** or **rejected (with the reason)**.
+**accepted (→ fix list)** or **rejected (with the reason)**. Cross-model
+findings carry two extra rules: **agreement** (both models flag it
+independently) is near-certain — accept it; and the gate **rejecting the
+other model's behavior-affecting finding** is itself the material
+disagreement — silence from one reviewer isn't consent, and the local
+model overruling its cross-model critic re-creates the self-judging this
+layer exists to break. That rejection isn't the gate's to make: route the
+finding to NEEDS HUMAN.
 
 ## Step 3 — Verdict, then ship
 
@@ -110,7 +132,8 @@ One of three, stated plainly with the reasons:
   (or hand back to feature/bugfix), then re-run **only the affected lines**
   of the gate — not the whole ceremony.
 - **NEEDS HUMAN** — a judgment call the gate can't make: a tripwire the user
-  must rule on, a spec ambiguity, a disputed reviewer finding, a trade-off.
+  must rule on, a spec ambiguity, a disputed reviewer finding (including a
+  cross-model split), a trade-off.
 
 On SHIP (human-in-the-loop, in this order):
 
