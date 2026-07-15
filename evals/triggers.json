@@ -31,6 +31,11 @@
     { "prompt": "what's on my plate today?", "expect": "daybrief" },
     { "prompt": "teach me Rust ownership from scratch", "expect": "learn" },
     { "prompt": "quiz me on what I learned about SQL", "expect": "learn" },
+    { "prompt": "teach me this book, it's at docs/handbook.pdf", "expect": "learn" },
+    { "prompt": "learn Go from this PDF I have", "expect": "learn" },
+    { "prompt": "summarize this book for learning", "expect": "learn" },
+    { "prompt": "read the project docs and make me a study guide from them", "expect": "learn", "route": "not blueprint — blueprint documents a codebase; this asks to be taught from existing docs" },
+    { "prompt": "turn this book into a Claude Code skill", "expect": "none", "route": "agent-facing compile, not tutoring — scout SKIP 2026-07-15 says use book-to-skill for that" },
     { "prompt": "Claude keeps making the same mistake every session — fix my setup", "expect": "tune" },
     { "prompt": "why does the agent keep ignoring my CLAUDE.md rule?", "expect": "tune", "route": "not bugfix" }
   ]
