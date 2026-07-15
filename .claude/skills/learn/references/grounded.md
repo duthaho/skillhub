@@ -37,7 +37,7 @@ when context is tight, so the cheatsheet outranks the map.
 ```markdown
 # Distillate: <Source title>
 
-Source: <path> · ~<N>K tokens · distilled <date +%F>
+Source: <path> · ~<N>K tokens · distilled <YYYY-MM-DD>   <!-- date +%F, never guessed -->
 
 ## Cheatsheet — the author's judgment
 
