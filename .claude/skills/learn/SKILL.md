@@ -38,6 +38,37 @@ questions in chat; you grade what they actually wrote.
   (`x/y` units), last session date, review items due, and a suggested next step.
 - **QUIZ** — "quiz me" → recall-only session from the review queue + covered
   units; grade, update the log, teach nothing new.
+- **GROUNDED** — the learner supplies a document ("teach me this book",
+  "summarize docs/x.pdf for learning") → distill it, then offer the loop.
+  Asked to learn from a doc but no path given? Ask for the path first.
+
+## GROUNDED — learn from a supplied document
+
+The source feeds the existing loop; nothing below replaces NEW/CONTINUE.
+
+1. **Check the source:** must exist locally; PDF/md/txt read natively
+   (PDFs by page range). EPUB/MOBI: don't process — say plainly it needs
+   converting first (e.g. Calibre's `ebook-convert book.epub book.txt`)
+   and never install anything for the user.
+2. **Size gate:** estimate tokens (`wc -c` ÷ 4). Over ~50K, show the
+   estimate and get an explicit go-ahead before reading further; then
+   **probe, don't ingest** — locate structure with `grep -n`, pull only
+   the slice a step needs, never re-read the file whole per unit.
+3. **Distill first** (read `references/grounded.md` when you get here):
+   write `out/learn/<slug>-distillate.md` — a source map with locators
+   plus a decision-focused cheatsheet. This is a complete deliverable:
+   offer the syllabus after it, and stop cleanly if they only wanted
+   the summary.
+4. **If they continue:** run NEW as usual with two changes — the syllabus
+   derives from the source's own structure (each unit's pass check cites
+   the sections/pages it covers), and the log's Learner line records
+   `Source: <path>`.
+
+**Grounding bar:** any claim attributed to the source is verified against
+it before you assert it — `grep -n` the passage (md/txt) or re-read the
+cited pages (PDF) — and taught with the citation. "The book says" without
+a locator is fabrication; the no-fabrication guardrail applies to the
+document exactly as it does to the web.
 
 ## The learning log — memory across sessions
 
