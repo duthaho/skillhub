@@ -83,6 +83,7 @@ Respect manual edits (a unit hand-marked done stays done; ask nothing).
 ## Learner
 Goal: <what they want to be able to DO> · Level: <self-described start point>
 Background: <relevant experience to hook examples onto> · Session length: ~<N> min
+Source: <path> · distillate: out/learn/<slug>-distillate.md   <!-- grounded topics only -->
 
 ## Syllabus                <!-- status: ☐ not started · ◐ taught, not passed · ✓ passed -->
 1. ✓ <unit — one teachable idea>
@@ -128,6 +129,8 @@ is itself signal for future sessions.
    **Write each unit's pass check now** — the question or micro-exercise that
    will prove it, plus a 2–3-criterion rubric — so later grading is against a
    contract written before the teaching, not the tutor's mood after it.
+   Grounded topics: units derive from the source's own structure, and each
+   unit cites its coverage (`src: §3, L120–214` or pages).
    Present it and let the learner reorder/cut/add before saving. Then save the
    log and either start unit 1 (if the session has time) or stop cleanly.
 
@@ -167,6 +170,8 @@ skipped with a stated reason:
    it's wrong. Match depth to the session length; **one unit only** — resist
    finishing the syllabus early. If the unit involves anything
    version-sensitive, verify before asserting (same rule as NEW step 2).
+   Grounded topics: teach from the unit's cited sections, quotes carrying
+   their citation, verified against the source first (the GROUNDED bar).
 4. **Active-recall check:** 2–4 questions or one small exercise applying the
    unit — confidence tags requested with the answers, exactly as in the
    warm-up. Wait for answers; grade as in step 2, against the unit's rubric,
