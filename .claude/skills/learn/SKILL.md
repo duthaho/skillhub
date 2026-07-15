@@ -10,8 +10,9 @@ description: >-
   fact-sensitive content is verified by web search, not memory. Keyless.
   Use to learn or study a topic — e.g. "/learn rust ownership", "teach me
   kubernetes", "quiz me on X", "continue the SQL lessons"; "/learn" alone
-  lists topics in progress. For community buzz use pulse; for choosing
-  between technologies use verdict.
+  lists topics in progress. Also teaches from a document you supply —
+  "summarize this book for learning", "/learn X from <file>". For community
+  buzz use pulse; for choosing between technologies use verdict.
 ---
 
 # learn — personalized tutor with memory
