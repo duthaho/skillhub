@@ -32,6 +32,10 @@
     { "prompt": "teach me Rust ownership from scratch", "expect": "learn" },
     { "prompt": "quiz me on what I learned about SQL", "expect": "learn" },
     { "prompt": "Claude keeps making the same mistake every session — fix my setup", "expect": "tune" },
-    { "prompt": "why does the agent keep ignoring my CLAUDE.md rule?", "expect": "tune", "route": "not bugfix" }
+    { "prompt": "why does the agent keep ignoring my CLAUDE.md rule?", "expect": "tune", "route": "not bugfix" },
+    { "prompt": "brainstorm some new features and directions for this project", "expect": "ideate" },
+    { "prompt": "give me ideas worth pursuing for what I could build next", "expect": "ideate" },
+    { "prompt": "I have a problem to solve and want to generate a range of ideas before I pick one", "expect": "ideate", "route": "not priorart — priorart checks whether one idea already exists; ideate generates the ideas" },
+    { "prompt": "help me come up with new directions for my own project", "expect": "ideate", "route": "not scout — scout mines competitors' features; ideate diverges from the project itself" }
   ]
 }
