@@ -205,6 +205,7 @@ verdict: Build / Fork / Contribute / Use / Investigate first.
 | [refactor](./.claude/skills/refactor/SKILL.md) | Evidence-picked refactors in small behavior-preserving steps | `/refactor` |
 | [done](./.claude/skills/done/SKILL.md) | The gate: prove it works, then ship | `/done` |
 | [autopilot](./.claude/skills/autopilot/SKILL.md) | The whole loop on one yes: issues, parallel agents, review loops, PR | `/autopilot add rate limiting` |
+| [newskill](./.claude/skills/newskill/SKILL.md) | Add or repair a skill across all four registration surfaces, validator-green | `/newskill fix ideate` |
 
 ## How the memory works
 

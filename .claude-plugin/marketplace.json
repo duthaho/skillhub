@@ -21,7 +21,8 @@
         "./.claude/skills/bugfix",
         "./.claude/skills/refactor",
         "./.claude/skills/done",
-        "./.claude/skills/autopilot"
+        "./.claude/skills/autopilot",
+        "./.claude/skills/newskill"
       ]
     },
     {
