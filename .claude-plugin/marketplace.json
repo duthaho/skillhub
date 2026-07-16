@@ -37,7 +37,8 @@
         "./.claude/skills/jobfit",
         "./.claude/skills/factcheck",
         "./.claude/skills/scout",
-        "./.claude/skills/priorart"
+        "./.claude/skills/priorart",
+        "./.claude/skills/ideate"
       ]
     },
     {
