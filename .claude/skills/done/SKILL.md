@@ -49,13 +49,19 @@ exact failure this skill exists to prevent.
 - [ ] Ran the actual change: <command / flow> → <observed behavior>
 - [ ] Diff hygiene: no debug prints (grep the diff for [DEBUG- — the tag
       bugfix leaves), no commented-out code, no stray files
-- [ ] Tripwires (below): clean
+- [ ] Tripwires (fake-green + source-security, below): clean
 ```
 
 **"Ran the actual change"** is the line agents skip and humans value most: a
 green suite proves the tests pass, not that the feature works. Execute the
 spec's end-to-end check — start the app, curl the endpoint, run the CLI on
-real input — and report what actually happened.
+real input — and report what actually happened. On **auth, payment, or
+data-migration** surfaces, "ran the change" means the *failure* path too, not
+just the happy one — an expired or tampered token is rejected, a declined
+card and a replayed webhook are handled, a migration's rollback is actually
+run — because that's where these surfaces break. Happy-path evidence alone on
+one of those surfaces **can't reach SHIP**: it's incomplete evidence (→ FIX
+FIRST, or NEEDS HUMAN when the missing check is a judgment call).
 
 **Fake-green tripwires** — scan the diff itself; any hit is called out
 loudly and blocks a SHIP verdict until the user rules on it:
@@ -66,6 +72,40 @@ loudly and blocks a SHIP verdict until the user rules on it:
 - assertions hardcoded to the current output rather than the intended behavior
 - a test whose expected value is **recomputed the way the code computes it**
   — expected values come from an independent source of truth
+
+**Source-security tripwires** — the source-side twin of the block above:
+scan the diff for a catastrophe pattern *shipped into the code*, not a faked
+test. Same rule — any hit is called out loudly with the **file:line** and
+blocks a SHIP verdict until the user rules on it. This is a scan of the diff,
+not an audit of the repo: a pattern the change doesn't introduce isn't a
+finding. Some clauses below are *missing-safeguard* ones — no tested
+rollback, no signature check — where the safeguard may live in an unchanged
+file; there the tripwire fires on the dangerous operation the diff *does*
+introduce, and the user's ruling is where a safeguard already present
+elsewhere gets confirmed.
+
+- **Secrets in source** — an API key, token, password, or private key in a
+  committed file (not `.env`, not a placeholder); an OAuth or signing secret
+  anywhere but a secret manager.
+- **Injection** — a SQL query built by string-concatenation with
+  user-controlled input (no parameterization / ORM escaping); a shell command
+  assembled from user input via `exec`/`spawn`/`eval`; a template rendered
+  with unescaped user input where XSS is reachable.
+- **Auth bypass** — a middleware check with a path that skips it (early
+  return, swallowed exception, condition that always resolves to
+  "authenticated"); a role or permission check forgeable by a request
+  parameter; a JWT accepted with `alg: none` or verified against a secret
+  hardcoded in source.
+- **Payment / webhook** — a handler that swallows errors silently (empty
+  catch, unhandled rejection); a webhook with no signature verification; an
+  amount or recipient derived from untrusted input without server-side
+  validation.
+- **Destructive data** — a migration with a `DROP` or destructive `ALTER` and
+  no tested rollback; a bulk delete or update with no `WHERE` or a
+  user-controlled one; a cache or store wipe with no restore path.
+- **Plaintext sensitive data** — a password or PII logged or stored
+  unencrypted; an SSN, payment card, or health field in an unencrypted
+  column.
 
 ## Step 2 — Fresh-context review (two stages, one sub-agent each)
 
@@ -127,7 +167,9 @@ finding to NEEDS HUMAN.
 
 One of three, stated plainly with the reasons:
 
-- **SHIP** — evidence complete, tripwires clean, no accepted findings.
+- **SHIP** — evidence complete (including the failure-path check on any
+  auth/payment/migration surface), tripwires clean — fake-green *and*
+  source-security — and no accepted findings.
 - **FIX FIRST** — the accepted findings, as a short ordered list. Fix them
   (or hand back to feature/bugfix), then re-run **only the affected lines**
   of the gate — not the whole ceremony.
