@@ -36,6 +36,10 @@
     { "prompt": "brainstorm some new features and directions for this project", "expect": "ideate" },
     { "prompt": "give me ideas worth pursuing for what I could build next", "expect": "ideate" },
     { "prompt": "I have a problem to solve and want to generate a range of ideas before I pick one", "expect": "ideate", "route": "not priorart — priorart checks whether one idea already exists; ideate generates the ideas" },
-    { "prompt": "help me come up with new directions for my own project", "expect": "ideate", "route": "not scout — scout mines competitors' features; ideate diverges from the project itself" }
+    { "prompt": "help me come up with new directions for my own project", "expect": "ideate", "route": "not scout — scout mines competitors' features; ideate diverges from the project itself" },
+    { "prompt": "what did I park to re-check later that's due now?", "expect": "revisit" },
+    { "prompt": "show my revisit queue across all my skills", "expect": "revisit" },
+    { "prompt": "anything I decided to reconsider later that's come due?", "expect": "revisit", "route": "not daybrief — daybrief is today's calendar/mail/git; revisit surfaces parked re-check items across skill memory" },
+    { "prompt": "is there a parked idea or decision worth reviving now?", "expect": "revisit", "route": "not ideate — ideate generates new ideas; revisit checks which already-parked ones are due" }
   ]
 }

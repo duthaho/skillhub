@@ -24,7 +24,7 @@ DESCRIPTION_WARN = 950  # soft limit: room to edit before the hard wall
 # shadowing (see mattpocock/skills#483). Update when the harness adds commands.
 BUILTINS = {
     "review", "code-review", "security-review", "verify", "init", "run",
-    "simplify", "loop", "schedule",
+    "simplify", "loop", "schedule", "status",
 }
 
 

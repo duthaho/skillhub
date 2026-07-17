@@ -50,7 +50,8 @@
       "skills": [
         "./.claude/skills/daybrief",
         "./.claude/skills/learn",
-        "./.claude/skills/tune"
+        "./.claude/skills/tune",
+        "./.claude/skills/revisit"
       ]
     }
   ]
