@@ -1,0 +1,36 @@
+name: validate-skills
+
+# Skillhub's mechanical drift gate. A skill lives across four surfaces
+# (folder, README table row, marketplace plugin, trigger evals); when they
+# disagree, the repo has drifted. scripts/validate-skills.py is the oracle for
+# that — this runs it on every PR so drift can't reach main by memory alone.
+#
+# Scope: the *mechanical* checks only (frontmatter, 1024-char limit,
+# marketplace coverage both ways, README rows, references/ integrity). The
+# trigger eval needs a judge sub-agent (a model) and stays a local/manual step
+# per evals/README.md — a keyless Action can't run it.
+
+on:
+  pull_request:
+    paths:
+      - ".claude/skills/**"
+      - ".claude-plugin/marketplace.json"
+      - "README.md"
+      - "evals/**"
+      - "scripts/validate-skills.py"
+      - ".github/workflows/validate-skills.yml"
+  push:
+    branches: [main]
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install dependencies
+        run: pip install pyyaml
+      - name: Validate skills
+        run: python3 scripts/validate-skills.py
