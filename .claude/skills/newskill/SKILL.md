@@ -56,10 +56,21 @@ Adding a brand-new skill from a name + description + category.
 4. **Trigger evals (model-invoked only).** Add ≥2 cases to
    `evals/triggers.json`, including a routing pair against the nearest
    neighbour skill. Skip for user-invoked skills.
-5. **Run the loop** above until green.
+5. **Pre-flight the body's snippets.** Every snippet the new `SKILL.md` embeds
+   is tried once against real data before the skill ships, output quoted
+   in-session: execute each bash line (placeholders filled with real values),
+   fetch each API endpoint, read each referenced path. A snippet that fails as
+   written is a bug in the skill, not a formatting nit. Two honest outs, both
+   flagged **unverified** and never skipped silently: one that can't run here
+   (external account, missing binary, a file that exists only mid-run), and one
+   that would mutate real state — never run something destructive just to
+   prove it. This is tune's prove-the-rules-bite extended from config to
+   authoring. (Fix mode is exempt — it never writes a body.)
+6. **Run the loop** above until green.
 
 **Completion criterion:** validator prints no FAIL; the new `<name>` appears in
-all four surfaces it's required in.
+all four surfaces it's required in; every embedded snippet has run clean or is
+flagged unverified.
 
 ## Mode: fix
 
