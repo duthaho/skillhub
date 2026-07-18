@@ -44,7 +44,11 @@ convention: every approval gate becomes a self-approval **on the record** —
 the decision and its reason are appended to `log.md` instead of asked — and
 every verdict that would need a human becomes a **PARK**. The skills' own
 rules (task sizing, TDD, tripwires, never-weaken-tests) are unchanged; only
-the waiting is removed.
+the waiting is removed. In auto mode the run **never calls a tool that
+stops to wait on a human — `AskUserQuestion` first among them** (waiting on
+sub-agents or commands is fine): with nobody watching, such a call isn't a
+question, it's a deadlock. A decision only a human can settle is parked
+with the decision spelled out — never waited on, never guessed.
 
 ## Step 0 — Preflight
 
