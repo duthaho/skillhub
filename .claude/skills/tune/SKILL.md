@@ -38,8 +38,10 @@ shallower per project, say so.
 baseline. Read: user + project `CLAUDE.md`, the installed skills (names +
 descriptions), `settings.json` / `settings.local.json` (permissions,
 hooks). Also read `out/tune/learnings.md` (past accepted/rejected — don't
-re-propose what was rejected) and `out/dev/bugfix-log.md` if present
-(recurring root causes are harness findings too).
+re-propose what was rejected), `out/tune/principles.md` if present
+(promoted cross-cutting principles — a lens for judging new findings),
+and `out/dev/bugfix-log.md` if present (recurring root causes are harness
+findings too).
 
 ## Step 1 — Mine the transcripts (cheap models, parallel)
 
@@ -82,8 +84,10 @@ session dates, occurrence count.** Full evidence goes to
 ## Step 3 — Propose, one at a time
 
 Present findings **one at a time, highest impact first** — evidence
-(quoted, dated), the proposed change as an **exact diff or text**, and
-where it goes. The user approves, rejects, or edits each before the next
+(quoted, dated), the proposed change as an **exact diff or text**, where
+it goes, and the **one-line principle** the finding generalizes to: the
+transferable "why" that would prevent the whole incident class, not just
+this instance. The user approves, rejects, or edits each before the next
 is shown. Apply only on an explicit yes.
 
 The escalation ladder — always the *weakest mechanism that will actually
@@ -109,14 +113,33 @@ is a no-op wearing a diff.
 After the session, update `out/tune/learnings.md`:
 
 ```markdown
-| Date | Finding | Proposal | Verdict | Provenance |
-|------|---------|----------|---------|------------|
-| 2026-07-06 | `cat` fails (bat alias), 4 sessions | rule: use Read tool, never cat | accepted | sessions 06-28→07-03 |
-| 2026-07-06 | user rejects auto-PR-body edits | (rejected — user prefers manual) | rejected | — |
+| Date | Finding | Proposal | Principle | Verdict | Provenance |
+|------|---------|----------|-----------|---------|------------|
+| 2026-07-06 | `cat` fails (bat alias), 4 sessions | rule: use Read tool, never cat | prefer harness tools over shell equivalents | accepted | sessions 06-28→07-03 |
+| 2026-07-06 | user rejects auto-PR-body edits | (rejected — user prefers manual) | — | rejected | — |
 ```
 
 The **Provenance** column is what makes rules retire-able: a future run
 that sees the incident class gone can propose the deletion.
+
+**Promote recurring principles.** When two or more *accepted* rows — from
+this run or any earlier one — share a principle (the same idea, not
+necessarily the same words) that isn't already in `out/tune/principles.md`,
+propose adding it there: the two-strike rule applied one level up, with
+the same explicit-yes gate as every other change:
+
+```markdown
+- Prefer harness tools over shell equivalents — findings 2026-07-06, 2026-07-14
+```
+
+One line per principle, each citing the findings that earned it. Future
+runs read the file in Step 0 and weigh new findings against it; sessions
+that author or rewrite skills and rules read it as a pre-write checklist.
+A principle retires only when its **incident class** has vanished —
+pruning its source rows from learnings.md is housekeeping, not evidence —
+and retire-ability applies one level up too. Keep the file under ~15
+lines: a principles file too long to skim is a rules file wearing a new
+name.
 
 ## Guardrails
 

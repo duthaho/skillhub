@@ -43,7 +43,9 @@ Adding a brand-new skill from a name + description + category.
    `<name>` that collides with a harness built-in (the validator's `BUILTINS`
    set) or an existing skill.
 2. **Folder.** Write `.claude/skills/<name>/SKILL.md` with frontmatter (`name`
-   = folder name) and a `description`. Keep the description **≤ 950 chars**
+   = folder name) and a `description`. If `out/tune/principles.md` exists, read
+   it before writing the body — each line is an authoring rule distilled from
+   accepted past fixes. Keep the description **≤ 950 chars**
    (soft limit; hard wall is 1024) — front-load the leading word, one trigger
    per branch. For a user-invoked tool add `disable-model-invocation: true` and
    write a human-facing one-line description (no trigger list).
