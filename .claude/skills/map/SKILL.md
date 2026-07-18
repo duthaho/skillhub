@@ -36,7 +36,14 @@ First, look before generating:
   `.github/copilot-instructions.md`. If one exists, this is a **REFRESH**, not a
   fresh write — read it, and update in place rather than duplicating. If a
   `CLAUDE.md` already carries the knowledge, offer to have `AGENTS.md` `@import`
-  it instead of restating it.
+  it instead of restating it. If the existing map carries a stamp and HEAD has
+  moved past it, state the drift in one line when naming the mode — "map is N
+  commits behind (touched: X, Y)" via `git rev-list --count` +
+  `git diff --stat` over `<stamped-commit>..HEAD` — and offer the refresh
+  unless this run already is one. A stamp that no longer resolves (rebase,
+  shallow clone) is itself the staleness signal: report it and offer a fresh
+  map. Staleness surfaces at every touch, never only when someone remembers
+  `/map refresh`.
 - **Size the repo** (`git ls-files | wc -l`, top-level layout) to scale the
   fan-out: a small repo maps in one pass inline; a large or polyglot one gets
   the full parallel sweep below.

@@ -42,7 +42,13 @@ Look before generating:
   the refresh path in Step 5; offer a full regenerate only if the user asks
   or the manifest looks obsolete. An existing
   hand-written `docs/architecture*` file is context to read and link, never
-  to overwrite.
+  to overwrite. Whichever mode wins, if the manifest's stamp trails HEAD,
+  state the drift in one line — "blueprint is N commits behind (touched:
+  X, Y)" via `git rev-list --count` + `git diff --stat` over
+  `<stamped-commit>..HEAD` — and offer the refresh unless this run already
+  is one. A stamp that no longer resolves (rebase, shallow clone) is itself
+  the staleness signal: report it and offer a full regenerate. Staleness
+  surfaces at every touch, not only on a remembered refresh.
 - **Orient cheaply first.** Read `AGENTS.md`/`CLAUDE.md`/`README` if present
   (the map skill writes the first) — they answer in seconds what fan-out
   answers in minutes. No AGENTS.md in a large repo? Offer `/map` first; its
