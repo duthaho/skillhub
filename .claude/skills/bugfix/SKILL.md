@@ -88,6 +88,13 @@ one observation.
 3. Test green, then the **full suite** green (the fix must not buy one green
    at the cost of another).
 
+**Three straight failed fix attempts is a spiral, not progress.** Stop
+editing code: the "confirmed" root cause is now in doubt, so return to
+Step 2's hypothesis list, name the assumption that might be wrong, and run
+one discriminating probe (or ask one diagnostic question) before the next
+attempt. (Step 2's two-dead-hypotheses rule governs probing; this one
+governs fixing — they don't share a counter.)
+
 If the minimal fix keeps growing — touching many files, changing behavior,
 demanding design decisions — stop and say so: this is a **feature** wearing a
 bug costume. Hand off to `/feature` with the diagnosis as its input; the
