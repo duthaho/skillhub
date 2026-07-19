@@ -1,5 +1,10 @@
 # Pulse brief template — the brief rendered in Step 3; read it when composing the brief.
 
+**Pre-render check:** read only the TL;DR — it alone must deliver the
+headline state of the conversation, so a reader who stops there leaves
+correctly informed. If the real headline sits lower, lift it; don't bolt a
+second summary on top.
+
 ```markdown
 # Pulse: <Topic>
 

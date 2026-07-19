@@ -1,5 +1,9 @@
 # Scout brief template — the report rendered in Step 5; read it when composing the brief.
 
+**Pre-render check:** read only the brief's opening block and its closing
+pre-Sources lines — together they must say what matters most and what to do
+next. If they don't, reshape the brief; don't bolt a second summary on top.
+
 ```markdown
 # Scout: <project> vs the field
 

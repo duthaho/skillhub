@@ -1,5 +1,9 @@
 # Verdict ADR template — the brief rendered in Step 3; read it when composing the brief.
 
+**Pre-render check:** read only the brief's opening block and its closing
+pre-Sources lines — together they must say what matters most and what to do
+next. If they don't, reshape the brief; don't bolt a second summary on top.
+
 ```markdown
 # Verdict: <Option A> vs <Option B>[ vs <Option C>] — <context, one line>
 
