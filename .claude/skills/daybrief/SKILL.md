@@ -164,6 +164,10 @@ Compact, scannable, in chat — this is the product. Skeleton:
 Sources: calendar ✓ · email ✓ · repos ✓ · tasks ✓/— · radar ✓/— <note any unavailable>
 ```
 
+**Pre-render check:** read only the brief's opening block and its closing
+pre-Sources lines — together they must say what matters most and what to do
+next. If they don't, reshape the brief; don't bolt a second summary on top.
+
 If the user runs daybrief manually on consecutive days, suggest once — never
 nag — scheduling it each morning with `save: on` (cron or /schedule).
 
