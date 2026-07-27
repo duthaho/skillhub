@@ -1,8 +1,8 @@
 # skillhub
 
-A collection of [Claude Code](https://claude.com/claude-code) skills for research,
-daily work, and shipping code. They started as prompts I kept retyping, so I wrote each
-one down once, gave it memory, and made it cite its sources.
+Give [Claude Code](https://claude.com/claude-code) a memory and make it cite its
+sources — skills for research, daily work, and shipping code. They started as
+prompts I kept retyping, so I wrote each one down once.
 
 Keyless: no API keys, no signups. Skills run on Claude Code's own web and
 sub-agent tools plus free public endpoints. Nothing is sent, submitted, or pushed
