@@ -79,7 +79,14 @@ session dates, occurrence count.** Full evidence goes to
   times outranks an elegant refactor of the rules file.
 - **Deletions rank alongside additions.** A bloated CLAUDE.md degrades the
   agent — every rule costs context in every session. A rule whose incident
-  class has disappeared is a finding.
+  class has disappeared is a finding. Name the class a cut falls into:
+  **Conflict** (two layers pulling opposite ways — quote both sides),
+  **Duplicate** (keep the copy nearest its point of use), **Obvious**
+  (restates what the code or the model's defaults already show),
+  **Judgement-now** (a blanket worst-case rule a current model calls better
+  from context), or the vanished incident class above — first match in that
+  order wins. A line that fits none is a **Gotcha** — load-bearing; it
+  survives this run.
 
 ## Step 3 — Propose, one at a time
 
