@@ -133,11 +133,13 @@ what was generated and why, and committing still follows the run's charter.
 
 On **REFRESH**: diff the map's claims against the current tree — flag sections
 whose cited files moved, changed shape, or vanished; regenerate only those;
-re-stamp. Don't rewrite what's still true. Command-shaped claims (build, test,
-validate, install) are re-proven by running them — or their cheapest safe
-dry-run — not by checking that the paths they mention still exist: a command
-that no longer runs as the map claims is stale even when every cited file is
-in place; update the claim to what actually happened.
+re-stamp. Don't rewrite what's still true. Command-shaped claims are re-proven
+by running them, not by checking that the paths they mention still exist — a
+command that no longer runs as claimed is stale even when every cited file is
+in place; update the claim to what actually happened. Read-only commands
+(test, lint, validate) run directly; state-changing ones (install, deploy,
+migrate) only via an explicit dry-run flag — no dry-run mode means the claim
+is marked unverified, never executed.
 
 ## Guardrails
 
