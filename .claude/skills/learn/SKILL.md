@@ -10,8 +10,9 @@ description: >-
   fact-sensitive content is verified by web search, not memory. Keyless.
   Use to learn or study a topic — e.g. "/learn rust ownership", "teach me
   kubernetes", "quiz me on X", "continue the SQL lessons"; "/learn" alone
-  lists topics in progress. For community buzz use pulse; for choosing
-  between technologies use verdict.
+  lists topics in progress. Also teaches from a document you supply —
+  "summarize this book for learning", "/learn X from <file>". For community
+  buzz use pulse; for choosing between technologies use verdict.
 ---
 
 # learn — personalized tutor with memory
@@ -37,6 +38,37 @@ questions in chat; you grade what they actually wrote.
   (`x/y` units), last session date, review items due, and a suggested next step.
 - **QUIZ** — "quiz me" → recall-only session from the review queue + covered
   units; grade, update the log, teach nothing new.
+- **GROUNDED** — the learner supplies a document ("teach me this book",
+  "summarize docs/x.pdf for learning") → distill it, then offer the loop.
+  Asked to learn from a doc but no path given? Ask for the path first.
+
+## GROUNDED — learn from a supplied document
+
+The source feeds the existing loop; nothing below replaces NEW/CONTINUE.
+
+1. **Check the source:** must exist locally; PDF/md/txt read natively
+   (PDFs by page range). EPUB/MOBI: don't process — say plainly it needs
+   converting first (e.g. Calibre's `ebook-convert book.epub book.txt`)
+   and never install anything for the user.
+2. **Size gate:** estimate tokens (`wc -c` ÷ 4). Over ~50K, show the
+   estimate and get an explicit go-ahead before reading further; then
+   **probe, don't ingest** — locate structure with `grep -n`, pull only
+   the slice a step needs, never re-read the file whole per unit.
+3. **Distill first** (read `references/grounded.md` when you get here):
+   write `out/learn/<slug>-distillate.md` — a source map with locators
+   plus a decision-focused cheatsheet. This is a complete deliverable:
+   offer the syllabus after it, and stop cleanly if they only wanted
+   the summary.
+4. **If they continue:** run NEW as usual with two changes — the syllabus
+   derives from the source's own structure (each unit's pass check cites
+   the sections/pages it covers), and the log's Learner line records
+   `Source: <path>`.
+
+**Grounding bar:** any claim attributed to the source is verified against
+it before you assert it — `grep -n` the passage (md/txt) or re-read the
+cited pages (PDF) — and taught with the citation. "The book says" without
+a locator is fabrication; the no-fabrication guardrail applies to the
+document exactly as it does to the web.
 
 ## The learning log — memory across sessions
 
@@ -51,6 +83,7 @@ Respect manual edits (a unit hand-marked done stays done; ask nothing).
 ## Learner
 Goal: <what they want to be able to DO> · Level: <self-described start point>
 Background: <relevant experience to hook examples onto> · Session length: ~<N> min
+Source: <path> · distillate: out/learn/<slug>-distillate.md   <!-- grounded topics only -->
 
 ## Syllabus                <!-- status: ☐ not started · ◐ taught, not passed · ✓ passed -->
 1. ✓ <unit — one teachable idea>
@@ -96,6 +129,8 @@ is itself signal for future sessions.
    **Write each unit's pass check now** — the question or micro-exercise that
    will prove it, plus a 2–3-criterion rubric — so later grading is against a
    contract written before the teaching, not the tutor's mood after it.
+   Grounded topics: units derive from the source's own structure, and each
+   unit cites its coverage (`src: §3, L120–214` or pages).
    Present it and let the learner reorder/cut/add before saving. Then save the
    log and either start unit 1 (if the session has time) or stop cleanly.
 
@@ -135,6 +170,8 @@ skipped with a stated reason:
    it's wrong. Match depth to the session length; **one unit only** — resist
    finishing the syllabus early. If the unit involves anything
    version-sensitive, verify before asserting (same rule as NEW step 2).
+   Grounded topics: teach from the unit's cited sections, quotes carrying
+   their citation, verified against the source first (the GROUNDED bar).
 4. **Active-recall check:** 2–4 questions or one small exercise applying the
    unit — confidence tags requested with the answers, exactly as in the
    warm-up. Wait for answers; grade as in step 2, against the unit's rubric,
