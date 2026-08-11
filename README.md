@@ -1,5 +1,7 @@
 # skillhub
 
+[![skills.sh](https://skills.sh/b/duthaho/skillhub)](https://skills.sh/duthaho/skillhub)
+
 Give [Claude Code](https://claude.com/claude-code) a memory and make it cite its
 sources — skills for research, daily work, and shipping code. They started as
 prompts I kept retyping, so I wrote each one down once.
@@ -22,7 +24,14 @@ Inside Claude Code, as plugins (pick the groups you want):
 /plugin install daily@skillhub           # daybrief, learn, tune
 ```
 
-Or copy the files, if you'd rather own and edit them:
+Or copy the files, if you'd rather own and edit them — via
+[skills.sh](https://skills.sh/duthaho/skillhub):
+
+```bash
+npx skills add duthaho/skillhub    # pick the skills you want, editable copies
+```
+
+or by hand:
 
 ```bash
 git clone https://github.com/duthaho/skillhub.git
