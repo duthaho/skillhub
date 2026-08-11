@@ -52,6 +52,12 @@ exact failure this skill exists to prevent.
 - [ ] Tripwires (fake-green + source-security, below): clean
 ```
 
+Every line is quoted **redacted**: secrets replaced with `<REDACTED>`, long
+output cut to its signal-carrying lines. A live secret in pasted evidence is
+itself a finding — treat it like a tripwire hit (→ FIX FIRST)
+until it's out of the evidence; whether it's also in the *code* is the
+source-security scan's job below.
+
 **"Ran the actual change"** is the line agents skip and humans value most: a
 green suite proves the tests pass, not that the feature works. Execute the
 spec's end-to-end check — start the app, curl the endpoint, run the CLI on

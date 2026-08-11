@@ -41,6 +41,13 @@ something that fails on demand and will pass when the bug is dead.
   once**, with the invocation and its output pasted. That output is the
   baseline the fix is judged against — a repro described but never run
   doesn't count.
+- **Redact before you paste.** Shown output travels — into chat,
+  `out/dev/bugfix-log.md`, commit messages — so replace every secret with
+  `<REDACTED>` before showing it, build repro loops against env vars so the
+  credential stays in the environment rather than in the command line, and
+  quote only the signal-carrying lines of a captured artifact (auth headers
+  rarely carry signal). If the redacted output isn't enough to diagnose,
+  say so and ask.
 - **Tighten the loop** — Step 2 re-runs it on every hypothesis, so its
   speed is your debugging speed: faster, sharper signal, more deterministic
   (pin time, seed RNG, isolate the filesystem).
