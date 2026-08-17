@@ -51,6 +51,7 @@ Respect manual edits (a unit hand-marked done stays done; ask nothing).
 ## Learner
 Goal: <what they want to be able to DO> · Level: <self-described start point>
 Background: <relevant experience to hook examples onto> · Session length: ~<N> min
+Freshness: <stable — teach from knowledge · fast-moving — verify each unit before teaching>
 
 ## Syllabus                <!-- status: ☐ not started · ◐ taught, not passed · ✓ passed -->
 1. ✓ <unit — one teachable idea>
@@ -60,6 +61,9 @@ Background: <relevant experience to hook examples onto> · Session length: ~<N> 
 
 ## Review queue            <!-- weak spots; due dates, not session counts -->
 - <item missed> — missed 2026-07-05 (conf: sure) · due 2026-07-06 · passes 0/3
+
+## Sources                 <!-- verified references; check here before searching again -->
+- <title> — <url> · verified 2026-07-05 · covers: <units/claims>
 
 ## Sessions
 | # | Date | Unit | Warm-up | Check | Notes |
@@ -72,8 +76,10 @@ grade, not at goodbye:** update the log immediately after each graded step —
 warm-up scores right after the warm-up, check results right after the check.
 A crashed or compacted session must not lose answers the learner already
 gave. Compute dates with `date +%F`, never guess. Older logs (session-number
-dues, no rubrics) upgrade in place on the next run: session dues become
-dates (due today), a unit's rubric is written when it's next touched.
+dues, no rubrics, no `Freshness:` line or `## Sources` section) upgrade in
+place on the next run: session dues become dates (due today), a unit's
+rubric is written when it's next touched, and a missing freshness verdict
+is judged and written before any teaching.
 **Supersede, don't delete:** a revised unit or rubric strikes the old line
 and adds the new one — how the plan and the learner's understanding evolved
 is itself signal for future sessions.
@@ -91,6 +97,9 @@ is itself signal for future sessions.
    light `WebSearch` pass first to confirm the current major version and any
    recent breaking changes — so the syllabus isn't stale on day one. Cite what
    you verified. Don't fan out sub-agents; this is a check, not research.
+   **Record the verdict** as the log's `Freshness:` line — `stable` or
+   `fast-moving` — so CONTINUE sessions inherit the decision instead of
+   re-judging it, and seed `## Sources` with anything you verified.
 3. **Draft the syllabus:** 5–12 units, each **one teachable idea** sized to a
    session, sequenced so every unit builds on passed ones, ending at the goal.
    **Write each unit's pass check now** — the question or micro-exercise that
@@ -109,6 +118,7 @@ skipped with a stated reason:
 - [ ] Log read; reviews due by date + next unit picked
 - [ ] Warm-up recall asked — ANSWERED, with confidence tags
 - [ ] Warm-up graded against rubrics; log updated NOW
+- [ ] Freshness honored: fast-moving → unit claims verified, cited, Sources updated · stable → n/a
 - [ ] Unit taught (concept → example on their background → misconception)
 - [ ] Check questions asked — ANSWERED, with confidence tags
 - [ ] Check graded; misses + confidence into the queue; log updated NOW
@@ -133,8 +143,13 @@ skipped with a stated reason:
 3. **Teach the unit:** the concept, then a worked example grounded in the
    learner's stated background, then the most common misconception and why
    it's wrong. Match depth to the session length; **one unit only** — resist
-   finishing the syllabus early. If the unit involves anything
-   version-sensitive, verify before asserting (same rule as NEW step 2).
+   finishing the syllabus early. **Honor the log's `Freshness:` line:** for a
+   fast-moving topic, check `## Sources` first and do one light, unit-scoped
+   `WebSearch` only for what it doesn't already cover — cite inline and add
+   new finds to `## Sources` (verification gets cheaper each session, not
+   repeated). For a stable topic teach from knowledge, but anything version-,
+   date-, or price-sensitive that sneaks into a unit still gets verified
+   (same rule as NEW step 2).
 4. **Active-recall check:** 2–4 questions or one small exercise applying the
    unit — confidence tags requested with the answers, exactly as in the
    warm-up. Wait for answers; grade as in step 2, against the unit's rubric,
@@ -143,6 +158,8 @@ skipped with a stated reason:
    only ◐), session row, misses into the review queue.
 6. **Preview:** one line on what the next session covers, and anything worth
    doing between sessions (a ≤15-min hands-on task when the topic allows).
+   For fast-moving topics, name one primary source from `## Sources` worth
+   reading before next time.
 
 **Spacing rule (dates, not session counts):** a missed item is due
 **tomorrow**; each pass on review roughly doubles the interval — **3 days →
