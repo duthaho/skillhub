@@ -357,14 +357,113 @@ def totals(turns):
     }
 
 
+_FIX = {
+    "idle_gap": "Idle gaps past the cache TTL are your biggest rebuild cost. "
+                "Return to the session within the window, or batch questions so "
+                "the agent isn't left waiting past the ~5-min TTL — the cache you "
+                "already paid for expires and gets rewritten at 1.25x.",
+    "model_switch": "Pin one model/effort per session. Switching mid-session "
+                    "invalidates the cached prefix and rewrites the whole thing.",
+    "write_churn": "Mid-session rebuilds with no idle gap point at prefix churn: "
+                   "MCP tool-list changes, an edited CLAUDE.md/system prompt, or "
+                   "dynamic content (timestamps) near the top. Keep the prefix "
+                   "byte-stable across turns.",
+    "dead_session": "You restarted a cold session for the same project soon after "
+                    "another ended, re-paying the initial build. Resume the prior "
+                    "session (--resume / resume-from-summary) instead of starting "
+                    "fresh. (low-confidence heuristic)",
+    "unattributed": "Rebuilds whose cause couldn't be determined from the "
+                    "transcript (usually missing timestamps).",
+    "context_tax": "These sessions carry far more prefix per turn than your norm. "
+                   "One task per session — /clear or a handoff brief between tasks "
+                   "— shrinks the context re-read (and re-billed) every turn.",
+}
+
+
+def _offenders(events, key, n=5):
+    agg = defaultdict(lambda: {"usd": 0.0, "tokens": 0})
+    for e in events:
+        a = agg[e[key]]
+        a["usd"] += e["usd"]
+        a["tokens"] += e["tokens"]
+    rows = [{key: k, **v} for k, v in agg.items()]
+    rows.sort(key=lambda r: r["usd"], reverse=True)
+    return rows[:n]
+
+
+def build_report(turns, sessions, stats, days):
+    miss_events = []
+    for seq in sessions.values():
+        miss_events.extend(attribute_session(seq))
+    dead_events = attribute_cross_session(sessions)
+    causes = roll_up(miss_events)
+    tax = context_tax(sessions)
+
+    tot = totals(turns)
+    spent = {"input": 0.0, "read": 0.0, "write": 0.0, "output": 0.0}
+    fallback_models = set()
+    for t in turns:
+        c = turn_cost(t)
+        for k in spent:
+            spent[k] += c[k]
+        if c["fallback"]:
+            fallback_models.add(t["model"])
+    spent["total"] = sum(spent.values())
+
+    miss_usd = sum(c["usd"] for c in causes.values())
+    dead_usd = sum(e["usd"] for e in dead_events)
+
+    presc = []
+    for cause, agg in causes.items():
+        presc.append({"cause": cause, "usd": agg["usd"], "tokens": agg["tokens"],
+                      "fix": _FIX.get(cause, "")})
+    if tax["total_excess_usd"] > 0:
+        presc.append({"cause": "context_tax", "usd": tax["total_excess_usd"],
+                      "tokens": sum(r["excess_tokens"] for r in tax["top_sessions"]),
+                      "fix": _FIX["context_tax"]})
+    if dead_usd > 0:
+        presc.append({"cause": "dead_session", "usd": dead_usd,
+                      "tokens": sum(e["tokens"] for e in dead_events),
+                      "fix": _FIX["dead_session"], "low_confidence": True})
+    presc.sort(key=lambda p: p["usd"], reverse=True)
+
+    return {
+        "meta": {"days": days, "pricing_asof": PRICING_ASOF},
+        "stats": stats,
+        "totals": {**tot, "usd": spent},
+        "miss_attribution": {
+            "causes": causes, "total_usd": miss_usd,
+            "invariant_tokens": sum(c["tokens"] for c in causes.values()),
+        },
+        "dead_session": {"events": len(dead_events), "usd": dead_usd,
+                         "low_confidence": True,
+                         "sessions": dead_events[:SPRAWL_TOP_N]},
+        "context_tax": tax,
+        "top_offenders": {
+            "sessions": _offenders(miss_events, "session"),
+            "projects": _offenders(miss_events, "project"),
+        },
+        "prescriptions": presc,
+        "flags": {
+            "pricing_fallback_models": sorted(fallback_models),
+            "missing_timestamp_turns": stats.get("missing_timestamp", 0),
+            "malformed_lines": stats.get("malformed_lines", 0),
+        },
+    }
+
+
+def run(claude_dir, days=30, now=None):
+    turns, stats = load_turns(claude_dir, days=days, now=now)
+    sessions = by_session(turns)
+    return build_report(turns, sessions, stats, days)
+
+
 def main(argv=None):
     p = argparse.ArgumentParser(description="Cachewise cache-economics analyzer")
     p.add_argument("--claude-dir", default="~/.claude")
     p.add_argument("--days", type=int, default=30)
     args = p.parse_args(argv)
-    turns, stats = load_turns(args.claude_dir, days=args.days)
-    out = {"stats": stats, "totals": totals(turns)}
-    print(json.dumps(out, indent=2))
+    print(json.dumps(run(args.claude_dir, days=args.days), indent=2))
 
 
 if __name__ == "__main__":

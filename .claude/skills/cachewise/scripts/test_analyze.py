@@ -368,5 +368,33 @@ class TestRollup(unittest.TestCase):
         self.assertEqual(sum(c["tokens"] for c in roll.values()), 175)
 
 
+class TestReport(unittest.TestCase):
+    def test_full_schema_and_ranked_prescriptions(self):
+        base = datetime(2026, 8, 24, 12, 0, tzinfo=timezone.utc)
+        # session with an idle-gap rebuild miss
+        entries = [
+            entry(iso(base), session="s1", read=30000, creation=30000),
+            entry(iso(base.replace(minute=20)), session="s1", read=0, creation=30000),
+        ]
+        with TmpClaude() as t:
+            write_jsonl(t.d, "a.jsonl", entries)
+            rep = analyze.run(t.d, days=3650, now=base.replace(minute=21))
+        for key in ("meta", "stats", "totals", "miss_attribution",
+                    "dead_session", "context_tax", "top_offenders",
+                    "prescriptions", "flags"):
+            self.assertIn(key, rep)
+        self.assertEqual(rep["meta"]["pricing_asof"], analyze.PRICING_ASOF)
+        self.assertIn("idle_gap", rep["miss_attribution"]["causes"])
+        usds = [p["usd"] for p in rep["prescriptions"]]
+        self.assertEqual(usds, sorted(usds, reverse=True))
+
+    def test_runs_on_empty_dir(self):
+        with TmpClaude() as t:
+            os.makedirs(os.path.join(t.d, "projects"))
+            rep = analyze.run(t.d, days=30)
+        self.assertEqual(rep["stats"]["turns"], 0)
+        self.assertEqual(rep["prescriptions"], [])
+
+
 if __name__ == "__main__":
     unittest.main()
