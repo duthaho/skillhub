@@ -37,10 +37,24 @@ WRITE_1H_MULT = 2.0
 READ_MULT = 0.1
 
 
+def _matches(key, m):
+    # substring match, but the char after the key must not be a digit — so
+    # "opus-4-1" (Opus 4.1) doesn't swallow a future "opus-4-10".
+    start = 0
+    while True:
+        i = m.find(key, start)
+        if i < 0:
+            return False
+        after = i + len(key)
+        if after >= len(m) or not m[after].isdigit():
+            return True
+        start = i + 1
+
+
 def rate_for(model):
     m = (model or "").lower()
     for key, inp, out in _PRICE_TABLE:
-        if key in m:
+        if _matches(key, m):
             return {"input": inp, "output": out, "fallback": False}
     return {"input": _FALLBACK[0], "output": _FALLBACK[1], "fallback": True}
 
@@ -86,6 +100,13 @@ def parse_ts(v):
     return dt.astimezone(timezone.utc)
 
 
+def _int(v):
+    try:
+        return int(v)
+    except (TypeError, ValueError):
+        return 0  # tolerate garbage numeric fields, never crash (spec A1)
+
+
 def parse_entry(d):
     if not isinstance(d, dict) or d.get("type") != "assistant":
         return None
@@ -97,12 +118,12 @@ def parse_entry(d):
         return None
     cc = u.get("cache_creation")
     cc = cc if isinstance(cc, dict) else {}
-    creation = int(u.get("cache_creation_input_tokens") or 0)
+    creation = _int(u.get("cache_creation_input_tokens"))
     c5m = cc.get("ephemeral_5m_input_tokens")
     c1h = cc.get("ephemeral_1h_input_tokens")
     has_split = c5m is not None or c1h is not None
-    c5m = int(c5m or 0)
-    c1h = int(c1h or 0)
+    c5m = _int(c5m)
+    c1h = _int(c1h)
     return {
         "session": d.get("sessionId") or "unknown",
         "project": d.get("cwd") or "unknown",
@@ -110,9 +131,9 @@ def parse_entry(d):
         "model": msg.get("model") or "unknown",
         "effort": d.get("effort"),
         "sidechain": bool(d.get("isSidechain")),
-        "input": int(u.get("input_tokens") or 0),
-        "output": int(u.get("output_tokens") or 0),
-        "read": int(u.get("cache_read_input_tokens") or 0),
+        "input": _int(u.get("input_tokens")),
+        "output": _int(u.get("output_tokens")),
+        "read": _int(u.get("cache_read_input_tokens")),
         "creation": creation,
         "creation_5m": c5m,
         "creation_1h": c1h,
@@ -213,7 +234,9 @@ def attribute_session(seq):
                     "session": t["session"], "project": t["project"],
                     "model": t["model"],
                 })
-        established = max(established, t["read"])
+        # cache alive after this turn ≈ prefix read + increment written; a
+        # cold-start turn (read=0, creation>0) still establishes a cache.
+        established = max(established, t["read"] + t["creation"])
     return events
 
 
@@ -239,11 +262,16 @@ def context_tax(sessions):
     baseline) shows zero.
     """
     reads_by_model = defaultdict(list)
-    for seq in sessions.values():
+    sessions_by_model = defaultdict(set)
+    for (project, session), seq in sessions.items():
         for t in seq:
             if t["read"] > 0:
                 reads_by_model[t["model"]].append(t["read"])
-    median = {m: _median(v) for m, v in reads_by_model.items()}
+                sessions_by_model[t["model"]].add((project, session))
+    # a baseline needs more than one session; a lone session has no norm to
+    # be judged against, so it's never charged context tax.
+    median = {m: _median(v) for m, v in reads_by_model.items()
+              if len(sessions_by_model[m]) >= 2}
 
     rows = []
     total = 0.0
@@ -252,7 +280,9 @@ def context_tax(sessions):
         excess_tokens = 0
         reads = [t["read"] for t in seq if t["read"] > 0]
         for t in seq:
-            base = median.get(t["model"], 0)
+            if t["model"] not in median:
+                continue
+            base = median[t["model"]]
             over = t["read"] - base
             if over > 0:
                 excess_tokens += over

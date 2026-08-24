@@ -88,6 +88,19 @@ class TestParsing(unittest.TestCase):
         self.assertEqual(len(turns), 1)
         self.assertEqual(stats["malformed_lines"], 1)
 
+    def test_garbage_numeric_field_does_not_crash(self):
+        base = datetime(2026, 8, 24, 12, 0, tzinfo=timezone.utc)
+        good = entry(iso(base), read=5, creation=0)
+        bad = entry(iso(base), read=0, creation=0)
+        bad["message"]["usage"]["input_tokens"] = "not-a-number"
+        bad["message"]["usage"]["cache_read_input_tokens"] = ["oops"]
+        with TmpClaude() as t:
+            write_jsonl(t.d, "a.jsonl", [good, bad])
+            turns, stats = analyze.load_turns(t.d, days=3650, now=base + timedelta(minutes=1))
+        self.assertEqual(len(turns), 2)  # tolerated, not crashed
+        bad_turn = [x for x in turns if x["read"] == 0][0]
+        self.assertEqual(bad_turn["input"], 0)  # garbage coerced to 0
+
     def test_missing_timestamp_excluded_from_gap_but_counted(self):
         base = datetime(2026, 8, 24, 12, 0, tzinfo=timezone.utc)
         e = entry(iso(base), read=5, creation=0)
@@ -152,6 +165,11 @@ class TestPricing(unittest.TestCase):
         rate = analyze.rate_for("<synthetic>")
         self.assertTrue(rate["fallback"])
         self.assertEqual(rate["input"], 3.0)
+
+    def test_opus_4_1_exact_vs_future_double_digit(self):
+        self.assertEqual(analyze.rate_for("claude-opus-4-1")["input"], 15.0)
+        # a future opus-4-10..19 must not collide with the 4.1 row
+        self.assertEqual(analyze.rate_for("claude-opus-4-10")["input"], 5.0)
 
     def test_turn_cost_5m_write_and_read(self):
         t = {"model": "claude-opus-4-8", "input": 1000, "output": 100,
@@ -259,6 +277,16 @@ class TestWithinSession(unittest.TestCase):
         )
         self.assertEqual(ev[0]["cause"], "unattributed")
 
+    def test_cold_start_then_idle_rebuild_counted(self):
+        # session whose first turn only writes cache (read=0); the later
+        # idle-gap rebuild must still be attributed.
+        ev = self.seq(
+            turn(self.B, read=0, creation=20000),
+            turn(self.B.replace(minute=15), read=0, creation=20000),
+        )
+        self.assertEqual(len(ev), 1)
+        self.assertEqual(ev[0]["cause"], "idle_gap")
+
     def test_unknown_model_not_counted_as_switch(self):
         ev = self.seq(
             turn(self.B, read=20000, creation=20000, model="<synthetic>"),
@@ -299,6 +327,15 @@ class TestContextTax(unittest.TestCase):
         sessions = {("/p", "solo"): [
             turn(self.B.replace(minute=m), session="solo", read=200000)
             for m in range(0, 10)
+        ]}
+        tax = analyze.context_tax(sessions)
+        self.assertEqual(tax["total_excess_usd"], 0)
+
+    def test_single_session_asymmetric_reads_no_false_positive(self):
+        # one session, varying per-turn reads — no baseline exists, so 0
+        sessions = {("/p", "solo"): [
+            turn(self.B.replace(minute=0), session="solo", read=100000),
+            turn(self.B.replace(minute=1), session="solo", read=300000),
         ]}
         tax = analyze.context_tax(sessions)
         self.assertEqual(tax["total_excess_usd"], 0)
