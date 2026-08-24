@@ -205,6 +205,7 @@ verdict: Build / Fork / Contribute / Use / Investigate first.
 | [learn](./.claude/skills/learn/SKILL.md) | A tutor that remembers what you got wrong | `/learn rust ownership` |
 | [tune](./.claude/skills/tune/SKILL.md) | Turn recurring agent mistakes into one-line fixes | `/tune` |
 | [revisit](./.claude/skills/revisit/SKILL.md) | What you parked to re-check later, now due — across every skill's memory | `/revisit` |
+| [cachewise](./.claude/skills/cachewise/SKILL.md) | Why your tokens burn so fast — cache-miss forensics, priced, with fixes | `/cachewise` |
 
 **The coding loop** — effort-scaled, evidence-gated
 | Skill | One line | Try |

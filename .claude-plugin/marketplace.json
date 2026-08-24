@@ -51,7 +51,8 @@
         "./.claude/skills/daybrief",
         "./.claude/skills/learn",
         "./.claude/skills/tune",
-        "./.claude/skills/revisit"
+        "./.claude/skills/revisit",
+        "./.claude/skills/cachewise"
       ]
     }
   ]
