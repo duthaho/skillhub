@@ -164,6 +164,59 @@ def by_session(turns):
     return groups
 
 
+# A rebuild only counts as a miss when the re-created chunk is comparable to
+# the cache that was alive — this gate is what keeps normal incremental writes
+# (small deltas of new content) from being mislabeled as waste.
+REBUILD_RATIO = 0.5
+CACHE_FLOOR = 5000
+TTL_5M = 300
+TTL_1H = 3600
+
+
+def _switched(t, prev):
+    model_sw = (t["model"] != prev["model"]
+                and "unknown" not in (t["model"], prev["model"])
+                and "<synthetic>" not in (t["model"], prev["model"]))
+    effort_sw = bool(t["effort"]) and bool(prev["effort"]) and t["effort"] != prev["effort"]
+    return model_sw or effort_sw
+
+
+def attribute_session(seq):
+    """Classify within-session cache rebuilds. Returns one event per miss."""
+    events = []
+    established = 0
+    for i, t in enumerate(seq):
+        if i > 0:
+            prev = seq[i - 1]
+            c = t["creation"]
+            if c > 0 and established >= CACHE_FLOOR and c >= REBUILD_RATIO * established:
+                ttl = "1h" if (t["creation_1h"] > 0 or prev["creation_1h"] > 0) else "5m"
+                window = TTL_1H if ttl == "1h" else TTL_5M
+                gap = None
+                if t["ts"] is not None and prev["ts"] is not None:
+                    gap = (t["ts"] - prev["ts"]).total_seconds()
+                switched = _switched(t, prev)
+                tags = []
+                if gap is None:
+                    cause = "unattributed"
+                elif gap > window:
+                    cause = "idle_gap"
+                    if switched:
+                        tags.append("switch")
+                elif switched:
+                    cause = "model_switch"
+                else:
+                    cause = "write_churn"
+                events.append({
+                    "cause": cause, "tokens": c, "ttl": ttl, "gap": gap,
+                    "tags": tags, "usd": avoidable_usd(c, t["model"], ttl),
+                    "session": t["session"], "project": t["project"],
+                    "model": t["model"],
+                })
+        established = max(established, t["read"])
+    return events
+
+
 def totals(turns):
     read = sum(t["read"] for t in turns)
     creation = sum(t["creation"] for t in turns)

@@ -182,5 +182,91 @@ class TestPricing(unittest.TestCase):
         self.assertAlmostEqual(av, 1000 * (1.25 - 0.1) * 5.0 / 1e6)
 
 
+def turn(ts, **kw):
+    d = {"session": "s1", "project": "/p", "ts": ts, "model": "claude-opus-4-8",
+         "effort": "high", "sidechain": False, "input": 2, "output": 50,
+         "read": 0, "creation": 0, "creation_5m": 0, "creation_1h": 0,
+         "has_split": True}
+    d.update(kw)
+    if kw.get("creation") and not kw.get("creation_5m") and not kw.get("creation_1h"):
+        d["creation_5m"] = d["creation"]
+    return d
+
+
+class TestWithinSession(unittest.TestCase):
+    B = datetime(2026, 8, 24, 12, 0, tzinfo=timezone.utc)
+
+    def seq(self, *turns):
+        return analyze.attribute_session(list(turns))
+
+    def test_idle_gap_rebuild(self):
+        ev = self.seq(
+            turn(self.B, read=20000, creation=20000),
+            turn(self.B.replace(minute=15), read=0, creation=20000),
+        )
+        self.assertEqual(len(ev), 1)
+        self.assertEqual(ev[0]["cause"], "idle_gap")
+
+    def test_idle_gap_with_switch_tagged(self):
+        ev = self.seq(
+            turn(self.B, read=20000, creation=20000),
+            turn(self.B.replace(minute=15), read=0, creation=20000,
+                 model="claude-opus-4-7"),
+        )
+        self.assertEqual(ev[0]["cause"], "idle_gap")
+        self.assertIn("switch", ev[0]["tags"])
+
+    def test_model_switch_within_ttl(self):
+        ev = self.seq(
+            turn(self.B, read=20000, creation=20000),
+            turn(self.B.replace(minute=1), read=0, creation=20000,
+                 model="claude-opus-4-7"),
+        )
+        self.assertEqual(ev[0]["cause"], "model_switch")
+
+    def test_effort_switch_within_ttl(self):
+        ev = self.seq(
+            turn(self.B, read=20000, creation=20000),
+            turn(self.B.replace(minute=1), read=0, creation=20000, effort="xhigh"),
+        )
+        self.assertEqual(ev[0]["cause"], "model_switch")
+
+    def test_write_churn(self):
+        ev = self.seq(
+            turn(self.B, read=20000, creation=20000),
+            turn(self.B.replace(minute=1), read=0, creation=20000),
+        )
+        self.assertEqual(ev[0]["cause"], "write_churn")
+
+    def test_small_incremental_write_not_a_miss(self):
+        ev = self.seq(
+            turn(self.B, read=20000, creation=20000),
+            turn(self.B.replace(minute=1), read=20000, creation=500),
+        )
+        self.assertEqual(ev, [])
+
+    def test_below_cache_floor_ignored(self):
+        ev = self.seq(
+            turn(self.B, read=1000, creation=1000),
+            turn(self.B.replace(minute=15), read=0, creation=1000),
+        )
+        self.assertEqual(ev, [])
+
+    def test_missing_timestamp_unattributed(self):
+        ev = self.seq(
+            turn(self.B, read=20000, creation=20000),
+            turn(None, read=0, creation=20000),
+        )
+        self.assertEqual(ev[0]["cause"], "unattributed")
+
+    def test_unknown_model_not_counted_as_switch(self):
+        ev = self.seq(
+            turn(self.B, read=20000, creation=20000, model="<synthetic>"),
+            turn(self.B.replace(minute=1), read=0, creation=20000,
+                 model="claude-opus-4-8"),
+        )
+        self.assertEqual(ev[0]["cause"], "write_churn")
+
+
 if __name__ == "__main__":
     unittest.main()
