@@ -275,6 +275,71 @@ def context_tax(sessions):
     }
 
 
+DEAD_SESSION_WINDOW_H = 2.0
+
+
+def _session_span(seq):
+    timed = [t for t in seq if t["ts"] is not None]
+    if not timed:
+        return None
+    return {
+        "start": timed[0]["ts"], "end": timed[-1]["ts"],
+        "last_read": timed[-1]["read"],
+        "first_creation": timed[0]["creation"], "model": timed[0]["model"],
+    }
+
+
+def attribute_cross_session(sessions):
+    """Cold re-boot of a same-project session shortly after another ended —
+    work that likely could have continued in the warm session. Strict and
+    labeled low-confidence: same project, prior session fully ended before this
+    one started, within the window, and this boot re-creates a chunk comparable
+    to the prior session's live cache. Sidechains (sub-agents) are excluded."""
+    by_project = defaultdict(list)
+    for (project, session), seq in sessions.items():
+        if session.endswith("::sidechain"):
+            continue
+        span = _session_span(seq)
+        if span:
+            span["session"] = session
+            span["project"] = project
+            by_project[project].append(span)
+
+    events = []
+    window = DEAD_SESSION_WINDOW_H * 3600
+    for project, spans in by_project.items():
+        spans.sort(key=lambda s: s["start"])
+        for i, s in enumerate(spans):
+            if s["first_creation"] <= 0:
+                continue
+            for p in spans[:i]:
+                if p["end"] >= s["start"]:
+                    continue
+                if (s["start"] - p["end"]).total_seconds() > window:
+                    continue
+                if p["last_read"] < CACHE_FLOOR:
+                    continue
+                if s["first_creation"] >= REBUILD_RATIO * p["last_read"]:
+                    events.append({
+                        "cause": "dead_session", "tokens": s["first_creation"],
+                        "usd": avoidable_usd(s["first_creation"], s["model"], "5m"),
+                        "low_confidence": True, "project": project,
+                        "session": s["session"], "model": s["model"],
+                    })
+                    break
+    return events
+
+
+def roll_up(events):
+    causes = {}
+    for e in events:
+        c = causes.setdefault(e["cause"], {"events": 0, "tokens": 0, "usd": 0.0})
+        c["events"] += 1
+        c["tokens"] += e["tokens"]
+        c["usd"] += e["usd"]
+    return causes
+
+
 def totals(turns):
     read = sum(t["read"] for t in turns)
     creation = sum(t["creation"] for t in turns)

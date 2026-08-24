@@ -304,5 +304,69 @@ class TestContextTax(unittest.TestCase):
         self.assertEqual(tax["total_excess_usd"], 0)
 
 
+class TestCrossSession(unittest.TestCase):
+    B = datetime(2026, 8, 24, 12, 0, tzinfo=timezone.utc)
+
+    def sessions(self, spec):
+        out = {}
+        for (proj, sid, suffix), turns in spec.items():
+            out[(proj, sid + suffix)] = turns
+        return out
+
+    def test_dead_session_reread_detected(self):
+        prior = [turn(self.B.replace(minute=m), session="p", read=30000)
+                 for m in range(0, 6)]
+        restart = [turn(self.B.replace(hour=12, minute=30), session="q",
+                        read=0, creation=30000)]
+        s = self.sessions({("/p", "p", ""): prior, ("/p", "q", ""): restart})
+        ev = analyze.attribute_cross_session(s)
+        self.assertEqual(len(ev), 1)
+        self.assertEqual(ev[0]["cause"], "dead_session")
+        self.assertTrue(ev[0]["low_confidence"])
+
+    def test_gap_beyond_window_ignored(self):
+        prior = [turn(self.B.replace(minute=m), session="p", read=30000)
+                 for m in range(0, 6)]
+        restart = [turn(self.B.replace(hour=15), session="q",
+                        read=0, creation=30000)]
+        s = self.sessions({("/p", "p", ""): prior, ("/p", "q", ""): restart})
+        self.assertEqual(analyze.attribute_cross_session(s), [])
+
+    def test_different_project_ignored(self):
+        prior = [turn(self.B.replace(minute=m), session="p", read=30000)
+                 for m in range(0, 6)]
+        restart = [turn(self.B.replace(hour=12, minute=30), session="q",
+                        project="/other", read=0, creation=30000)]
+        s = self.sessions({("/p", "p", ""): prior, ("/other", "q", ""): restart})
+        self.assertEqual(analyze.attribute_cross_session(s), [])
+
+    def test_concurrent_sessions_not_paired(self):
+        a = [turn(self.B.replace(minute=m), session="a", read=30000)
+             for m in range(0, 40, 5)]
+        b = [turn(self.B.replace(minute=2), session="b", read=0, creation=30000)]
+        s = self.sessions({("/p", "a", ""): a, ("/p", "b", ""): b})
+        self.assertEqual(analyze.attribute_cross_session(s), [])
+
+    def test_sidechain_excluded(self):
+        prior = [turn(self.B.replace(minute=m), session="p", read=30000)
+                 for m in range(0, 6)]
+        side = [turn(self.B.replace(hour=12, minute=30), session="q",
+                     sidechain=True, read=0, creation=30000)]
+        s = self.sessions({("/p", "p", ""): prior, ("/p", "q", "::sidechain"): side})
+        self.assertEqual(analyze.attribute_cross_session(s), [])
+
+
+class TestRollup(unittest.TestCase):
+    def test_invariant_sum_equals_missed_creation(self):
+        events = [
+            {"cause": "idle_gap", "tokens": 100, "usd": 1.0},
+            {"cause": "write_churn", "tokens": 50, "usd": 0.5},
+            {"cause": "unattributed", "tokens": 25, "usd": 0.2},
+        ]
+        roll = analyze.roll_up(events)
+        self.assertEqual(roll["idle_gap"]["tokens"], 100)
+        self.assertEqual(sum(c["tokens"] for c in roll.values()), 175)
+
+
 if __name__ == "__main__":
     unittest.main()
