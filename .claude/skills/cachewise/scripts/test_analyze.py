@@ -133,5 +133,54 @@ class TestParsing(unittest.TestCase):
         self.assertEqual(len(turns), 1)
 
 
+class TestPricing(unittest.TestCase):
+    def test_known_model_rate(self):
+        rate = analyze.rate_for("claude-opus-4-8")
+        self.assertEqual(rate["input"], 5.0)
+        self.assertEqual(rate["output"], 25.0)
+        self.assertFalse(rate["fallback"])
+
+    def test_opus_variants(self):
+        for m in ("claude-opus-5", "claude-opus-4-7", "claude-opus-4-5"):
+            self.assertEqual(analyze.rate_for(m)["input"], 5.0)
+
+    def test_haiku_and_fable(self):
+        self.assertEqual(analyze.rate_for("claude-haiku-4-5-20251001")["input"], 1.0)
+        self.assertEqual(analyze.rate_for("claude-fable-5")["input"], 10.0)
+
+    def test_unknown_model_falls_back_flagged(self):
+        rate = analyze.rate_for("<synthetic>")
+        self.assertTrue(rate["fallback"])
+        self.assertEqual(rate["input"], 3.0)
+
+    def test_turn_cost_5m_write_and_read(self):
+        t = {"model": "claude-opus-4-8", "input": 1000, "output": 100,
+             "read": 2000, "creation": 4000, "creation_5m": 4000,
+             "creation_1h": 0, "has_split": True}
+        c = analyze.turn_cost(t)
+        self.assertAlmostEqual(c["input"], 1000 * 5.0 / 1e6)
+        self.assertAlmostEqual(c["read"], 2000 * 0.1 * 5.0 / 1e6)
+        self.assertAlmostEqual(c["write"], 4000 * 1.25 * 5.0 / 1e6)
+        self.assertAlmostEqual(c["output"], 100 * 25.0 / 1e6)
+
+    def test_turn_cost_1h_write(self):
+        t = {"model": "claude-opus-4-8", "input": 0, "output": 0,
+             "read": 0, "creation": 1000, "creation_5m": 0,
+             "creation_1h": 1000, "has_split": True}
+        c = analyze.turn_cost(t)
+        self.assertAlmostEqual(c["write"], 1000 * 2.0 * 5.0 / 1e6)
+
+    def test_no_split_treated_as_5m(self):
+        t = {"model": "claude-opus-4-8", "input": 0, "output": 0,
+             "read": 0, "creation": 1000, "creation_5m": 0,
+             "creation_1h": 0, "has_split": False}
+        c = analyze.turn_cost(t)
+        self.assertAlmostEqual(c["write"], 1000 * 1.25 * 5.0 / 1e6)
+
+    def test_avoidable_usd_is_write_minus_hit(self):
+        av = analyze.avoidable_usd(1000, "claude-opus-4-8", "5m")
+        self.assertAlmostEqual(av, 1000 * (1.25 - 0.1) * 5.0 / 1e6)
+
+
 if __name__ == "__main__":
     unittest.main()

@@ -13,6 +13,62 @@ from collections import defaultdict
 from datetime import datetime, timezone
 
 
+# API list prices per million tokens, verified against
+# platform.claude.com/docs/en/about-claude/pricing on this date. USD.
+PRICING_ASOF = "2026-08-24"
+# (model-id substring, base-input $/MTok, output $/MTok) — checked in order,
+# most specific first. Cache prices derive from base input via the standard
+# multipliers (5m write 1.25x, 1h write 2x, read 0.1x).
+_PRICE_TABLE = [
+    ("opus-4-1", 15.0, 75.0),
+    ("opus-4.1", 15.0, 75.0),
+    ("opus-5", 5.0, 25.0),
+    ("opus-4", 5.0, 25.0),
+    ("sonnet-5", 2.0, 10.0),
+    ("sonnet-4", 3.0, 15.0),
+    ("haiku-4", 1.0, 5.0),
+    ("haiku-3", 0.80, 4.0),
+    ("fable-5", 10.0, 50.0),
+    ("mythos-5", 10.0, 50.0),
+]
+_FALLBACK = (3.0, 15.0)  # Sonnet 4.x — used for unknown/synthetic model ids
+WRITE_5M_MULT = 1.25
+WRITE_1H_MULT = 2.0
+READ_MULT = 0.1
+
+
+def rate_for(model):
+    m = (model or "").lower()
+    for key, inp, out in _PRICE_TABLE:
+        if key in m:
+            return {"input": inp, "output": out, "fallback": False}
+    return {"input": _FALLBACK[0], "output": _FALLBACK[1], "fallback": True}
+
+
+def turn_cost(t):
+    r = rate_for(t.get("model"))
+    inp_rate = r["input"] / 1e6
+    if t.get("has_split", True):
+        write = (t.get("creation_5m", 0) * WRITE_5M_MULT
+                 + t.get("creation_1h", 0) * WRITE_1H_MULT) * inp_rate
+    else:
+        write = t.get("creation", 0) * WRITE_5M_MULT * inp_rate
+    return {
+        "input": t.get("input", 0) * inp_rate,
+        "read": t.get("read", 0) * READ_MULT * inp_rate,
+        "write": write,
+        "output": t.get("output", 0) * r["output"] / 1e6,
+        "fallback": r["fallback"],
+    }
+
+
+def avoidable_usd(tokens, model, ttl="5m"):
+    """USD that a cache hit would have saved vs re-writing these tokens."""
+    inp_rate = rate_for(model)["input"] / 1e6
+    write_mult = WRITE_1H_MULT if ttl == "1h" else WRITE_5M_MULT
+    return tokens * (write_mult - READ_MULT) * inp_rate
+
+
 def parse_ts(v):
     if not isinstance(v, str):
         return None
