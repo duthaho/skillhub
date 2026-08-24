@@ -217,6 +217,64 @@ def attribute_session(seq):
     return events
 
 
+SPRAWL_TOP_N = 5
+
+
+def _median(xs):
+    xs = sorted(xs)
+    n = len(xs)
+    if n == 0:
+        return 0
+    mid = n // 2
+    return xs[mid] if n % 2 else (xs[mid - 1] + xs[mid]) / 2
+
+
+def context_tax(sessions):
+    """Read-cost of carrying more prefix than a typical same-model session.
+
+    Not a cache *miss* — it's the standing tax of oversized sessions. Baseline
+    is the per-model median per-turn read, so long-but-necessary context isn't
+    penalized against a different model's norm. Conservative: a session is only
+    charged for reads above its own model's median, and a lone session (no
+    baseline) shows zero.
+    """
+    reads_by_model = defaultdict(list)
+    for seq in sessions.values():
+        for t in seq:
+            if t["read"] > 0:
+                reads_by_model[t["model"]].append(t["read"])
+    median = {m: _median(v) for m, v in reads_by_model.items()}
+
+    rows = []
+    total = 0.0
+    for (project, session), seq in sessions.items():
+        excess_usd = 0.0
+        excess_tokens = 0
+        reads = [t["read"] for t in seq if t["read"] > 0]
+        for t in seq:
+            base = median.get(t["model"], 0)
+            over = t["read"] - base
+            if over > 0:
+                excess_tokens += over
+                excess_usd += over * READ_MULT * rate_for(t["model"])["input"] / 1e6
+        if excess_usd <= 0:
+            continue
+        tss = [t["ts"] for t in seq if t["ts"] is not None]
+        span_h = ((max(tss) - min(tss)).total_seconds() / 3600) if len(tss) > 1 else 0.0
+        total += excess_usd
+        rows.append({
+            "project": project, "session": session, "turns": len(seq),
+            "span_hours": round(span_h, 1),
+            "mean_read": int(sum(reads) / len(reads)) if reads else 0,
+            "excess_tokens": excess_tokens, "excess_usd": excess_usd,
+        })
+    rows.sort(key=lambda r: r["excess_usd"], reverse=True)
+    return {
+        "total_excess_usd": total,
+        "top_sessions": rows[:SPRAWL_TOP_N],
+    }
+
+
 def totals(turns):
     read = sum(t["read"] for t in turns)
     creation = sum(t["creation"] for t in turns)

@@ -268,5 +268,41 @@ class TestWithinSession(unittest.TestCase):
         self.assertEqual(ev[0]["cause"], "write_churn")
 
 
+class TestContextTax(unittest.TestCase):
+    B = datetime(2026, 8, 24, 12, 0, tzinfo=timezone.utc)
+
+    def test_sprawl_session_flagged_lean_not(self):
+        lean = {("/p", "lean"): [
+            turn(self.B.replace(minute=m), session="lean", read=10000)
+            for m in range(0, 10)
+        ]}
+        # many other lean sessions to set the baseline median ~10k
+        sessions = dict(lean)
+        for s in range(5):
+            sessions[("/p", "b%d" % s)] = [
+                turn(self.B.replace(minute=m), session="b%d" % s, read=10000)
+                for m in range(0, 5)
+            ]
+        # one bloated session carrying ~300k/turn over many turns
+        sessions[("/p", "sprawl")] = [
+            turn(self.B.replace(hour=12 + (m // 6), minute=(m * 7) % 60),
+                 session="sprawl", read=300000)
+            for m in range(0, 30)
+        ]
+        tax = analyze.context_tax(sessions)
+        top = {t["session"]: t for t in tax["top_sessions"]}
+        self.assertIn("sprawl", top)
+        self.assertGreater(top["sprawl"]["excess_usd"], 0)
+        self.assertNotIn("lean", top)
+
+    def test_single_session_no_false_positive(self):
+        sessions = {("/p", "solo"): [
+            turn(self.B.replace(minute=m), session="solo", read=200000)
+            for m in range(0, 10)
+        ]}
+        tax = analyze.context_tax(sessions)
+        self.assertEqual(tax["total_excess_usd"], 0)
+
+
 if __name__ == "__main__":
     unittest.main()
