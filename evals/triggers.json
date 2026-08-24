@@ -40,6 +40,12 @@
     { "prompt": "what did I park to re-check later that's due now?", "expect": "revisit" },
     { "prompt": "show my revisit queue across all my skills", "expect": "revisit" },
     { "prompt": "anything I decided to reconsider later that's come due?", "expect": "revisit", "route": "not daybrief — daybrief is today's calendar/mail/git; revisit surfaces parked re-check items across skill memory" },
-    { "prompt": "is there a parked idea or decision worth reviving now?", "expect": "revisit", "route": "not ideate — ideate generates new ideas; revisit checks which already-parked ones are due" }
+    { "prompt": "is there a parked idea or decision worth reviving now?", "expect": "revisit", "route": "not ideate — ideate generates new ideas; revisit checks which already-parked ones are due" },
+    { "prompt": "why am I hitting my Claude usage limit so fast?", "expect": "cachewise" },
+    { "prompt": "analyze my prompt cache hit rate and where tokens are going", "expect": "cachewise" },
+    { "prompt": "what's burning all my tokens in Claude Code?", "expect": "cachewise" },
+    { "prompt": "my cache keeps missing and I'm paying full price — diagnose it", "expect": "cachewise" },
+    { "prompt": "the agent keeps ignoring my CLAUDE.md rule every session", "expect": "tune", "route": "not cachewise — tune fixes recurring behavior mistakes; cachewise diagnoses token/cache cost" },
+    { "prompt": "how much am I spending and why is my cache hit rate low?", "expect": "cachewise", "route": "not daybrief — daybrief is today's calendar/mail/git; cachewise analyzes cache economics from transcripts" }
   ]
 }
