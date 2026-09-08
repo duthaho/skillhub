@@ -44,8 +44,9 @@ is the strongest check — offer it, don't require it (keyless first).
 
 ## Repair protocol (bounded)
 
-On any defect: list the issues as `line: problem`, fix **only those
-issues** — no redesign — and re-run the self-check. **Maximum 3 repair
+On any defect: emit a one-line structured diagnosis —
+`rule: <which checklist rule failed> · fix: <the targeted change>` — then
+apply **only that fix**, and re-run the self-check. **Maximum 3 repair
 attempts.** Still broken after 3 → degrade: drop subgraphs, then drop
 click links, then halve nodes by collapsing to parents. A plain diagram
 that renders beats a rich one that doesn't; never attempt a fourth repair.

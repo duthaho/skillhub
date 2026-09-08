@@ -75,9 +75,9 @@ The machine-readable half; refresh depends on it, so the format is fixed:
 
 ## Nodes
 
-| ID | Name | Path | Page |
-|---|---|---|---|
-| comp-<slug> | <display name> | `<path>` | README.md § Components |
+| ID | Name | Path | Job | Page |
+|---|---|---|---|---|
+| comp-<slug> | <display name> | `<path>` | <one-line job> | README.md § Components |
 
 ## Edges
 

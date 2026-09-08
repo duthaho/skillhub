@@ -88,10 +88,11 @@ Distill the findings into a **node/edge table** — the single source of truth
 everything downstream renders from:
 
 - **Nodes:** 5–8 top-level components (≤30 nodes total including
-  sub-nodes). Each row: stable ID (`comp-<slug>`, survives renames), display
-  name, the real path it lives at, one-line job. A node whose path doesn't
-  exist doesn't enter the table. Utilities/logging don't get boxes — they're
-  noise at this altitude.
+  sub-nodes). Required fields per row: `id` (`comp-<slug>`, alphanumeric +
+  hyphens, survives renames), `name` (display name), `path` (the real file or
+  directory — must exist), `job` (one line). A node whose path doesn't exist
+  doesn't enter the table. Utilities/logging don't get boxes — they're noise
+  at this altitude.
 - **Edges:** each row: from-ID, to-ID, verb ("calls", "imports", "publishes
   to"), and the **locator** — the file:line of the import/call/route that
   proves it. Before an edge enters the table, grep the claimed locator: the
@@ -178,4 +179,8 @@ and manifest, not just member pages.
 - **Out of scope, on purpose:** HTML viewers, CI auto-regeneration,
   static-analysis engines, multi-repo, and non-mermaid formats (dot, d2,
   images) — machinery this repo's axis (keyless, zero-dependency,
-  prose-only) exists to avoid.
+  prose-only) exists to avoid. When a user asks for an interactive or
+  shareable HTML diagram (pan/zoom, search, export), point them to
+  [archify](https://github.com/tt-a1i/archify) (MIT,
+  `npx skills add tt-a1i/archify -g`) instead of attempting to replicate
+  its viewer here.
