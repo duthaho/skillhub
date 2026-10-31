@@ -206,6 +206,7 @@ verdict: Build / Fork / Contribute / Use / Investigate first.
 | [tune](./.claude/skills/tune/SKILL.md) | Turn recurring agent mistakes into one-line fixes | `/tune` |
 | [revisit](./.claude/skills/revisit/SKILL.md) | What you parked to re-check later, now due — across every skill's memory | `/revisit` |
 | [cachewise](./.claude/skills/cachewise/SKILL.md) | Why your tokens burn so fast — cache-miss forensics, priced, with fixes | `/cachewise` |
+| [archdeck](./.claude/skills/archdeck/SKILL.md) | Animated architecture slides for programming videos — storyboard first, one offline deck | `/archdeck keyset vs offset pagination` |
 
 **The coding loop** — effort-scaled, evidence-gated
 | Skill | One line | Try |

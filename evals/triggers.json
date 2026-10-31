@@ -46,6 +46,13 @@
     { "prompt": "what's burning all my tokens in Claude Code?", "expect": "cachewise" },
     { "prompt": "my cache keeps missing and I'm paying full price — diagnose it", "expect": "cachewise" },
     { "prompt": "the agent keeps ignoring my CLAUDE.md rule every session", "expect": "tune", "route": "not cachewise — tune fixes recurring behavior mistakes; cachewise diagnoses token/cache cost" },
-    { "prompt": "how much am I spending and why is my cache hit rate low?", "expect": "cachewise", "route": "not daybrief — daybrief is today's calendar/mail/git; cachewise analyzes cache economics from transcripts" }
+    { "prompt": "how much am I spending and why is my cache hit rate low?", "expect": "cachewise", "route": "not daybrief — daybrief is today's calendar/mail/git; cachewise analyzes cache economics from transcripts" },
+    { "prompt": "make animated slides explaining how consistent hashing works for my YouTube video", "expect": "archdeck" },
+    { "prompt": "turn this system design problem into a presentation with diagrams for a tutorial", "expect": "archdeck" },
+    { "prompt": "I need HTML slides that illustrate the architecture of a rate limiter, step by step, to record a coding lesson", "expect": "archdeck" },
+    { "prompt": "tạo bộ slide có animation minh họa kiến trúc cache-aside cho video hướng dẫn lập trình", "expect": "archdeck" },
+    { "prompt": "create an architecture diagram of this codebase for the team wiki", "expect": "blueprint", "route": "not archdeck — blueprint documents a real codebase; archdeck makes teaching slides for a problem" },
+    { "prompt": "make presentation slides explaining how our payment flow could be designed, for a video", "expect": "archdeck", "route": "not blueprint — no codebase to document; the output is video slides" },
+    { "prompt": "teach me how database indexes work and quiz me after", "expect": "learn", "route": "not archdeck — learn tutors the user; archdeck produces slides for the user to teach others" }
   ]
 }
