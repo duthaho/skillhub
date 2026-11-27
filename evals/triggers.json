@@ -51,6 +51,13 @@
     { "prompt": "is my code production-ready?", "expect": "harden", "route": "not done — done verifies ship readiness against acceptance criteria; harden audits structural production failure modes like error swallowing and missing resilience" },
     { "prompt": "make this feature enterprise-grade before we merge", "expect": "harden" },
     { "prompt": "check the new auth module for silent error swallowing and missing resilience", "expect": "harden", "route": "not refactor — refactor finds churn/complexity hotspots; harden audits production failure modes like error swallowing and missing retry logic" },
-    { "prompt": "review this feature for production concerns before I merge", "expect": "harden", "route": "not done — done verifies the feature ships correctly; harden audits production failure modes like missing observability and infrastructure coupling" }
+    { "prompt": "review this feature for production concerns before I merge", "expect": "harden", "route": "not done — done verifies the feature ships correctly; harden audits production failure modes like missing observability and infrastructure coupling" },
+    { "prompt": "make animated slides explaining how consistent hashing works for my YouTube video", "expect": "archdeck" },
+    { "prompt": "turn this system design problem into a presentation with diagrams for a tutorial", "expect": "archdeck" },
+    { "prompt": "I need HTML slides that illustrate the architecture of a rate limiter, step by step, to record a coding lesson", "expect": "archdeck" },
+    { "prompt": "tạo bộ slide có animation minh họa kiến trúc cache-aside cho video hướng dẫn lập trình", "expect": "archdeck" },
+    { "prompt": "create an architecture diagram of this codebase for the team wiki", "expect": "blueprint", "route": "not archdeck — blueprint documents a real codebase; archdeck makes teaching slides for a problem" },
+    { "prompt": "make presentation slides explaining how our payment flow could be designed, for a video", "expect": "archdeck", "route": "not blueprint — no codebase to document; the output is video slides" },
+    { "prompt": "teach me how database indexes work and quiz me after", "expect": "learn", "route": "not archdeck — learn tutors the user; archdeck produces slides for the user to teach others" }
   ]
 }

@@ -44,7 +44,7 @@
     },
     {
       "name": "daily",
-      "description": "Day-to-day skills with memory: a morning briefing, a tutor that remembers what you got wrong, and a retro that turns agent mistakes into one-line fixes",
+      "description": "Day-to-day skills with memory: a morning briefing, a tutor that remembers what you got wrong, a retro that turns agent mistakes into one-line fixes, and animated explainer slides for teaching videos",
       "version": "1.0.0",
       "source": "./",
       "strict": false,
@@ -53,7 +53,8 @@
         "./.claude/skills/learn",
         "./.claude/skills/tune",
         "./.claude/skills/revisit",
-        "./.claude/skills/cachewise"
+        "./.claude/skills/cachewise",
+        "./.claude/skills/archdeck"
       ]
     }
   ]
