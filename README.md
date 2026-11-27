@@ -219,6 +219,7 @@ verdict: Build / Fork / Contribute / Use / Investigate first.
 | [done](./.claude/skills/done/SKILL.md) | The gate: prove it works, then ship | `/done` |
 | [autopilot](./.claude/skills/autopilot/SKILL.md) | The whole loop on one yes: issues, parallel agents, review loops, PR | `/autopilot add rate limiting` |
 | [newskill](./.claude/skills/newskill/SKILL.md) | Add or repair a skill across all four registration surfaces, validator-green | `/newskill fix ideate` |
+| [harden](./.claude/skills/harden/SKILL.md) | Production-readiness audit — five failure modes, each finding paired with the pattern that prevents it | `/harden src/orders/` |
 
 ## How the memory works
 
