@@ -60,7 +60,9 @@ Freshness: <stable — teach from knowledge · fast-moving — verify each unit 
    pass: <…> · rubric: <…>
 
 ## Review queue            <!-- weak spots; due dates, not session counts -->
-- <item missed> — missed 2026-07-05 (conf: sure) · due 2026-07-06 · passes 0/3
+<!-- grasp (tutor's read, distinct from the learner's conf tag):
+     solid · shaky · accepted (parroted, not owned) · resisted (disagrees) · not-engaged -->
+- <item missed> — missed 2026-07-05 (conf: sure · grasp: resisted) · due 2026-07-06 · passes 0/3
 
 ## Sources                 <!-- verified references; check here before searching again -->
 - <title> — <url> · verified 2026-07-05 · covers: <units/claims>
@@ -105,8 +107,17 @@ is itself signal for future sessions.
    **Write each unit's pass check now** — the question or micro-exercise that
    will prove it, plus a 2–3-criterion rubric — so later grading is against a
    contract written before the teaching, not the tutor's mood after it.
-   Present it and let the learner reorder/cut/add before saving. Then save the
-   log and either start unit 1 (if the session has time) or stop cleanly.
+   Present it and let the learner reorder/cut/add before saving.
+4. **Place the learner (diagnostic, don't just trust self-report):** before
+   defaulting to unit 1, offer a short diagnostic — 3–5 questions spread across
+   the syllabus, hardest plausible first — to find the **knowledge boundary**:
+   the earliest unit they can't pass. Confidence tags apply (a `sure` miss
+   still means start at or before that unit). Mark units they clearly own `✓`
+   with `grasp: solid` and a note that it was placed, not taught; set the
+   starting unit to the first shaky/unknown one. Skip the probe for a declared
+   true beginner or if the learner declines — then start at unit 1. Teaching
+   what they already own is the fastest way to lose them. Then save the log and
+   either start at the placed unit (if the session has time) or stop cleanly.
 
 ## CONTINUE — the session loop
 
@@ -121,22 +132,31 @@ skipped with a stated reason:
 - [ ] Freshness honored: fast-moving → unit claims verified, cited, Sources updated · stable → n/a
 - [ ] Unit taught (concept → example on their background → misconception)
 - [ ] Check questions asked — ANSWERED, with confidence tags
-- [ ] Check graded; misses + confidence into the queue; log updated NOW
+- [ ] Check graded; misses + confidence + grasp into the queue; log updated NOW
 - [ ] Statuses final; next unit previewed
 ```
 
 1. **Warm-up recall (~3 min):** 2–3 questions — review-queue items due today
-   or earlier, plus one from the last unit. Ask the learner to tag each
-   answer with confidence in the same message — `sure / mostly / half /
-   guessing` — **before any grading is shown**. Never infer a missing tag;
-   log it as untagged. **Ask, then stop and wait.**
+   or earlier, plus one from the last unit. **Vary the cue:** don't re-ask the
+   identical question a miss failed on — change the angle (new example,
+   reversed direction, applied vs. definitional) and lean toward the
+   formulation they missed. An idea retrievable only through its original
+   wording isn't learned; a concept that survives a fresh cue is. Ask the
+   learner to tag each answer with confidence in the same message — `sure /
+   mostly / half / guessing` — **before any grading is shown**. Never infer a
+   missing tag; log it as untagged. **Ask, then stop and wait.**
 2. **Grade honestly, against the rubric:** right/partial/wrong per answer,
    naming the rubric criterion that failed. Partial credit is named, not
    rounded up. A fast correct answer minutes after teaching is **fluency**;
    the spaced warm-up measures **storage strength**, the real goal — say so
    when a learner aces a check and asks why the material still comes back. A miss tagged `sure` is gold — correct it explicitly and put
    it at the front of the queue: high-confidence errors, once corrected, are
-   the stickiest learning there is. **Strict mode** (when the learner asks):
+   the stickiest learning there is. Tag each graded concept with a **grasp**
+   read — your judgment, not their confidence: `solid / shaky / accepted /
+   resisted / not-engaged`. `accepted` (right words, no ownership) and
+   `resisted` (the learner argues the point) are failures even when the answer
+   scores — both go in the queue, because a parroted or disputed idea won't
+   survive spacing. **Strict mode** (when the learner asks):
    grade blind — a fresh-context sub-agent sees only the verbatim answers
    and the rubric, never the lesson; the tutor who just taught grades with
    an optimism bias, the same reason done uses fresh reviewers.
